@@ -39,7 +39,7 @@
 
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item">
-                                <button type="button" class="btn btn-success">Add expense</button>
+                                <a class="btn btn-success" href="expenses/add">Add expense</a>
                             </li>
                         </ul>
                     </div>
