@@ -1,4 +1,4 @@
-package com.es.expensetracker.web;
+package com.es.jointexpensetracker.web;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
