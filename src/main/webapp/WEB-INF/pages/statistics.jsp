@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
-<template:page>
+<template:page statisticsTabIsActive="${true}">
     <h1 class="page-header">Total expenses per person</h1>
     <div class="container">
         <div class="row">

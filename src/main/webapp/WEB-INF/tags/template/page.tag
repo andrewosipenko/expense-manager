@@ -1,4 +1,6 @@
 <%@ tag body-content="scriptless" trimDirectiveWhitespaces="true" pageEncoding="UTF-8" %>
+<%@ attribute name="expensesTabIsActive" type="java.lang.Boolean" %>
+<%@ attribute name="statisticsTabIsActive" type="java.lang.Boolean" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,10 +29,10 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
-                            <li class="nav-item active">
+                            <li class="nav-item ${expensesTabIsActive ? 'active' : ''}">
                                 <a class="nav-link" href="expenses">Expenses</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item ${statisticsTabIsActive ? 'active' : ''}">
                                 <a class="nav-link" href="statistics">Statistics</a>
                             </li>
                         </ul>
