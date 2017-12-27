@@ -52,8 +52,8 @@
                         </tr>
                         <tr>
                             <td>Andrei</td>
-                            <td>owes 100$ to Ivan</td>
-                            <td>Sergei</td>
+                            <td>owes 100$ to</td>
+                            <td>Ivan</td>
                         </tr>
                         <tr>
                             <td>Ivan</td>
