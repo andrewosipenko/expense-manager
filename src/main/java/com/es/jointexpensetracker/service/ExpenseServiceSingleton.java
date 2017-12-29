@@ -1,4 +1,4 @@
-package com.es.jointexpensetracker.data;
+package com.es.jointexpensetracker.service;
 
 import com.es.jointexpensetracker.model.Expense;
 
@@ -7,20 +7,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class ExpenseServletSingleton {
+public class ExpenseServiceSingleton implements ExpenseService {
 
-    private static ExpenseServletSingleton instance;
+    private static ExpenseServiceSingleton instance;
 
     public List<Expense> expenses;
 
 
-    private ExpenseServletSingleton(){
+    private ExpenseServiceSingleton(){
         initExpenses();
     }
 
-    public static ExpenseServletSingleton getInstance(){
+    public static ExpenseServiceSingleton getInstance(){
         if(instance == null){
-            instance = new ExpenseServletSingleton();
+            instance = new ExpenseServiceSingleton();
         }
         return instance;
     }
