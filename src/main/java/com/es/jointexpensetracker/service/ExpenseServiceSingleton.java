@@ -9,20 +9,18 @@ import java.util.UUID;
 
 public class ExpenseServiceSingleton implements ExpenseService {
 
-    private static ExpenseServiceSingleton instance;
-
     public List<Expense> expenses;
 
+    private static class SingletonHolder{
+        private final static ExpenseServiceSingleton instance = new ExpenseServiceSingleton();
+    }
 
     private ExpenseServiceSingleton(){
         initExpenses();
     }
 
     public static ExpenseServiceSingleton getInstance(){
-        if(instance == null){
-            instance = new ExpenseServiceSingleton();
-        }
-        return instance;
+        return SingletonHolder.instance;
     }
 
     private void initExpenses() {
@@ -45,6 +43,7 @@ public class ExpenseServiceSingleton implements ExpenseService {
         );
     }
 
+    @Override
     public List<Expense> getExpenses() {
         return expenses;
     }
