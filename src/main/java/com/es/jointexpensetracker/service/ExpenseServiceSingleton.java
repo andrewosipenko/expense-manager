@@ -47,4 +47,14 @@ public class ExpenseServiceSingleton implements ExpenseService {
     public List<Expense> getExpenses() {
         return expenses;
     }
+
+    @Override
+    public Expense getExpenseById(long id) {
+        for(Expense expense : expenses){
+            if(expense.getId() == id){
+                return expense;
+            }
+        }
+        return null;
+    }
 }
