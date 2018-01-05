@@ -1,5 +1,6 @@
 package com.es.jointexpensetracker.service;
 
+import com.es.jointexpensetracker.exception.DataNotFoundException;
 import com.es.jointexpensetracker.model.Expense;
 
 import java.math.BigDecimal;
@@ -49,12 +50,10 @@ public class ExpenseServiceSingleton implements ExpenseService {
     }
 
     @Override
-    public Expense getExpenseById(long id) {
-        for(Expense expense : expenses){
-            if(expense.getId() == id){
-                return expense;
-            }
-        }
-        return null;
+    public Expense loadExpenseById(long id) throws DataNotFoundException {
+        return expenses.stream()
+                .filter((a) -> a.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new DataNotFoundException("Can't find expense with id="+id));
     }
 }
