@@ -10,4 +10,6 @@ public interface ExpenseService {
     List<Expense> getExpenses();
 
     Expense loadExpenseById(long id) throws DataNotFoundException;
+
+    void save();
 }

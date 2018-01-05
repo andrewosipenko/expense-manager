@@ -56,4 +56,9 @@ public class ExpenseServiceSingleton implements ExpenseService {
                 .findFirst()
                 .orElseThrow(() -> new DataNotFoundException("Can't find expense with id="+id));
     }
+
+    @Override
+    public void save() {
+        //saving
+    }
 }

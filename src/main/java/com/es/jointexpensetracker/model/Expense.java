@@ -6,12 +6,12 @@ import java.util.Currency;
 
 public class Expense {
     private final Long id;
-    private final String description;
-    private final BigDecimal amount;
-    private final Currency currency;
-    private final String person;
-    private final LocalDate date;
-    private final String expenseGroup;
+    private String description;
+    private BigDecimal amount;
+    private Currency currency;
+    private String person;
+    private LocalDate date;
+    private String expenseGroup;
 
     public Expense(Long id, String description, BigDecimal amount, String person, String expenseGroup) {
         this(id, description, amount, Currency.getInstance("USD"), person, LocalDate.now(), expenseGroup);
@@ -35,24 +35,48 @@ public class Expense {
         return description;
     }
 
+    public void setDescription(String description){
+        this.description = description;
+    }
+
     public BigDecimal getAmount() {
         return amount;
+    }
+
+    public void setAmount(BigDecimal amount){
+        this.amount = amount;
     }
 
     public Currency getCurrency() {
         return currency;
     }
 
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
     public String getPerson() {
         return person;
+    }
+
+    public void setPerson(String person) {
+        this.person = person;
     }
 
     public LocalDate getDate() {
         return date;
     }
 
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
     public String getExpenseGroup()
     {
         return expenseGroup;
+    }
+
+    public void setExpenseGroup(String expenseGroup) {
+        this.expenseGroup = expenseGroup;
     }
 }
