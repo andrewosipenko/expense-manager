@@ -9,17 +9,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class ExpenseServiceHardcodeImpl implements ExpenseService {
+public class HardcodeExpenseService implements ExpenseService {
 
     private List<Expense> expenseList;
 
-    private static ExpenseServiceHardcodeImpl instance = new ExpenseServiceHardcodeImpl();
+    private static HardcodeExpenseService instance = new HardcodeExpenseService();
 
-    public static ExpenseServiceHardcodeImpl getInstance(){
+    public static HardcodeExpenseService getInstance(){
         return instance;
     }
 
-    private ExpenseServiceHardcodeImpl(){
+    private HardcodeExpenseService(){
         String expenseGroup = UUID.randomUUID().toString();
         expenseList = Arrays.asList(
                 new Expense(1L, "Train tickets from Minsk to Warsaw", new BigDecimal(200), "Andrei", expenseGroup),

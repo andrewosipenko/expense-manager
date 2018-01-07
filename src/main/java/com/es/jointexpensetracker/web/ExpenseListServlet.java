@@ -1,7 +1,7 @@
 package com.es.jointexpensetracker.web;
 
 import com.es.jointexpensetracker.service.ExpenseService;
-import com.es.jointexpensetracker.service.impl.ExpenseServiceHardcodeImpl;
+import com.es.jointexpensetracker.service.impl.HardcodeExpenseService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,7 +16,7 @@ public class ExpenseListServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        expenseService = ExpenseServiceHardcodeImpl.getInstance();
+        expenseService = HardcodeExpenseService.getInstance();
     }
 
     @Override
