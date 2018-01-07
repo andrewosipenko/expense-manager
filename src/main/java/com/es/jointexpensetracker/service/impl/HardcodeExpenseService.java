@@ -4,10 +4,7 @@ import com.es.jointexpensetracker.model.Expense;
 import com.es.jointexpensetracker.service.ExpenseService;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class HardcodeExpenseService implements ExpenseService {
 
@@ -42,5 +39,15 @@ public class HardcodeExpenseService implements ExpenseService {
 
     public List<Expense> getExpenses() {
         return expenseList;
+    }
+
+    public Expense getExpenseById(int id){
+        final int VALUE_TO_CONVERT_TO_INDEX = 1;
+
+        int index = id-VALUE_TO_CONVERT_TO_INDEX;
+        if((index<0)||(index>=expenseList.size())){
+            return null;
+        }
+        return expenseList.get(index);
     }
 }

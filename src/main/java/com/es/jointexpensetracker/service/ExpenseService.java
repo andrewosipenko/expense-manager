@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ExpenseService {
     List<Expense> getExpenses();
+    Expense getExpenseById(int id);
 }

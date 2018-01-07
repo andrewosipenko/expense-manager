@@ -25,6 +25,6 @@ public class ExpenseListServlet extends HttpServlet {
         request.setAttribute(
             "expenses", expenseService.getExpenses()
         );
-        request.getRequestDispatcher("WEB-INF/pages/expenses.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/pages/expenses.jsp").forward(request, response);
     }
 }
