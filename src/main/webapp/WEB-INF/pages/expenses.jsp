@@ -27,7 +27,7 @@
                     <td>${expense.amount}</td>
                     <td>${expense.person}</td>
                     <td>
-                        <a class="btn btn-outline-primary" href="expenses/${expense.id}">View</a>
+                        <a class="btn btn-outline-primary" href="/joint-expense-tracker/expenses/${expense.id}">View</a>
                     </td>
                 </tr>
             </c:forEach>

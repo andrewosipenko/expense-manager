@@ -35,7 +35,6 @@
   </dependencies>
   <build>
     <finalName>joint-expense-tracker</finalName>
-    <pluginManagement>
       <plugins>
         <plugin>
           <groupId>org.apache.tomcat.maven</groupId>
@@ -43,6 +42,5 @@
           <version>2.2</version>
         </plugin>
       </plugins>
-    </pluginManagement>
   </build>
 </project>
