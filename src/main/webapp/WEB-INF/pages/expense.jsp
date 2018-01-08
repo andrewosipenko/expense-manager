@@ -38,7 +38,10 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-default" name="edit">Submit</button>
+                        <button type="submit" class="btn btn-default" name="update">Update</button>
+                    </div>
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-default" name="delete">Delete</button>
                     </div>
                 </div>
             </form>

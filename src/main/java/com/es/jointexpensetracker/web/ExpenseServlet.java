@@ -61,22 +61,39 @@ public class ExpenseServlet extends HttpServlet {
                     .getExpenseById(idExpense)
                     .orElse(null);
 
-            if(expense != null){
-                if(changeExpenseByRequest(expense,request)){
-                    request.getSession().setAttribute("infoMessage","Expense \""+expense.getDescription()+"\" was update successfully");
-                    response.sendRedirect(request.getContextPath() + "/expenses");
-                    return;
+            if (expense != null) {
+                if(request.getParameter("update") != null) {
+                    if (changeExpenseByRequest(expense, request)) {
+                        request.getSession().setAttribute("infoMessage", "Expense \"" + expense.getDescription() + "\" was update successfully");
+                        response.sendRedirect(request.getContextPath() + "/expenses");
+                        return;
+                    } else {
+                        request.setAttribute(
+                                "message", "Please, check input data"
+                        );
+                        request.setAttribute(
+                                "expense", expense
+                        );
+                    }
+                }
+                else if(request.getParameter("delete") != null) {
+                    if(expenseService.deleteExpenseById(idExpense)){
+                        request.getSession().setAttribute("infoMessage", "Expense \"" + expense.getDescription() + "\" was delete successfully");
+                        response.sendRedirect(request.getContextPath() + "/expenses");
+                        return;
+                    }
+                    else{
+                        request.setAttribute(
+                                "message", "Deletion failed. Please, try again later!"
+                        );
+                    }
                 }
                 else{
                     request.setAttribute(
-                            "message", "Please, check input data"
-                    );
-                    request.setAttribute(
-                            "expense", expense
+                            "message", "Unknown action"
                     );
                 }
-            }
-            else {
+            } else {
                 request.setAttribute(
                         "message", "Expense not found =("
                 );
