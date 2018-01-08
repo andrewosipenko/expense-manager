@@ -8,58 +8,40 @@
         </div>
     </c:if>
     <c:if test="${expense ne null}">
-        <h1 class="page-header">${expense.description}</h1>
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>Property</th>
-                <th>Value</th>
-            </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <strong>ID</strong>
-                    </td>
-                    <td>${expense.id}</td>
-                </tr>
-                <tr>
-                    <td>
-                        <strong>Description</strong>
-                    </td>
-                    <td>${expense.description}</td>
-                </tr>
-                <tr>
-                    <td>
-                        <strong>Amount</strong>
-                    </td>
-                    <td>${expense.amount}</td>
-                </tr>
-                <tr>
-                    <td>
-                        <strong>Currency</strong>
-                    </td>
-                    <td>${expense.currency}</td>
-                </tr>
-                <tr>
-                    <td>
-                        <strong>Person</strong>
-                    </td>
-                    <td>${expense.person}</td>
-                </tr>
-                <tr>
-                    <td>
-                        <strong>Date</strong>
-                    </td>
-                    <td>${expense.date}</td>
-                </tr>
-                <tr>
-                    <td>
-                        <strong>Expense Group</strong>
-                    </td>
-                    <td>${expense.expenseGroup}</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="jumbotron">
+            <h1 class="page-header">${expense.description}</h1>
+            <form method="post" class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="description">Description:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="description" value="${expense.description}" name="description">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="amount">Amount:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="amount" value="${expense.amount}" name="amount">
+                        <input type="text" class="form-control" value="${expense.currency}" name="currency">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="person">Person:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="person" value="${expense.person}" name="person">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="date">Date:</label>
+                    <div class="col-sm-10">
+                        <input type="date" class="form-control" id="date" value="${expense.date}" name="date">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-default" name="edit">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </c:if>
 </template:page>

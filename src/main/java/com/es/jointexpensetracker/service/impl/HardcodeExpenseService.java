@@ -41,13 +41,9 @@ public class HardcodeExpenseService implements ExpenseService {
         return expenseList;
     }
 
-    public Expense getExpenseById(int id){
-        final int VALUE_TO_CONVERT_TO_INDEX = 1;
-
-        int index = id-VALUE_TO_CONVERT_TO_INDEX;
-        if((index<0)||(index>=expenseList.size())){
-            return null;
-        }
-        return expenseList.get(index);
+    public Optional<Expense> getExpenseById(int id){
+        return expenseList.stream()
+                .filter(expense -> id == expense.getId())
+                .findFirst();
     }
 }
