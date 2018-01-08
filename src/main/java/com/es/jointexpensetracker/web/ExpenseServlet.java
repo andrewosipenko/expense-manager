@@ -63,6 +63,7 @@ public class ExpenseServlet extends HttpServlet {
 
             if(expense != null){
                 if(changeExpenseByRequest(expense,request)){
+                    request.getSession().setAttribute("infoMessage","Expense \""+expense.getDescription()+"\" was update successfully");
                     response.sendRedirect(request.getContextPath() + "/expenses");
                     return;
                 }
