@@ -9,4 +9,5 @@ public interface ExpenseService {
     List<Expense> getExpenses();
     Optional<Expense> getExpenseById(int id);
     boolean deleteExpenseById(int id);
+    void addNewExpense(Expense newExpense);
 }

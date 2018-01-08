@@ -2,7 +2,7 @@ package com.es.jointexpensetracker.web;
 
 import com.es.jointexpensetracker.model.Expense;
 import com.es.jointexpensetracker.service.ExpenseService;
-import com.es.jointexpensetracker.service.impl.HardcodeExpenseService;
+import com.es.jointexpensetracker.service.impl.ExpenseServiceImpl;
 import com.es.jointexpensetracker.web.util.Validator;
 
 import javax.servlet.ServletException;
@@ -22,7 +22,7 @@ public class ExpenseServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        expenseService = HardcodeExpenseService.getInstance();
+        expenseService = ExpenseServiceImpl.getInstance();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ExpenseServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try{
+        try {
             int idExpense = getIdExpenseFromRequest(request);
 
             Expense expense = expenseService
@@ -62,7 +62,7 @@ public class ExpenseServlet extends HttpServlet {
                     .orElse(null);
 
             if (expense != null) {
-                if(request.getParameter("update") != null) {
+                if (request.getParameter("update") != null) {
                     if (changeExpenseByRequest(expense, request)) {
                         request.getSession().setAttribute("infoMessage", "Expense \"" + expense.getDescription() + "\" was update successfully");
                         response.sendRedirect(request.getContextPath() + "/expenses");
@@ -75,20 +75,17 @@ public class ExpenseServlet extends HttpServlet {
                                 "expense", expense
                         );
                     }
-                }
-                else if(request.getParameter("delete") != null) {
-                    if(expenseService.deleteExpenseById(idExpense)){
+                } else if (request.getParameter("delete") != null) {
+                    if (expenseService.deleteExpenseById(idExpense)) {
                         request.getSession().setAttribute("infoMessage", "Expense \"" + expense.getDescription() + "\" was delete successfully");
                         response.sendRedirect(request.getContextPath() + "/expenses");
                         return;
-                    }
-                    else{
+                    } else {
                         request.setAttribute(
                                 "message", "Deletion failed. Please, try again later!"
                         );
                     }
-                }
-                else{
+                } else {
                     request.setAttribute(
                             "message", "Unknown action"
                     );
@@ -98,7 +95,7 @@ public class ExpenseServlet extends HttpServlet {
                         "message", "Expense not found =("
                 );
             }
-        }catch(NumberFormatException e){
+        }catch(NullPointerException | NumberFormatException e){
             request.setAttribute(
                     "message", "Expense not found =("
             );

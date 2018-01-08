@@ -6,18 +6,21 @@ import com.es.jointexpensetracker.service.ExpenseService;
 import java.math.BigDecimal;
 import java.util.*;
 
-public class HardcodeExpenseService implements ExpenseService {
+public class ExpenseServiceImpl implements ExpenseService {
 
     private List<Expense> expenseList;
 
-    private static HardcodeExpenseService instance = new HardcodeExpenseService();
+    private String expenseGroup = UUID.randomUUID().toString();
 
-    public static HardcodeExpenseService getInstance(){
+    private long nextId;
+
+    private static ExpenseServiceImpl instance = new ExpenseServiceImpl();
+
+    public static ExpenseServiceImpl getInstance(){
         return instance;
     }
 
-    private HardcodeExpenseService(){
-        String expenseGroup = UUID.randomUUID().toString();
+    private ExpenseServiceImpl(){
         expenseList = new ArrayList<>();
         expenseList.add(new Expense(1L, "Train tickets from Minsk to Warsaw", new BigDecimal(200), "Andrei", expenseGroup));
         expenseList.add(new Expense(2L, "Air tickets from Warsaw to Gran Carania and back", new BigDecimal(2000), "Ivan", expenseGroup));
@@ -34,6 +37,7 @@ public class HardcodeExpenseService implements ExpenseService {
         expenseList.add(new Expense(13L, "Air wing", new BigDecimal(50), "Sergei", expenseGroup));
         expenseList.add(new Expense(14L, "Bus tickets from Warsaw to Minsk", new BigDecimal(200), "Andrei", expenseGroup));
         expenseList = Collections.synchronizedList(expenseList);
+        nextId = 15L;
     }
 
     @Override
@@ -51,5 +55,16 @@ public class HardcodeExpenseService implements ExpenseService {
     @Override
     public boolean deleteExpenseById(int id) {
         return expenseList.removeIf(expense -> id == expense.getId());
+    }
+
+    private synchronized long getNextId(){
+        return nextId++;
+    }
+
+    @Override
+    public void addNewExpense(Expense newExpense) {
+        newExpense.setId(getNextId());
+        newExpense.setExpenseGroup(expenseGroup);
+        expenseList.add(newExpense);
     }
 }

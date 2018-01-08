@@ -13,6 +13,10 @@
     <servlet-class>com.es.jointexpensetracker.web.ExpenseServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>addExpense</servlet-name>
+    <servlet-class>com.es.jointexpensetracker.web.AddExpenseServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>statistics</servlet-name>
     <jsp-file>/WEB-INF/pages/statistics.jsp</jsp-file>
   </servlet>
@@ -24,6 +28,10 @@
   <servlet-mapping>
     <servlet-name>expense</servlet-name>
     <url-pattern>/expenses/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>addExpense</servlet-name>
+    <url-pattern>/expenses/add</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>statistics</servlet-name>

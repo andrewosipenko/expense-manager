@@ -5,16 +5,20 @@ import java.time.LocalDate;
 import java.util.Currency;
 
 public class Expense {
-    private final Long id;
+    private Long id;
     private String description;
     private BigDecimal amount;
     private Currency currency;
     private String person;
     private LocalDate date;
-    private final String expenseGroup;
+    private String expenseGroup;
 
     public Expense(Long id, String description, BigDecimal amount, String person, String expenseGroup) {
         this(id, description, amount, Currency.getInstance("USD"), person, LocalDate.now(), expenseGroup);
+    }
+
+    public Expense(String description, BigDecimal amount, Currency currency, String person, LocalDate date) {
+        this(-1L, description, amount, currency, person, date, null);
     }
 
     public Expense(Long id, String description, BigDecimal amount, Currency currency, String person, LocalDate date, String expenseGroup) {
@@ -56,6 +60,10 @@ public class Expense {
         return expenseGroup;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -74,5 +82,9 @@ public class Expense {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public void setExpenseGroup(String expenseGroup) {
+        this.expenseGroup = expenseGroup;
     }
 }
