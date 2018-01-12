@@ -1,6 +1,7 @@
 package com.es.jointexpensetracker.web;
 
 import com.es.jointexpensetracker.exception.DataNotFoundException;
+import com.es.jointexpensetracker.filter.NotificationFilter;
 import com.es.jointexpensetracker.model.Expense;
 import com.es.jointexpensetracker.service.ExpenseService;
 import com.es.jointexpensetracker.service.ExpenseServiceSingleton;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 public class ExpenseServlet extends HttpServlet {
 
     private final static String EXPENSE_JSP_PATH = "/WEB-INF/pages/expense.jsp";
+    private final static String SUCCESS_MESSAGE_TEMPLATE = "Expense '%s' was updated successfully";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -53,6 +55,11 @@ public class ExpenseServlet extends HttpServlet {
                     LocalDate.parse(request.getParameter("date"))
             );
             ExpenseServiceSingleton.getInstance().save();
+
+            request.setAttribute(
+                    NotificationFilter.MESSAGE_KEY,
+                    String.format(SUCCESS_MESSAGE_TEMPLATE, expense.getDescription())
+            );
 
             response.sendRedirect(getServletContext().getContextPath() + "/expenses");
         } catch (DataNotFoundException e) {

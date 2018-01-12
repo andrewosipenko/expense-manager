@@ -11,6 +11,13 @@
             <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
         </p>
     </div>
+
+    <c:if test="${sessionScope.containsKey(\"message\")}">
+        <div class="alert alert-success" role="alert">
+            ${sessionScope.get("message")}
+        </div>
+    </c:if>
+
     <table class="table table-hover">
         <thead>
             <tr>
