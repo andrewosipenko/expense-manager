@@ -10,18 +10,16 @@ import java.util.UUID;
 
 public class ExpenseServiceSingleton implements ExpenseService {
 
-    public List<Expense> expenses;
+    private List<Expense> expenses;
 
-    private static class SingletonHolder{
-        private final static ExpenseServiceSingleton instance = new ExpenseServiceSingleton();
-    }
+    private final static ExpenseServiceSingleton instance = new ExpenseServiceSingleton();
 
-    private ExpenseServiceSingleton(){
+    private ExpenseServiceSingleton() {
         initExpenses();
     }
 
-    public static ExpenseServiceSingleton getInstance(){
-        return SingletonHolder.instance;
+    public static ExpenseServiceSingleton getInstance() {
+        return instance;
     }
 
     private void initExpenses() {
