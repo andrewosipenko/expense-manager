@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ExpenseService {
     List<Expense> getExpenses();
-    Optional<Expense> getExpenseById(int id);
-    boolean deleteExpenseById(int id);
+    Optional<Expense> getExpenseById(long id);
+    boolean deleteExpenseById(long id);
     void addNewExpense(Expense newExpense);
 }

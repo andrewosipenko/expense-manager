@@ -28,9 +28,9 @@
         <tbody>
             <c:forEach var="expense" items="${expenses}">
                 <tr>
-                    <td>${expense.description}</td>
+                    <td><c:out value = "${expense.description}"/></td>
                     <td>${expense.amount}</td>
-                    <td>${expense.person}</td>
+                    <td><c:out value = "${expense.person}"/></td>
                     <td>
                         <a class="btn btn-outline-primary" href="/joint-expense-tracker/expenses/${expense.id}">View</a>
                     </td>

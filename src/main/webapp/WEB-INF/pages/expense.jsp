@@ -9,34 +9,29 @@
     </c:if>
     <c:if test="${expense ne null || showAddForm}">
         <div class="jumbotron">
-            <h1 class="page-header">${expense.description}</h1>
+            <h1 class="page-header"><c:out value = "${expense.description}"/></h1>
             <form method="post" class="form-horizontal">
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="description">Description:</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="description" value="${expense.description}" name="description">
+                        <input type="text" class="form-control" id="description" value="<c:out value = "${expense.description}"/>" name="description">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="amount">Amount:</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="amount" value="${expense.amount}" name="amount">
-                        <input type="text" class="form-control"
-                        <c:choose>
-                            <c:when test="${expense.currency eq null}">
-                                value="USD"
-                            </c:when>
-                            <c:otherwise>
-                               value="${expense.currency}"
-                            </c:otherwise>
-                        </c:choose>
-                        name="currency">
+                        <select class="form-control" name="currency" id="currency">
+                            <option value="USD" ${expense.currency == 'USD' ? 'selected' : ''}>USD</option>
+                            <option value="EUR" ${expense.currency == 'EUR' ? 'selected' : ''}>EUR</option>
+                            <option value="RUB" ${expense.currency == 'RUB' ? 'selected' : ''}>RUB</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="person">Person:</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="person" value="${expense.person}" name="person">
+                        <input type="text" class="form-control" id="person" value="<c:out value = "${expense.person}"/>" name="person">
                     </div>
                 </div>
                 <div class="form-group">

@@ -17,8 +17,12 @@ public class Expense {
         this(id, description, amount, Currency.getInstance("USD"), person, LocalDate.now(), expenseGroup);
     }
 
+    public Expense() {
+        this(null, null, null, null, null, null, null);
+    }
+
     public Expense(String description, BigDecimal amount, Currency currency, String person, LocalDate date) {
-        this(-1L, description, amount, currency, person, date, null);
+        this(null, description, amount, currency, person, date, null);
     }
 
     public Expense(Long id, String description, BigDecimal amount, Currency currency, String person, LocalDate date, String expenseGroup) {
