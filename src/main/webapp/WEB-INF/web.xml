@@ -4,6 +4,15 @@
          version="3.1">
   <display-name>Joint Expense Tracker (ES servlet-api training task)</display-name>
 
+  <error-page>
+    <exception-type>com.es.jointexpensetracker.web.exceptions.HttpNotFoundException</exception-type>
+    <location>/WEB-INF/pages/errors/notFound.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/WEB-INF/pages/errors/notFound.jsp</location>
+  </error-page>
+
   <servlet>
     <servlet-name>expenseList</servlet-name>
     <servlet-class>com.es.jointexpensetracker.web.ExpenseListServlet</servlet-class>
@@ -11,6 +20,10 @@
   <servlet>
     <servlet-name>expense</servlet-name>
     <servlet-class>com.es.jointexpensetracker.web.ExpenseServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>addExpense</servlet-name>
+    <servlet-class>com.es.jointexpensetracker.web.AddExpenseServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>statistics</servlet-name>
@@ -24,6 +37,10 @@
   <servlet-mapping>
     <servlet-name>expense</servlet-name>
     <url-pattern>/expenses/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>addExpense</servlet-name>
+    <url-pattern>/expenses/add</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>statistics</servlet-name>
