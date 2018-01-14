@@ -1,43 +1,50 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <template:page>
     <div>
         <form action="" method="post">
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col">
-                    <h2>Expense <span class="text-info">#${expense.id}</span></h2>
+                    <h2>Expense<span class="text-info">#${expense.id}</span></h2>
                 </div>
-                <div class="col-7">
-                    <input hidden class="data-edit btn btn-success" type="submit" value="Confirm">
-                    <input hidden type="button" class="data-edit btn btn-primary" data-toggle="modal" data-target="#exampleModal" value="Delete"/>
-                    <input class="pull-right btn btn-primary" type="button" id="toggle-button" onclick="onToggleForm()" value="Edit"/>
+                <div class="col-7 float-left">
+                    <button class="pull-right btn btn-default float-right" type="button" id="toggle-button" onclick="onToggleForm()">
+                        <i class="fa fa-pencil fa-fw"></i>
+                    </button>
+                    <button hidden class="data-edit btn btn-default float-right" type="button" data-toggle="modal" data-target="#exampleModal">
+                        <i class="fa fa-trash fa-fw"></i>
+                    </button>
+                    <button hidden class="data-edit btn btn-success float-right" type="submit">
+                        <i class="fa fa-check fa-fw"></i>
+                    </button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-7">
-                    <p class="data-view">${expense.description}</p>
+                    <p class="data-view mt-1 mb-2">${expense.description}</p>
                     <input hidden class="data-edit" type="text" name="description" value="${expense.description}"/>
                 </div>
                 <div class="col-2">
-                    <p class="data-view">${expense.person}</p>
+                    <p class="data-view mt-1 mb-2">${expense.person}</p>
                     <input hidden class="data-edit" type="text" name="person" value="${expense.person}"/>
                 </div>
                 <div class="col-3">
-                    <p class="data-view text-right">${expense.date}</p>
+                    <p class="data-view text-right mt-1 mb-2">${expense.date}</p>
                     <input hidden class="data-edit" type="date" name="date" value="${expense.date}"/>
                 </div>
             </div>
             <hr class="my-3">
             <div class="row justify-content-end">
-                <div class="col-1">
-                    Amount
+                <div class="col-2">
+                    <p class="mt-1">Amount</p>
                 </div>
                 <div class="col-2">
-                    <p class="data-view text-right">${expense.amount}</p>
+                    <p class="data-view text-right mt-1">${expense.amount}</p>
                     <input hidden class="data-edit text-right" type="number" min="0" name="amount" value="${expense.amount}"/>
                 </div>
                 <div class="col-1">
-                    <p class="text-right">${expense.currency}</p>
+                    <p class="text-right mt-1">${expense.currency}</p>
                 </div>
             </div>
         </form>
@@ -58,7 +65,7 @@
                 <div class="modal-footer">
                     <form action="${pageContext.request.contextPath}/expenses/delete" method="post">
                         <input hidden type="text" name="id" value="${expense.id}"/>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         <input type="submit" class="btn btn-primary" value="Confirm"/>
                     </form>
                 </div>
