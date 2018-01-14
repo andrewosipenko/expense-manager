@@ -11,5 +11,7 @@ public interface ExpenseService {
 
     Expense loadExpenseById(long id) throws DataNotFoundException;
 
+    void removeExpense(Expense expense);
+
     void save();
 }

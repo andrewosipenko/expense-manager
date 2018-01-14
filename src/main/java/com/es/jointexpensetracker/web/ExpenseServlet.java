@@ -17,13 +17,13 @@ import java.time.LocalDate;
 public class ExpenseServlet extends HttpServlet {
 
     private final static String EXPENSE_JSP_PATH = "/WEB-INF/pages/expense.jsp";
-    private final static String SUCCESS_MESSAGE_TEMPLATE = "Expense '%s' was updated successfully";
+    private final static String SUCCESS_MESSAGE_TEMPLATE = "Expense '%s' was %s successfully";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final ExpenseService service = ExpenseServiceSingleton.getInstance();
         try {
-            Expense expense = loadExpense(service, request.getPathInfo());
+            Expense expense = loadExpense(service, request.getPathInfo().substring(1));
             request.setAttribute(
                     "expense",
                     expense
@@ -41,26 +41,15 @@ public class ExpenseServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final ExpenseService service = ExpenseServiceSingleton.getInstance();
         try {
-            Expense expense = loadExpense(service, request.getPathInfo());
-            expense.setAmount(
-                    new BigDecimal(request.getParameter("amount"))
-            );
-            expense.setDescription(
-                    request.getParameter("description")
-            );
-            expense.setPerson(
-                    request.getParameter("person")
-            );
-            expense.setDate(
-                    LocalDate.parse(request.getParameter("date"))
-            );
+            switch (request.getPathInfo()) {
+                case "/delete":
+                    delete(request, service);
+                    break;
+                default:
+                    update(request, service);
+                    break;
+            }
             ExpenseServiceSingleton.getInstance().save();
-
-            request.setAttribute(
-                    NotificationFilter.MESSAGE_KEY,
-                    String.format(SUCCESS_MESSAGE_TEMPLATE, expense.getDescription())
-            );
-
             response.sendRedirect(getServletContext().getContextPath() + "/expenses");
         } catch (DataNotFoundException e) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -69,9 +58,44 @@ public class ExpenseServlet extends HttpServlet {
         }
     }
 
-    private Expense loadExpense(ExpenseService service, String pathInfo)
+    private void delete(HttpServletRequest request, ExpenseService service) throws DataNotFoundException{
+        Expense expense = loadExpense(service, request.getParameter("id"));
+        service.removeExpense(expense);
+        attachMessage(
+                request,
+                String.format(SUCCESS_MESSAGE_TEMPLATE, expense.getDescription(), "deleted")
+        );
+    }
+
+    private void update(HttpServletRequest request, ExpenseService service) throws DataNotFoundException{
+        Expense expense = loadExpense(service, request.getPathInfo().substring(1));
+        expense.setAmount(
+                new BigDecimal(request.getParameter("amount"))
+        );
+        expense.setDescription(
+                request.getParameter("description")
+        );
+        expense.setPerson(
+                request.getParameter("person")
+        );
+        expense.setDate(
+                LocalDate.parse(request.getParameter("date"))
+        );
+        attachMessage(
+                request,
+                String.format(SUCCESS_MESSAGE_TEMPLATE, expense.getDescription(), "updated")
+        );
+    }
+
+    private Expense loadExpense(ExpenseService service, String id)
             throws DataNotFoundException{
-        long expenseId = Long.parseLong(pathInfo.substring(1));
+        long expenseId = Long.parseLong(id);
         return service.loadExpenseById(expenseId);
+    }
+
+    private void attachMessage(HttpServletRequest request, String message){
+        request.setAttribute(
+                NotificationFilter.MESSAGE_KEY,
+                message);
     }
 }

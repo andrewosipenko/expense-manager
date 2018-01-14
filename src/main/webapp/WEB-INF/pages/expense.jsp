@@ -7,11 +7,11 @@
                 <div class="col">
                     <h2>Expense <span class="text-info">#${expense.id}</span></h2>
                 </div>
-                <div class="col">
+                <div class="col-7">
                     <input hidden class="data-edit btn btn-success" type="submit" value="Confirm">
+                    <input hidden type="button" class="data-edit btn btn-primary" data-toggle="modal" data-target="#exampleModal" value="Delete"/>
                     <input class="pull-right btn btn-primary" type="button" id="toggle-button" onclick="onToggleForm()" value="Edit"/>
                 </div>
-
             </div>
             <div class="row">
                 <div class="col-7">
@@ -41,21 +41,45 @@
                 </div>
             </div>
         </form>
-        <script>
-            function onToggleForm(){
-                var inputs = document.getElementsByClassName("data-edit");
-                for(var i = 0; i < inputs.length; i++){
-                    inputs[i].hidden = !inputs[i].hidden;
-                }
-
-                var texts = document.getElementsByClassName("data-view");
-                for(var i = 0; i < texts.length; i++){
-                    texts[i].hidden = !texts[i].hidden;
-                }
-
-                var button = document.getElementById("toggle-button");
-                button.value = (button.value === "Edit")? "Cancel" : "Edit";
-            }
-        </script>
     </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete expense</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete '${expense.description}' expense?
+                </div>
+                <div class="modal-footer">
+                    <form action="${pageContext.request.contextPath}/expenses/delete" method="post">
+                        <input hidden type="text" name="id" value="${expense.id}"/>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <input type="submit" class="btn btn-primary" value="Confirm"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function onToggleForm() {
+            var inputs = document.getElementsByClassName("data-edit");
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].hidden = !inputs[i].hidden;
+            }
+
+            var texts = document.getElementsByClassName("data-view");
+            for (var i = 0; i < texts.length; i++) {
+                texts[i].hidden = !texts[i].hidden;
+            }
+
+            var button = document.getElementById("toggle-button");
+            button.value = (button.value === "Edit") ? "Cancel" : "Edit";
+        }
+    </script>
 </template:page>
