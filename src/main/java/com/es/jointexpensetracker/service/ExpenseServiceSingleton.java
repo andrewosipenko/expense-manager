@@ -4,13 +4,14 @@ import com.es.jointexpensetracker.exception.DataNotFoundException;
 import com.es.jointexpensetracker.model.Expense;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 public class ExpenseServiceSingleton implements ExpenseService {
 
-    private List<Expense> expenses;
+    private ArrayList<Expense> expenses;
 
     private final static ExpenseServiceSingleton instance = new ExpenseServiceSingleton();
 
@@ -24,7 +25,7 @@ public class ExpenseServiceSingleton implements ExpenseService {
 
     private void initExpenses() {
         String expenseGroup = UUID.randomUUID().toString();
-        expenses = Arrays.asList(
+        expenses = new ArrayList<>(Arrays.asList(
                 new Expense(1L, "Train tickets from Minsk to Warsaw", new BigDecimal(200), "Andrei", expenseGroup),
                 new Expense(2L, "Air tickets from Warsaw to Gran Carania and back", new BigDecimal(2000), "Ivan", expenseGroup),
                 new Expense(3L, "Restaurant", new BigDecimal(90), "Andrei", expenseGroup),
@@ -39,7 +40,7 @@ public class ExpenseServiceSingleton implements ExpenseService {
                 new Expense(12L, "Surfing", new BigDecimal(30), "Sergei", expenseGroup),
                 new Expense(13L, "Air wing", new BigDecimal(50), "Sergei", expenseGroup),
                 new Expense(14L, "Bus tickets from Warsaw to Minsk", new BigDecimal(200), "Andrei", expenseGroup)
-        );
+        ));
     }
 
     @Override
@@ -53,6 +54,11 @@ public class ExpenseServiceSingleton implements ExpenseService {
                 .filter((a) -> a.getId() == id)
                 .findFirst()
                 .orElseThrow(() -> new DataNotFoundException("Can't find expense with id="+id));
+    }
+
+    @Override
+    public void removeExpense(Expense expense) {
+        expenses.remove(expense);
     }
 
     @Override

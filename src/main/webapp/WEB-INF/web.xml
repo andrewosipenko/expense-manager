@@ -37,7 +37,6 @@
 
   <filter-mapping>
     <filter-name>NotificationFilter</filter-name>
-    <url-pattern>/expenses</url-pattern>
     <url-pattern>/expenses/*</url-pattern>
   </filter-mapping>
 </web-app>
