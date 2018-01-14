@@ -4,19 +4,21 @@ import com.es.jointexpensetracker.exception.DataNotFoundException;
 import com.es.jointexpensetracker.model.Expense;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.*;
 
 public class ExpenseServiceSingleton implements ExpenseService {
 
     private ArrayList<Expense> expenses;
 
+    private long lastId;
+    private String expenseGroup;
+
     private final static ExpenseServiceSingleton instance = new ExpenseServiceSingleton();
 
     private ExpenseServiceSingleton() {
         initExpenses();
+        this.lastId = this.expenses.size();
     }
 
     public static ExpenseServiceSingleton getInstance() {
@@ -24,7 +26,7 @@ public class ExpenseServiceSingleton implements ExpenseService {
     }
 
     private void initExpenses() {
-        String expenseGroup = UUID.randomUUID().toString();
+        this.expenseGroup = UUID.randomUUID().toString();
         expenses = new ArrayList<>(Arrays.asList(
                 new Expense(1L, "Train tickets from Minsk to Warsaw", new BigDecimal(200), "Andrei", expenseGroup),
                 new Expense(2L, "Air tickets from Warsaw to Gran Carania and back", new BigDecimal(2000), "Ivan", expenseGroup),
@@ -54,6 +56,21 @@ public class ExpenseServiceSingleton implements ExpenseService {
                 .filter((a) -> a.getId() == id)
                 .findFirst()
                 .orElseThrow(() -> new DataNotFoundException("Can't find expense with id="+id));
+    }
+
+    @Override
+    public Expense createExpense(String description, BigDecimal amount, Currency currency, String person, LocalDate date) {
+        Expense expense = new Expense(
+                ++this.lastId,
+                description,
+                amount,
+                currency,
+                person,
+                date,
+                this.expenseGroup
+        );
+        expenses.add(expense);
+        return expense;
     }
 
     @Override
