@@ -1,6 +1,7 @@
 package com.es.jointexpensetracker.web;
 
 
+import com.es.jointexpensetracker.model.Debt;
 import com.es.jointexpensetracker.model.Expense;
 import com.es.jointexpensetracker.service.ExpenseService;
 import com.es.jointexpensetracker.service.impl.HardcodeExpenseService;
@@ -27,24 +28,19 @@ public class StatisticsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Map<String,BigDecimal> mapExpenses = getMapExpenses();
+        Map<String,BigDecimal> mapExpenses = expenseService.getMapExpenses();
+        List<Debt> debtList = expenseService.getDebts();
 
         request.setAttribute(
                 "persons" , mapExpenses.keySet()
         );
-
         request.setAttribute(
                 "amounts" , mapExpenses.values()
         );
+        request.setAttribute(
+                "debts" , debtList
+        );
 
         request.getRequestDispatcher("/WEB-INF/pages/statistics.jsp").forward(request, response);
-    }
-
-    private Map<String,BigDecimal> getMapExpenses(){
-        List<Expense> expenseList = expenseService.getExpenses();
-        Map<String,BigDecimal> mapExpenses = expenseList.stream().collect(
-                Collectors.toMap(Expense::getPerson, Expense::getAmount, BigDecimal::add)
-        );
-        return mapExpenses;
     }
 }

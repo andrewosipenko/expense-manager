@@ -56,27 +56,19 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th>Person</th>
+                        <th>Debtor</th>
                         <th>Amount</th>
-                        <th>Person</th>
+                        <th>Creditor</th>
                     </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Andrei</td>
-                            <td>owes 200$ to</td>
-                            <td>Sergei</td>
-                        </tr>
-                        <tr>
-                            <td>Andrei</td>
-                            <td>owes 100$ to Ivan</td>
-                            <td>Sergei</td>
-                        </tr>
-                        <tr>
-                            <td>Ivan</td>
-                            <td>owes 50$ to</td>
-                            <td>Sergei</td>
-                        </tr>
+                        <c:forEach var="debt" items="${debts}">
+                            <tr>
+                                <td><c:out value = "${debt.debtor}"/></td>
+                                <td>${debt.amount} ${debt.currency}</td>
+                                <td><c:out value = "${debt.creditor}"/></td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
             </div>
