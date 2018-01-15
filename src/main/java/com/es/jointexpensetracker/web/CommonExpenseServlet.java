@@ -9,9 +9,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Currency;
 
-public class CommonExpenseServlet extends HttpServlet {
+public abstract class CommonExpenseServlet extends HttpServlet {
 
-    protected boolean changeExpenseByRequest(Expense editExpense, HttpServletRequest request){
+    protected boolean updateExpenseByRequest(Expense editExpense, HttpServletRequest request){
         try {
             String description = request.getParameter("description");
             if(description == null){

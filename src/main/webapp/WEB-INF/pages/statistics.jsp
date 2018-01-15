@@ -12,17 +12,34 @@
     </div>
     <script>
         $( document ).ready(function() {
-            //pie
+            var backgroundColor = [];
+            var hoverBackgroundColor = [];
+
+            for (var i = 0;i < ${persons.size()}; i++) {
+                var r = Math.floor(50+Math.random() * 150);
+                var g = Math.floor(50+Math.random() * 150);
+                var b = Math.floor(50+Math.random() * 150);
+                backgroundColor.push("rgba(" + r + "," + g + "," + b + ",1)");
+                hoverBackgroundColor.push("rgba(" + r + "," + g + "," + b + ",0.75)");
+            }
             var ctxP = document.getElementById("pieChart").getContext('2d');
             var myPieChart = new Chart(ctxP, {
                 type: 'pie',
                 data: {
-                    labels: ["Andre", "Igor", "Sergei", "Ivan", "Dark Grey"],
+                    labels: [
+                    <c:forEach var="person" items="${persons}">
+                        "<c:out value = "${person}"/>",
+                    </c:forEach>
+                    ],
                     datasets: [
                         {
-                            data: [300, 50, 100, 40, 120],
-                            backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
-                            hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+                            data: [
+                                <c:forEach var="amount" items="${amounts}">
+                                    ${amount},
+                                </c:forEach>
+                            ],
+                            backgroundColor: backgroundColor,
+                            hoverBackgroundColor: hoverBackgroundColor
                         }
                     ]
                 },

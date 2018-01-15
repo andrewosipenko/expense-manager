@@ -18,7 +18,7 @@ public class Expense {
     }
 
     public Expense() {
-        this(null, null, null, null, null, null, null);
+
     }
 
     public Expense(String description, BigDecimal amount, Currency currency, String person, LocalDate date) {

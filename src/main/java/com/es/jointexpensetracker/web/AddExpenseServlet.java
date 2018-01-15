@@ -36,7 +36,7 @@ public class AddExpenseServlet extends CommonExpenseServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Expense expense = new Expense();
 
-        if (changeExpenseByRequest(expense,request)) {
+        if (updateExpenseByRequest(expense,request)) {
             expenseService.addNewExpense(expense);
             messageService.setMessage(request, "Expense \"" + expense.getDescription() + "\" was created successfully");
             response.sendRedirect(request.getContextPath() + "/expenses");

@@ -52,7 +52,7 @@ public class ExpenseServlet extends CommonExpenseServlet {
             Expense expense = expenseOptional
                             .orElseThrow(HttpNotFoundException::new);
 
-            if (!changeExpenseByRequest(expense, request)) {
+            if (!updateExpenseByRequest(expense, request)) {
                 request.setAttribute(
                         "message", "Please, check input data"
                 );

@@ -27,7 +27,7 @@
   </servlet>
   <servlet>
     <servlet-name>statistics</servlet-name>
-    <jsp-file>/WEB-INF/pages/statistics.jsp</jsp-file>
+    <servlet-class>com.es.jointexpensetracker.web.StatisticsServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
