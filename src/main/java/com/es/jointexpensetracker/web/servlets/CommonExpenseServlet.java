@@ -1,6 +1,10 @@
-package com.es.jointexpensetracker.web;
+package com.es.jointexpensetracker.web.servlets;
 
 import com.es.jointexpensetracker.model.Expense;
+import com.es.jointexpensetracker.service.ExpenseGroupService;
+import com.es.jointexpensetracker.service.ExpenseService;
+import com.es.jointexpensetracker.service.impl.HardcodeExpenseGroupService;
+import com.es.jointexpensetracker.web.exceptions.HttpNotFoundException;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +14,17 @@ import java.time.format.DateTimeParseException;
 import java.util.Currency;
 
 public abstract class CommonExpenseServlet extends HttpServlet {
+
+    protected ExpenseGroupService expenseGroupService = HardcodeExpenseGroupService.getInstanse();
+
+    protected ExpenseService loadExpenseService(HttpServletRequest request){
+        String expenseGroup = (String)request.getAttribute("expenseGroup");
+        ExpenseService expenseService = expenseGroupService.getServiceByGroup(expenseGroup);
+        if(expenseService == null){
+            throw new HttpNotFoundException();
+        }
+        return expenseService;
+    }
 
     protected boolean updateExpenseByRequest(Expense editExpense, HttpServletRequest request){
         try {

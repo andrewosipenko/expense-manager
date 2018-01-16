@@ -1,4 +1,4 @@
-package com.es.jointexpensetracker.web;
+package com.es.jointexpensetracker.web.servlets;
 
 
 import com.es.jointexpensetracker.model.Debt;
@@ -15,19 +15,12 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class StatisticsServlet extends HttpServlet {
-
-    private ExpenseService expenseService;
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        expenseService = HardcodeExpenseService.getInstance();
-    }
-
+public class StatisticsServlet extends CommonExpenseServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ExpenseService expenseService = loadExpenseService(request);
+
         Map<String,BigDecimal> mapExpenses = expenseService.getMapExpenses();
         List<Debt> debtList = expenseService.getDebts();
 

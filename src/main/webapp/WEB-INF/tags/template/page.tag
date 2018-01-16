@@ -25,21 +25,21 @@
                     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <a class="navbar-brand mr-5" href="/joint-expense-tracker/expenses">Joint Expense Tracker</a>
+                    <a class="navbar-brand mr-5" href="${pageContext.request.contextPath}/expense-groups/${expenseGroup}/expenses">Joint Expense Tracker</a>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item ${expensesTabIsActive ? 'active' : ''}">
-                                <a class="nav-link" href="/joint-expense-tracker/expenses">Expenses</a>
+                                <a class="nav-link" href="${pageContext.request.contextPath}/expense-groups/${expenseGroup}/expenses">Expenses</a>
                             </li>
                             <li class="nav-item ${statisticsTabIsActive ? 'active' : ''}">
-                                <a class="nav-link" href="/joint-expense-tracker/statistics">Statistics</a>
+                                <a class="nav-link" href="${pageContext.request.contextPath}/expense-groups/${expenseGroup}/statistics">Statistics</a>
                             </li>
                         </ul>
 
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item">
-                                <a class="btn btn-success" href="/joint-expense-tracker/expenses/add">Add expense</a>
+                                <a class="btn btn-success" href="${pageContext.request.contextPath}/expense-groups/${expenseGroup}/expenses/add">Add expense</a>
                             </li>
                         </ul>
                     </div>

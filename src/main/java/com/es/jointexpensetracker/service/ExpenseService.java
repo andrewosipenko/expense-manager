@@ -10,9 +10,10 @@ import java.util.Optional;
 
 public interface ExpenseService {
     List<Expense> getExpenses();
+    List<Debt> getDebts();
     Optional<Expense> getExpenseById(long id);
+    Map<String,BigDecimal> getMapExpenses();
+    String getExpenseGroup();
     boolean deleteExpenseById(long id);
     void addNewExpense(Expense newExpense);
-    List<Debt> getDebts();
-    Map<String,BigDecimal> getMapExpenses();
 }

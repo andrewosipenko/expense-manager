@@ -1,4 +1,4 @@
-package com.es.jointexpensetracker.web;
+package com.es.jointexpensetracker.web.servlets;
 
 
 import com.es.jointexpensetracker.model.Expense;
@@ -14,13 +14,11 @@ import java.io.IOException;
 
 public class AddExpenseServlet extends CommonExpenseServlet {
 
-    private ExpenseService expenseService;
     private MessageService messageService;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        expenseService = HardcodeExpenseService.getInstance();
         messageService = SessionMessageService.getInstance();
     }
 
@@ -34,6 +32,7 @@ public class AddExpenseServlet extends CommonExpenseServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ExpenseService expenseService = loadExpenseService(request);
         Expense expense = new Expense();
 
         if (updateExpenseByRequest(expense,request)) {

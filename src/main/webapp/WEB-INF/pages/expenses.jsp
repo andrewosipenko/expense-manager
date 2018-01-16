@@ -32,7 +32,7 @@
                     <td>${expense.amount}</td>
                     <td><c:out value = "${expense.person}"/></td>
                     <td>
-                        <a class="btn btn-outline-primary" href="/joint-expense-tracker/expenses/${expense.id}">View</a>
+                        <a class="btn btn-outline-primary" href="${pageContext.request.contextPath}/expense-groups/${expenseGroup}/expenses/${expense.id}">View</a>
                     </td>
                 </tr>
             </c:forEach>

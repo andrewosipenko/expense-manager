@@ -13,21 +13,32 @@
     <location>/WEB-INF/pages/errors/notFound.jsp</location>
   </error-page>
 
+
+  <filter>
+    <filter-name>expenseGroup</filter-name>
+    <filter-class>com.es.jointexpensetracker.web.filters.ExpenseGroupFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>expenseGroup</filter-name>
+    <url-pattern>/expense-groups/*</url-pattern>
+  </filter-mapping>
+
   <servlet>
     <servlet-name>expenseList</servlet-name>
-    <servlet-class>com.es.jointexpensetracker.web.ExpenseListServlet</servlet-class>
+    <servlet-class>com.es.jointexpensetracker.web.servlets.ExpenseListServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>expense</servlet-name>
-    <servlet-class>com.es.jointexpensetracker.web.ExpenseServlet</servlet-class>
+    <servlet-class>com.es.jointexpensetracker.web.servlets.ExpenseServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>addExpense</servlet-name>
-    <servlet-class>com.es.jointexpensetracker.web.AddExpenseServlet</servlet-class>
+    <servlet-class>com.es.jointexpensetracker.web.servlets.AddExpenseServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>statistics</servlet-name>
-    <servlet-class>com.es.jointexpensetracker.web.StatisticsServlet</servlet-class>
+    <servlet-class>com.es.jointexpensetracker.web.servlets.StatisticsServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
