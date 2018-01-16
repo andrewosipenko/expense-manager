@@ -40,6 +40,10 @@
     <servlet-name>statistics</servlet-name>
     <servlet-class>com.es.jointexpensetracker.web.servlets.StatisticsServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>newExpenseGroup</servlet-name>
+    <servlet-class>com.es.jointexpensetracker.web.servlets.NewExpenseGroupServlet</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>expenseList</servlet-name>
@@ -56,5 +60,9 @@
   <servlet-mapping>
     <servlet-name>statistics</servlet-name>
     <url-pattern>/statistics</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>newExpenseGroup</servlet-name>
+    <url-pattern>/start</url-pattern>
   </servlet-mapping>
 </web-app>

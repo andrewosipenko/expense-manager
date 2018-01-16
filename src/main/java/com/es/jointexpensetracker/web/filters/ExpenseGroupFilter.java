@@ -14,19 +14,25 @@ public class ExpenseGroupFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         final int SKIP_SLASH_VALUE = 1;
+
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        String filterPathInfo = request.getRequestURI().split("expense-groups")[1];
+        String[] splittedRequestURI = request.getRequestURI().split("expense-groups");
+        if (splittedRequestURI.length < 2) {
+            throw new HttpNotFoundException();
+        }
+
+        String filterPathInfo = splittedRequestURI[1];
         int expenseGroupIndex = filterPathInfo.indexOf("/", SKIP_SLASH_VALUE);
 
-        if (expenseGroupIndex == -1){
+        if (expenseGroupIndex == -1) {
             throw new HttpNotFoundException();
         }
 
         String newPath = filterPathInfo.substring(expenseGroupIndex);
-        String expenseGroup = filterPathInfo.substring(SKIP_SLASH_VALUE,expenseGroupIndex);
+        String expenseGroup = filterPathInfo.substring(SKIP_SLASH_VALUE, expenseGroupIndex);
 
         request.setAttribute("expenseGroup", expenseGroup);
-        request.getRequestDispatcher(newPath).forward(servletRequest,servletResponse);
+        request.getRequestDispatcher(newPath).forward(servletRequest, servletResponse);
     }
 
     @Override

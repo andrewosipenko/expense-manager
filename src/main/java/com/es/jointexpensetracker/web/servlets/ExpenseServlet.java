@@ -42,6 +42,7 @@ public class ExpenseServlet extends CommonExpenseServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ExpenseService expenseService = loadExpenseService(request);
+        String expenseGroup = (String)request.getAttribute("expenseGroup");
 
         int idExpense = getIdExpenseFromRequest(request);
 
@@ -77,7 +78,7 @@ public class ExpenseServlet extends CommonExpenseServlet {
             throw new HttpNotFoundException();
         }
         messageService.setMessage(request, message);
-        response.sendRedirect(request.getContextPath() + "/expenses");
+        response.sendRedirect(request.getContextPath()+"/expense-groups/"+expenseGroup+"/expenses");
     }
 
     private int getIdExpenseFromRequest(HttpServletRequest request){

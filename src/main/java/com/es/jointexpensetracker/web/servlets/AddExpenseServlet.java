@@ -33,12 +33,13 @@ public class AddExpenseServlet extends CommonExpenseServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ExpenseService expenseService = loadExpenseService(request);
+        String expenseGroup = (String)request.getAttribute("expenseGroup");
         Expense expense = new Expense();
 
         if (updateExpenseByRequest(expense,request)) {
             expenseService.addNewExpense(expense);
             messageService.setMessage(request, "Expense \"" + expense.getDescription() + "\" was created successfully");
-            response.sendRedirect(request.getContextPath() + "/expenses");
+            response.sendRedirect(request.getContextPath()+"/expense-groups/"+expenseGroup+"/expenses");
         } else {
             request.setAttribute(
                     "message", "Please, check input data"

@@ -70,7 +70,13 @@ public class MemoryExpenseService implements ExpenseService {
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);
 
-        BigDecimal expensePerPerson = sumOfExpenses.divide(new BigDecimal(mapExpenses.size()));
+        final BigDecimal expensePerPerson;
+
+        if(mapExpenses.size() != 0) {
+            expensePerPerson = sumOfExpenses.divide(new BigDecimal(mapExpenses.size()));
+        }else{
+            expensePerPerson = BigDecimal.ZERO;
+        }
 
         List<Entry> listCreditors = mapExpenses.entrySet().stream()
                 .filter(entry -> entry.getValue().compareTo(expensePerPerson)>0)

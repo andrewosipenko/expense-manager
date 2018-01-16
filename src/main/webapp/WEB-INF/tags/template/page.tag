@@ -1,6 +1,8 @@
 <%@ tag body-content="scriptless" trimDirectiveWhitespaces="true" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ attribute name="expensesTabIsActive" type="java.lang.Boolean" %>
 <%@ attribute name="statisticsTabIsActive" type="java.lang.Boolean" %>
+<%@ attribute name="notShowMenu" type="java.lang.Boolean" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,23 +27,36 @@
                     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <a class="navbar-brand mr-5" href="${pageContext.request.contextPath}/expense-groups/${expenseGroup}/expenses">Joint Expense Tracker</a>
+                    <a class="navbar-brand mr-5"
+                    <c:choose>
+                    <c:when test="${notShowMenu}">
+                        href="${pageContext.request.contextPath}"
+                    </c:when>
+                    <c:otherwise>
+                        href="${pageContext.request.contextPath}/expense-groups/${expenseGroup}/expenses"
+                    </c:otherwise>
+                    </c:choose>
+                       >
+                        Joint Expense Tracker
+                    </a>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item ${expensesTabIsActive ? 'active' : ''}">
-                                <a class="nav-link" href="${pageContext.request.contextPath}/expense-groups/${expenseGroup}/expenses">Expenses</a>
-                            </li>
-                            <li class="nav-item ${statisticsTabIsActive ? 'active' : ''}">
-                                <a class="nav-link" href="${pageContext.request.contextPath}/expense-groups/${expenseGroup}/statistics">Statistics</a>
-                            </li>
-                        </ul>
+                        <c:if test="${not notShowMenu}">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item ${expensesTabIsActive ? 'active' : ''}">
+                                    <a class="nav-link" href="${pageContext.request.contextPath}/expense-groups/${expenseGroup}/expenses">Expenses</a>
+                                </li>
+                                <li class="nav-item ${statisticsTabIsActive ? 'active' : ''}">
+                                    <a class="nav-link" href="${pageContext.request.contextPath}/expense-groups/${expenseGroup}/statistics">Statistics</a>
+                                </li>
+                            </ul>
 
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item">
-                                <a class="btn btn-success" href="${pageContext.request.contextPath}/expense-groups/${expenseGroup}/expenses/add">Add expense</a>
-                            </li>
-                        </ul>
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item">
+                                    <a class="btn btn-success" href="${pageContext.request.contextPath}/expense-groups/${expenseGroup}/expenses/add">Add expense</a>
+                                </li>
+                            </ul>
+                        </c:if>
                     </div>
                 </nav>
                 <jsp:doBody/>
