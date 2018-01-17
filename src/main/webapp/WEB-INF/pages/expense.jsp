@@ -10,28 +10,28 @@
                 </div>
                 <div class="col-7 float-left">
                     <button class="pull-right btn btn-default float-right" type="button" id="toggle-button" onclick="onToggleForm()">
-                        <i class="fa fa-pencil fa-fw"></i>
+                        <i class="fa fa-pencil"></i>
                     </button>
                     <button hidden class="data-edit btn btn-default float-right" type="button" data-toggle="modal" data-target="#exampleModal">
-                        <i class="fa fa-trash fa-fw"></i>
+                        <i class="fa fa-trash"></i>
                     </button>
                     <button hidden class="data-edit btn btn-success float-right" type="submit">
-                        <i class="fa fa-check fa-fw"></i>
+                        <i class="fa fa-check"></i>
                     </button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-7">
                     <p class="data-view mt-1 mb-2">${expense.description}</p>
-                    <input hidden class="data-edit" type="text" name="description" value="${expense.description}"/>
+                    <input hidden class="data-edit" type="text" required name="description" value="${expense.description}"/>
                 </div>
                 <div class="col-2">
                     <p class="data-view mt-1 mb-2">${expense.person}</p>
-                    <input hidden class="data-edit" type="text" name="person" value="${expense.person}"/>
+                    <input hidden class="data-edit" type="text"required name="person" value="${expense.person}"/>
                 </div>
                 <div class="col-3">
                     <p class="data-view text-right mt-1 mb-2">${expense.date}</p>
-                    <input hidden class="data-edit" type="date" name="date" value="${expense.date}"/>
+                    <input hidden class="data-edit" type="date" required name="date" value="${expense.date}"/>
                 </div>
             </div>
             <hr class="my-3">
@@ -41,7 +41,7 @@
                 </div>
                 <div class="col-2">
                     <p class="data-view text-right mt-1">${expense.amount}</p>
-                    <input hidden class="data-edit text-right" type="number" min="0" name="amount" value="${expense.amount}"/>
+                    <input hidden class="data-edit text-right" type="number" min="0" required name="amount" value="${expense.amount}"/>
                 </div>
                 <div class="col-1">
                     <p class="text-right mt-1">${expense.currency}</p>
@@ -85,8 +85,6 @@
                 texts[i].hidden = !texts[i].hidden;
             }
 
-            var button = document.getElementById("toggle-button");
-            button.value = (button.value === "Edit") ? "Cancel" : "Edit";
         }
     </script>
 </template:page>
