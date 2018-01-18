@@ -25,31 +25,15 @@ public class Debt {
         return debtor;
     }
 
-    public void setDebtor(String debtor) {
-        this.debtor = debtor;
-    }
-
     public BigDecimal getAmount() {
         return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
     }
 
     public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
     public String getCreditor() {
         return creditor;
-    }
-
-    public void setCreditor(String creditor) {
-        this.creditor = creditor;
     }
 }

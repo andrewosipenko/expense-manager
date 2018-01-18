@@ -1,8 +1,6 @@
 package com.es.jointexpensetracker.web.filters;
 
-import com.es.jointexpensetracker.service.ExpenseGroupService;
-import com.es.jointexpensetracker.service.ExpenseService;
-import com.es.jointexpensetracker.service.impl.HardcodeExpenseGroupService;
+import com.es.jointexpensetracker.web.Constants;
 import com.es.jointexpensetracker.web.exceptions.HttpNotFoundException;
 
 import javax.servlet.*;
@@ -31,7 +29,7 @@ public class ExpenseGroupFilter implements Filter {
         String newPath = filterPathInfo.substring(expenseGroupIndex);
         String expenseGroup = filterPathInfo.substring(SKIP_SLASH_VALUE, expenseGroupIndex);
 
-        request.setAttribute("expenseGroup", expenseGroup);
+        request.setAttribute(Constants.EXPENSE_GROUP_ATTRIBUTE_NAME, expenseGroup);
         request.getRequestDispatcher(newPath).forward(servletRequest, servletResponse);
     }
 

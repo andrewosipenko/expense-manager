@@ -59,6 +59,11 @@
                         </c:if>
                     </div>
                 </nav>
+                <c:if test="${infoMessage ne null}">
+                    <div class="alert alert-info">
+                        <strong>${infoMessage}</strong>
+                    </div>
+                </c:if>
                 <jsp:doBody/>
             </div>
         </div>

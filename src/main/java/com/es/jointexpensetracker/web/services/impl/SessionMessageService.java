@@ -1,5 +1,6 @@
 package com.es.jointexpensetracker.web.services.impl;
 
+import com.es.jointexpensetracker.web.Constants;
 import com.es.jointexpensetracker.web.services.MessageService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ public class SessionMessageService implements MessageService {
         HttpSession session = request.getSession(false);
         String message = null;
         if(session != null){
-            message = (String)session.getAttribute("infoMessage");
+            message = (String)session.getAttribute(Constants.INFO_MESSAGE_ATTRIBUTE_NAME);
         }
         return message;
     }
@@ -31,15 +32,15 @@ public class SessionMessageService implements MessageService {
     public void clearMessage(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if(session != null){
-            String message = (String)session.getAttribute("infoMessage");
+            String message = (String)session.getAttribute(Constants.INFO_MESSAGE_ATTRIBUTE_NAME);
             if(message != null){
-                session.removeAttribute("infoMessage");
+                session.removeAttribute(Constants.INFO_MESSAGE_ATTRIBUTE_NAME);
             }
         }
     }
 
     @Override
     public void setMessage(HttpServletRequest request, String message) {
-        request.getSession().setAttribute("infoMessage", message);
+        request.getSession().setAttribute(Constants.INFO_MESSAGE_ATTRIBUTE_NAME, message);
     }
 }
