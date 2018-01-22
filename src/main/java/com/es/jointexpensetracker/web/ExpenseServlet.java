@@ -1,10 +1,11 @@
 package com.es.jointexpensetracker.web;
 
 import com.es.jointexpensetracker.exception.DataNotFoundException;
-import com.es.jointexpensetracker.filter.NotificationFilter;
 import com.es.jointexpensetracker.model.Expense;
 import com.es.jointexpensetracker.service.ExpenseService;
 import com.es.jointexpensetracker.service.ExpenseServiceSingleton;
+import com.es.jointexpensetracker.service.NotificationService;
+import com.es.jointexpensetracker.service.NotificationServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,6 +21,13 @@ public class ExpenseServlet extends HttpServlet {
     private final static String EXPENSE_ADD_JSP_PATH = "/WEB-INF/pages/expense_add.jsp";
     private final static String EXPENSE_JSP_PATH = "/WEB-INF/pages/expense.jsp";
     private final static String SUCCESS_MESSAGE_TEMPLATE = "Expense '%s' was %s successfully";
+
+    private NotificationService notificationService;
+
+    @Override
+    public void init() throws ServletException {
+        this.notificationService = new NotificationServiceImpl();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -70,7 +78,7 @@ public class ExpenseServlet extends HttpServlet {
     private void delete(HttpServletRequest request, ExpenseService service) throws DataNotFoundException{
         Expense expense = loadExpense(service, request.getParameter("id"));
         service.removeExpense(expense);
-        attachMessage(
+        notificationService.attachMessage(
                 request,
                 String.format(SUCCESS_MESSAGE_TEMPLATE, expense.getDescription(), "deleted")
         );
@@ -85,7 +93,7 @@ public class ExpenseServlet extends HttpServlet {
                 LocalDate.parse(request.getParameter("date"))
         );
 
-        attachMessage(
+        notificationService.attachMessage(
                 request,
                 String.format(SUCCESS_MESSAGE_TEMPLATE, expense.getDescription(), "created")
         );
@@ -105,7 +113,7 @@ public class ExpenseServlet extends HttpServlet {
         expense.setDate(
                 LocalDate.parse(request.getParameter("date"))
         );
-        attachMessage(
+        notificationService.attachMessage(
                 request,
                 String.format(SUCCESS_MESSAGE_TEMPLATE, expense.getDescription(), "updated")
         );
@@ -115,11 +123,5 @@ public class ExpenseServlet extends HttpServlet {
             throws DataNotFoundException{
         long expenseId = Long.parseLong(id);
         return service.loadExpenseById(expenseId);
-    }
-
-    private void attachMessage(HttpServletRequest request, String message){
-        request.setAttribute(
-                NotificationFilter.MESSAGE_KEY,
-                message);
     }
 }
