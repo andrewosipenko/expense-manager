@@ -1,4 +1,4 @@
-package com.es.jointexpensetracker.filter;
+package com.es.jointexpensetracker.web.filter;
 
 import com.es.jointexpensetracker.service.NotificationService;
 
