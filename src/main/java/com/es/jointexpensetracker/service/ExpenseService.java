@@ -14,7 +14,7 @@ public interface ExpenseService {
 
     Expense loadExpenseById(long id) throws DataNotFoundException;
 
-    Expense createExpense(String description, BigDecimal amount, Currency currency, String person, LocalDate date);
+    Expense createExpense();
 
     void removeExpense(Expense expense);
 

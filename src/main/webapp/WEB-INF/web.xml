@@ -16,6 +16,11 @@
     <servlet-name>statistics</servlet-name>
     <jsp-file>/WEB-INF/pages/statistics.jsp</jsp-file>
   </servlet>
+  <servlet>
+    <servlet-name>errorHandler</servlet-name>
+    <servlet-class>com.es.jointexpensetracker.web.ErrorServlet</servlet-class>
+  </servlet>
+
 
   <servlet-mapping>
     <servlet-name>expenseList</servlet-name>
@@ -29,6 +34,10 @@
     <servlet-name>statistics</servlet-name>
     <url-pattern>/statistics</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>errorHandler</servlet-name>
+    <url-pattern>/error</url-pattern>
+  </servlet-mapping>
 
   <filter>
     <filter-name>NotificationFilter</filter-name>
@@ -39,4 +48,10 @@
     <filter-name>NotificationFilter</filter-name>
     <url-pattern>/expenses/*</url-pattern>
   </filter-mapping>
+
+  <error-page>
+    <exception-type>java.lang.Throwable</exception-type>
+    <location>/error</location>
+  </error-page>
+
 </web-app>

@@ -59,16 +59,15 @@ public class ExpenseServiceSingleton implements ExpenseService {
     }
 
     @Override
-    public Expense createExpense(String description, BigDecimal amount, Currency currency, String person, LocalDate date) {
-        Expense expense = new Expense(
-                ++this.lastId,
-                description,
-                amount,
-                currency,
-                person,
-                date,
-                this.expenseGroup
-        );
+    public Expense createExpense() {
+        Expense expense = new Expense();
+        expense.setId(++lastId);
+        expense.setExpenseGroup(expenseGroup);
+        expense.setDate(LocalDate.now());
+        expense.setPerson("");
+        expense.setDescription("");
+        expense.setCurrency(Currency.getInstance("USD"));
+        expense.setAmount(BigDecimal.ZERO);
         expenses.add(expense);
         return expense;
     }

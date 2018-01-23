@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Currency;
 
 public class ExpenseServlet extends HttpServlet {
 
@@ -32,21 +31,15 @@ public class ExpenseServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final ExpenseService service = ExpenseServiceSingleton.getInstance();
-        try {
-            if(request.getPathInfo().equals("/add")){
-                request.getRequestDispatcher(EXPENSE_ADD_JSP_PATH).forward(request, response);
-            } else {
-                Expense expense = loadExpense(service, request.getPathInfo().substring(1));
-                request.setAttribute(
-                        "expense",
-                        expense
-                );
-                request.getRequestDispatcher(EXPENSE_JSP_PATH).forward(request, response);
-            }
-        } catch (DataNotFoundException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        if (request.getPathInfo().equals("/add")) {
+            request.getRequestDispatcher(EXPENSE_ADD_JSP_PATH).forward(request, response);
+        } else {
+            Expense expense = loadExpense(service, request.getPathInfo().substring(1));
+            request.setAttribute(
+                    "expense",
+                    expense
+            );
+            request.getRequestDispatcher(EXPENSE_JSP_PATH).forward(request, response);
         }
 
     }
@@ -54,7 +47,6 @@ public class ExpenseServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final ExpenseService service = ExpenseServiceSingleton.getInstance();
-        try {
             switch (request.getPathInfo()) {
                 case "/delete":
                     delete(request, service);
@@ -68,11 +60,6 @@ public class ExpenseServlet extends HttpServlet {
             }
             ExpenseServiceSingleton.getInstance().save();
             response.sendRedirect(getServletContext().getContextPath() + "/expenses");
-        } catch (DataNotFoundException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        }
     }
 
     private void delete(HttpServletRequest request, ExpenseService service) throws DataNotFoundException{
@@ -85,22 +72,30 @@ public class ExpenseServlet extends HttpServlet {
     }
 
     private void create(HttpServletRequest request, ExpenseService service){
-        Expense expense = service.createExpense(
-                request.getParameter("description"),
-                new BigDecimal(request.getParameter("amount")),
-                Currency.getInstance(request.getParameter("currency")),
-                request.getParameter("person"),
-                LocalDate.parse(request.getParameter("date"))
-        );
-
+        Expense expense = service.createExpense();
+        updateExpense(request, expense);
         notificationService.attachMessage(
                 request,
                 String.format(SUCCESS_MESSAGE_TEMPLATE, expense.getDescription(), "created")
         );
     }
 
-    private void update(HttpServletRequest request, ExpenseService service) throws DataNotFoundException{
+    private void update(HttpServletRequest request, ExpenseService service){
         Expense expense = loadExpense(service, request.getPathInfo().substring(1));
+        updateExpense(request, expense);
+        notificationService.attachMessage(
+                request,
+                String.format(SUCCESS_MESSAGE_TEMPLATE, expense.getDescription(), "updated")
+        );
+    }
+
+    private Expense loadExpense(ExpenseService service, String id)
+            throws DataNotFoundException{
+        long expenseId = Long.parseLong(id);
+        return service.loadExpenseById(expenseId);
+    }
+
+    private void updateExpense(HttpServletRequest request, Expense expense){
         expense.setAmount(
                 new BigDecimal(request.getParameter("amount"))
         );
@@ -113,15 +108,5 @@ public class ExpenseServlet extends HttpServlet {
         expense.setDate(
                 LocalDate.parse(request.getParameter("date"))
         );
-        notificationService.attachMessage(
-                request,
-                String.format(SUCCESS_MESSAGE_TEMPLATE, expense.getDescription(), "updated")
-        );
-    }
-
-    private Expense loadExpense(ExpenseService service, String id)
-            throws DataNotFoundException{
-        long expenseId = Long.parseLong(id);
-        return service.loadExpenseById(expenseId);
     }
 }
