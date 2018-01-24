@@ -3,17 +3,15 @@ package com.es.jointexpensetracker.service;
 import com.es.jointexpensetracker.model.Expense;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class ExpenseService {
     private static volatile ExpenseService instance = null;
-    private List<Expense> expenses;
+    private volatile Map<Long, Expense> expenses;
 
     private ExpenseService() {
         String expenseGroup = UUID.randomUUID().toString();
-        expenses = Arrays.asList(
+        List<Expense> tmp = Arrays.asList(
                 new Expense(1L, "Train tickets from Minsk to Warsaw", new BigDecimal(200), "Andrei", expenseGroup),
                 new Expense(2L, "Air tickets from Warsaw to Gran Carania and back", new BigDecimal(2000), "Ivan", expenseGroup),
                 new Expense(3L, "Restaurant", new BigDecimal(90), "Andrei", expenseGroup),
@@ -29,6 +27,10 @@ public class ExpenseService {
                 new Expense(13L, "Air wing", new BigDecimal(50), "Sergei", expenseGroup),
                 new Expense(14L, "Bus tickets from Warsaw to Minsk", new BigDecimal(200), "Andrei", expenseGroup)
         );
+        // TODO for future: either ConcurrentHashMap or synchronized-write methods
+        expenses = new HashMap<>();
+        for (Expense expense : tmp)
+            expenses.put(expense.getId(), expense);
     }
 
     public static synchronized ExpenseService getService(){
@@ -38,8 +40,15 @@ public class ExpenseService {
             return instance = new ExpenseService();
     }
 
-    public List<Expense> getExpenses(){
+    public Map<Long, Expense> getExpenseMap(){
         return expenses;
     }
 
+    public Collection<Expense> getExpenses(){
+        return expenses.values();
+    }
+
+    public Expense getExpenseById(long id){
+        return expenses.get(id);
+    }
 }
