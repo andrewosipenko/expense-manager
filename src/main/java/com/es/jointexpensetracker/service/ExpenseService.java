@@ -6,8 +6,8 @@ import java.math.BigDecimal;
 import java.util.*;
 
 public class ExpenseService {
-    private static volatile ExpenseService instance = null;
-    private volatile Map<Long, Expense> expenses;
+    private static ExpenseService instance;
+    private Map<Long, Expense> expenses;
 
     private ExpenseService() {
         String expenseGroup = UUID.randomUUID().toString();
@@ -33,7 +33,7 @@ public class ExpenseService {
             expenses.put(expense.getId(), expense);
     }
 
-    public static synchronized ExpenseService getService(){
+    public static synchronized ExpenseService getInstance(){
         if (instance != null)
             return instance;
         else

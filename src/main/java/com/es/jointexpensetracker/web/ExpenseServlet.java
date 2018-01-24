@@ -14,7 +14,7 @@ public class ExpenseServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
         try{
-            ExpenseService service = ExpenseService.getService();
+            ExpenseService service = ExpenseService.getInstance();
             long id = Long.parseLong(pathInfo.substring(1));
             Expense expense = service.getExpenseById(id);
             if (expense == null)
