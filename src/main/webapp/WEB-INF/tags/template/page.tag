@@ -39,7 +39,7 @@
 
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item">
-                                <a class="btn btn-success" href="expenses/add">Add expense</a>
+                                <a class="btn btn-success" onclick="redirect:/expenses">Add expense</a>
                             </li>
                         </ul>
                     </div>

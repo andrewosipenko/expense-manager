@@ -7,7 +7,7 @@ import java.util.*;
 
 public class ExpenseService {
     private List<Expense> expenses;
-    private static ExpenseService expenseService = null;
+    private static ExpenseService expenseService;
 
     public ExpenseService(){
 
@@ -36,7 +36,7 @@ public class ExpenseService {
 
     public Expense getOne(int id){
 
-        return expenses.get(id + 1);
+        return expenses.get(id - 1);
     }
 
     public List<Expense> getExpenses() {
@@ -47,7 +47,7 @@ public class ExpenseService {
         this.expenses = expenses;
     }
 
-    public static ExpenseService getInstance(){
+    public static synchronized ExpenseService getInstance(){
         if(expenseService == null){
             expenseService = new ExpenseService();
         }

@@ -33,5 +33,5 @@
             </tr>
         </tbody>
     </table>
-    <a class="btn btn-outline-primary" href="expenses">Back</a>
+    <a class="btn btn-outline-primary" href="expenses.jsp">Back</a>
 </template:page>

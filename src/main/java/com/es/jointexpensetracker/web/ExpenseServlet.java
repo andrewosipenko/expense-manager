@@ -16,7 +16,7 @@ public class ExpenseServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         request.setAttribute("expense", ExpenseService.getInstance().getOne(0));
-        request.getRequestDispatcher("WEB-INF/pages/expense.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/pages/expense.jsp").forward(request, response);
     }
 
     @Override
