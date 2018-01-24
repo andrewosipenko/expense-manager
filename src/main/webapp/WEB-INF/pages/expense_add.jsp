@@ -15,13 +15,13 @@
             </div>
             <div class="row">
                 <div class="col-7">
-                    <input type="text" name="description" placeholder="Decription"/>
+                    <input type="text" name="description" placeholder="Decription" required/>
                 </div>
                 <div class="col-2">
-                    <input type="text" name="person" placeholder="Name"/>
+                    <input type="text" name="person" placeholder="Name" required/>
                 </div>
                 <div class="col-3">
-                    <input type="date" name="date"/>
+                    <input type="date" name="date" required/>
                 </div>
             </div>
             <hr class="my-3">
@@ -30,7 +30,7 @@
                     <p class="mt-1">Amount</p>
                 </div>
                 <div class="col-2">
-                    <input class="text-right" type="number" min="0" name="amount"/>
+                    <input class="text-right" type="number" min="0" name="amount" required/>
                 </div>
                 <div class="col-2">
                     <select class="custom-select" name="currency">

@@ -5,13 +5,16 @@ import java.time.LocalDate;
 import java.util.Currency;
 
 public class Expense {
-    private final Long id;
+    private Long id;
     private String description;
     private BigDecimal amount;
     private Currency currency;
     private String person;
     private LocalDate date;
     private String expenseGroup;
+
+    public Expense(){
+    }
 
     public Expense(Long id, String description, BigDecimal amount, String person, String expenseGroup) {
         this(id, description, amount, Currency.getInstance("USD"), person, LocalDate.now(), expenseGroup);
@@ -29,6 +32,10 @@ public class Expense {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDescription() {
