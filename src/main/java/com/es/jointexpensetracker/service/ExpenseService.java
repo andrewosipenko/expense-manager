@@ -61,8 +61,4 @@ public class ExpenseService {
     public ArrayList<Expense> getExpenses() {
         return expenses;
     }
-
-    public void setExpenses(ArrayList<Expense> expenses) {
-        this.expenses = expenses;
-    }
 }
