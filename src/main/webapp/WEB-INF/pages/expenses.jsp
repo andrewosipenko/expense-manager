@@ -24,7 +24,7 @@
             <c:forEach var="expense" items="${expenses}">
                 <tr>
                     <td>${expense.description}</td>
-                    <td>${expense.amount}</td>
+                    <td>${expense.amount} ${expense.currency.getSymbol()}</td>
                     <td>${expense.person}</td>
                     <td>
                         <a class="btn btn-outline-primary" href="expenses/${expense.id}">View</a>

@@ -3,6 +3,7 @@ package com.es.jointexpensetracker.service;
 import com.es.jointexpensetracker.model.Expense;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 public class ExpenseService {
@@ -25,7 +26,8 @@ public class ExpenseService {
                 new Expense(11L, "New year party shopping", new BigDecimal(30), "Igor", expenseGroup),
                 new Expense(12L, "Surfing", new BigDecimal(30), "Sergei", expenseGroup),
                 new Expense(13L, "Air wing", new BigDecimal(50), "Sergei", expenseGroup),
-                new Expense(14L, "Bus tickets from Warsaw to Minsk", new BigDecimal(200), "Andrei", expenseGroup)
+                new Expense(14L, "Bus tickets from Warsaw to Minsk", new BigDecimal(200), "Andrei", expenseGroup),
+                new Expense(15L, "Test expense with another currency", new BigDecimal(500), Currency.getInstance("CNY"), "Egor", LocalDate.of(1999, 1, 20), expenseGroup)
         );
         // TODO for future: either ConcurrentHashMap or synchronized-write methods
         expenses = new HashMap<>();

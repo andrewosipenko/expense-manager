@@ -20,4 +20,20 @@
             </tr>
         </tbody>
     </table>
+    <div class="jumbotron">
+        <h3>Update expense</h3>
+        <form method="post">
+            <label><input type="text" name="person" value="${expense.person}"/>Person</label>
+            <span style="margin-left:60px"></span>
+            <label><input type="text" name="amount" value="${expense.amount}"/>Amount</label>
+            <select style="height:35px; width:70px; vertical-align: top" name="currency">
+                <c:forTokens var="code" items="USD, EUR, RUB, BYN, CNY" delims=", ">
+                    <option value="${code}" ${expense.currency.getCurrencyCode().equals(code) ? 'selected' : ''}>${code}</option>
+                </c:forTokens>
+            </select>
+            <label style="width:100%"><input type="text" name="description" value="${expense.description}"/>Description</label><br/>
+            <label><input type="date" name="date" value="${expense.date}"/>Date</label>
+            <input style="vertical-align: top" class="btn btn-success pull-right" type="submit" value="Submit"/>
+        </form>
+    </div>
 </template:page>
