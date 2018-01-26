@@ -7,6 +7,9 @@
   <version>1.0-SNAPSHOT</version>
   <name>Joint Expense Tracker (ES servlet-api training task)</name>
   <url>http://maven.apache.org</url>
+  <!-- test PR 1 -->
+  <!-- test PR 12 -->
+  <!-- test PR 13 -->
   <dependencies>
     <dependency>
       <groupId>javax.servlet</groupId>
