@@ -27,7 +27,6 @@ public class StatisticsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         final ExpenseService expenseService = ExpenseServiceSingleton.getInstance();
         List<Expense> expenses = expenseService.getExpenses();
 
@@ -35,6 +34,7 @@ public class StatisticsServlet extends HttpServlet {
 
         request.setAttribute("chartNames", chart.keySet());
         request.setAttribute("chartData", chart.values());
+        request.setAttribute("debts", statisticsService.getDebts(expenses));
 
         request.getRequestDispatcher(STATISTICS_JSP_PATH).forward(request, response);
     }
