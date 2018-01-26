@@ -1,5 +1,6 @@
 package com.es.jointexpensetracker.web;
 
+import com.es.jointexpensetracker.model.Expense;
 import com.es.jointexpensetracker.service.ExpenseService;
 import com.es.jointexpensetracker.service.ExpenseServiceSingleton;
 import com.es.jointexpensetracker.service.StatisticsService;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 public class StatisticsServlet extends HttpServlet {
@@ -27,8 +29,9 @@ public class StatisticsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         final ExpenseService expenseService = ExpenseServiceSingleton.getInstance();
+        List<Expense> expenses = expenseService.getExpenses();
 
-        Map<String, BigDecimal> chart = statisticsService.getChart(expenseService.getExpenses());
+        Map<String, BigDecimal> chart = statisticsService.getChartInfo(expenses);
 
         request.setAttribute("chartNames", chart.keySet());
         request.setAttribute("chartData", chart.values());

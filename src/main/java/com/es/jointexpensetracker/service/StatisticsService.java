@@ -8,6 +8,6 @@ import java.util.Map;
 
 public interface StatisticsService {
 
-    Map<String, BigDecimal> getChart(List<Expense> expenses);
+    Map<String, BigDecimal> getChartInfo(List<Expense> expenses);
 
 }
