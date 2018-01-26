@@ -45,23 +45,20 @@
                     </tr>
                     </thead>
                     <tbody>
+                    <c:forEach var="debt" items="${debts}">
                         <tr>
-                            <td>Andrei</td>
-                            <td>owes 200$ to</td>
-                            <td>Sergei</td>
+                            <td>${debt.debtor}</td>
+                            <td>owes ${debt.amount}$ to</td>
+                            <td>${debt.creditor}</td>
                         </tr>
-                        <tr>
-                            <td>Andrei</td>
-                            <td>owes 100$ to</td>
-                            <td>Ivan</td>
-                        </tr>
-                        <tr>
-                            <td>Ivan</td>
-                            <td>owes 50$ to</td>
-                            <td>Sergei</td>
-                        </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
+                <c:if test="${empty debts}">
+                    <div class="alert alert-success" role="alert">
+                        There is no debts
+                    </div>
+                </c:if>
             </div>
         </div>
     </div>
