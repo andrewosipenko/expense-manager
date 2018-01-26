@@ -4,13 +4,14 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Currency;
 
+
 public class Expense {
     private final Long id;
-    private final String description;
-    private final BigDecimal amount;
-    private final Currency currency;
-    private final String person;
-    private final LocalDate date;
+    private String description;
+    private BigDecimal amount;
+    private Currency currency;
+    private String person;
+    private LocalDate date;
     private final String expenseGroup;
 
     public Expense(Long id, String description, BigDecimal amount, String person, String expenseGroup) {
@@ -25,6 +26,7 @@ public class Expense {
         this.person = person;
         this.date = date;
         this.expenseGroup = expenseGroup;
+
     }
 
     public Long getId() {
@@ -55,4 +57,26 @@ public class Expense {
     {
         return expenseGroup;
     }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPerson(String person) {
+        this.person = person;
+    }
 }
+
+

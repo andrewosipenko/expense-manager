@@ -16,13 +16,17 @@
             </tr>
         </thead>
         <tbody>
-                <tr>
-                    <td>${expense.description}</td>
-                    <td>${expense.amount}</td>
-                    <td>${expense.person}</td>
-                    <td>${expense.currency}</td>
-                    <td>${expense.date}</td>
-                </tr>
+            <tr>
+                <form method="POST">
+                <td width="200%" ><textarea  name="description">${expense.description}</textarea></td>
+                <td><input name="amount" type="number" value="${expense.amount}"></td>
+                <td><input name="person" type="text" value="${expense.person}"></td>
+                <td><input name="currency" type="text" value="${expense.currency}"></td>
+                <td><input name="date" type="date" value="${expense.date}" ></td>
+                <td><input class="btn btn-outline-primary" type="submit" value="Update"></td>
+                </form>
+            </tr>
         </tbody>
     </table>
+
 </template:page>
