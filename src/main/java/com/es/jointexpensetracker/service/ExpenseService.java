@@ -30,21 +30,13 @@ public class ExpenseService {
         );
     }
 
-    public ExpenseService(List<Expense> expenses) {
-        this.expenses = expenses;
-    }
+    public Expense getOne(Long id){
 
-    public Expense getOne(int id){
-
-        return expenses.get(id - 1);
+        return expenses.get(id.intValue() - 1);
     }
 
     public List<Expense> getExpenses() {
         return expenses;
-    }
-
-    public void setExpenses(List<Expense> expenses) {
-        this.expenses = expenses;
     }
 
     public static synchronized ExpenseService getInstance(){

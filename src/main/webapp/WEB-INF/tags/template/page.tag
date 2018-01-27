@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ tag body-content="scriptless" trimDirectiveWhitespaces="true" pageEncoding="UTF-8" %>
 <%@ attribute name="expensesTabIsActive" type="java.lang.Boolean" %>
 <%@ attribute name="statisticsTabIsActive" type="java.lang.Boolean" %>
@@ -30,10 +31,10 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item ${expensesTabIsActive ? 'active' : ''}">
-                                <a class="nav-link" href="expenses">Expenses</a>
+                                <a class="nav-link"  href="${pageContext.request.contextPath}/expenses" >Expenses</a>
                             </li>
                             <li class="nav-item ${statisticsTabIsActive ? 'active' : ''}">
-                                <a class="nav-link" href="statistics">Statistics</a>
+                                <a class="nav-link" href="${pageContext.request.contextPath}/statistics" > Statistics</a>
                             </li>
                         </ul>
 
