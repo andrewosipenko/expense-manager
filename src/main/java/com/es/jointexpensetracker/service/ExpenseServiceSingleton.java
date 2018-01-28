@@ -91,4 +91,9 @@ public class ExpenseServiceSingleton implements ExpenseService {
     public void save() {
         //saving
     }
+
+    //temporary method for redirecting from index.jsp to existing expense group
+    public String getExpenseGroup(){
+        return this.expenseGroup;
+    }
 }
