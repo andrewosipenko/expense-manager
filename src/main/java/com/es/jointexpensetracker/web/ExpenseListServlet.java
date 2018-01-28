@@ -13,6 +13,6 @@ public class ExpenseListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ExpenseService service = ExpenseService.getInstance();
         request.setAttribute("expenses", service.getExpenses());
-        request.getRequestDispatcher("WEB-INF/pages/expenses.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/pages/expenses.jsp").forward(request, response);
     }
 }

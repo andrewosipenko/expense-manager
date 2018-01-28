@@ -11,6 +11,9 @@
             <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
         </p>
     </div>
+    <c:if test="${updateSuccessMessage != null}">
+        <p style="color: limegreen">${updateSuccessMessage.extractMessage()}</p>
+    </c:if>
     <table class="table table-hover">
         <thead>
             <tr>

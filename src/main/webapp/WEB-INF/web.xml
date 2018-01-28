@@ -29,4 +29,14 @@
     <servlet-name>statistics</servlet-name>
     <url-pattern>/statistics</url-pattern>
   </servlet-mapping>
+
+  <filter>
+    <filter-name>expenseValidationFilter</filter-name>
+    <filter-class>com.es.jointexpensetracker.web.ExpenseValidationFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>expenseValidationFilter</filter-name>
+    <servlet-name>expense</servlet-name>
+  </filter-mapping>
 </web-app>
