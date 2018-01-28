@@ -28,8 +28,9 @@ public class StatisticsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final ExpenseService expenseService = ExpenseServiceSingleton.getInstance();
-        List<Expense> expenses = expenseService.getExpenses();
 
+        String expenseGroup = request.getParameter("expenseGroup");
+        List<Expense> expenses = expenseService.getExpensesByGroup(expenseGroup);
         Map<String, BigDecimal> chart = statisticsService.getChartInfo(expenses);
 
         request.setAttribute("chartNames", chart.keySet());

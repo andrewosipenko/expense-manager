@@ -2,10 +2,12 @@ package com.es.jointexpensetracker.service;
 
 import com.es.jointexpensetracker.exception.DataNotFoundException;
 import com.es.jointexpensetracker.model.Expense;
+import com.es.jointexpensetracker.model.Expense.ExpenseKey;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ExpenseServiceSingleton implements ExpenseService {
 
@@ -46,23 +48,31 @@ public class ExpenseServiceSingleton implements ExpenseService {
     }
 
     @Override
-    public List<Expense> getExpenses() {
-        return expenses;
+    public List<Expense> getExpensesByGroup(String expenseGroup) {
+        List<Expense> result = expenses.stream()
+                .filter(e -> e.getExpenseGroup().equals(expenseGroup))
+                .collect(Collectors.toList());
+        if (result.isEmpty()) {
+            throw new DataNotFoundException("Can't find expense group: " + expenseGroup);
+        }
+        return result;
     }
 
     @Override
-    public Expense loadExpenseById(long id) throws DataNotFoundException {
+    public Expense loadExpenseByKey(ExpenseKey key) throws DataNotFoundException {
+        Long id = key.getId();
+        String expenseGroup = key.getExpenseGroup();
         return expenses.stream()
-                .filter((a) -> a.getId() == id)
+                .filter((a) -> a.getId() == id &&
+                                a.getExpenseGroup().equals(expenseGroup))
                 .findFirst()
-                .orElseThrow(() -> new DataNotFoundException("Can't find expense with id="+id));
+                .orElseThrow(() -> new DataNotFoundException("Can't find expense"));
     }
 
     @Override
     public Expense createExpense() {
         Expense expense = new Expense();
-        expense.setId(++lastId);
-        expense.setExpenseGroup(expenseGroup);
+        expense.setKey(new ExpenseKey(++lastId, expenseGroup));
         expense.setDate(LocalDate.now());
         expense.setPerson("");
         expense.setDescription("");

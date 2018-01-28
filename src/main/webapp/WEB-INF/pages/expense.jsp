@@ -63,7 +63,7 @@
                     Are you sure you want to delete '${expense.description}' expense?
                 </div>
                 <div class="modal-footer">
-                    <form action="${pageContext.request.contextPath}/expenses/delete" method="post">
+                    <form action="${expenseGroupPath}/expenses/delete" method="post">
                         <input hidden type="text" name="id" value="${expense.id}"/>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         <input type="submit" class="btn btn-primary" value="Confirm"/>

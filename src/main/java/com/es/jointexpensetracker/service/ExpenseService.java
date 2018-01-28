@@ -3,16 +3,13 @@ package com.es.jointexpensetracker.service;
 import com.es.jointexpensetracker.exception.DataNotFoundException;
 import com.es.jointexpensetracker.model.Expense;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Currency;
 import java.util.List;
 
 public interface ExpenseService {
 
-    List<Expense> getExpenses();
+    List<Expense> getExpensesByGroup(String expenseGroup);
 
-    Expense loadExpenseById(long id) throws DataNotFoundException;
+    Expense loadExpenseByKey(Expense.ExpenseKey key) throws DataNotFoundException;
 
     Expense createExpense();
 
