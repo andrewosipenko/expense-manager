@@ -25,21 +25,21 @@
                     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <a class="navbar-brand mr-5" href="expenses">Joint Expense Tracker</a>
+                    <a class="navbar-brand mr-5" href="/joint-expense-tracker">Joint Expense Tracker</a>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item ${expensesTabIsActive ? 'active' : ''}">
-                                <a class="nav-link" href="${pageContext.request.contextPath}/expenses">Expenses</a>
+                                <a class="nav-link" href="${expenseGroupPath}/expenses">Expenses</a>
                             </li>
                             <li class="nav-item ${statisticsTabIsActive ? 'active' : ''}">
-                                <a class="nav-link" href="${pageContext.request.contextPath}/statistics">Statistics</a>
+                                <a class="nav-link" href="${expenseGroupPath}/statistics">Statistics</a>
                             </li>
                         </ul>
 
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item">
-                                <a class="btn btn-success" href="${pageContext.request.contextPath}/expenses/add">Add expense</a>
+                                <a class="btn btn-success" href="${expenseGroupPath}/expenses/add">Add expense</a>
                             </li>
                         </ul>
                     </div>

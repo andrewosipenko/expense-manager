@@ -3,15 +3,15 @@ package com.es.jointexpensetracker.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Currency;
+import java.util.Objects;
 
 public class Expense {
-    private Long id;
+    private ExpenseKey key;
     private String description;
     private BigDecimal amount;
     private Currency currency;
     private String person;
     private LocalDate date;
-    private String expenseGroup;
 
     public Expense(){
     }
@@ -21,21 +21,20 @@ public class Expense {
     }
 
     public Expense(Long id, String description, BigDecimal amount, Currency currency, String person, LocalDate date, String expenseGroup) {
-        this.id = id;
         this.description = description;
         this.amount = amount;
         this.currency = currency;
         this.person = person;
         this.date = date;
-        this.expenseGroup = expenseGroup;
+        this.key = new ExpenseKey(id, expenseGroup);
     }
 
-    public Long getId() {
-        return id;
+    public Long getId(){
+        return key.getId();
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getExpenseGroup(){
+        return key.getExpenseGroup();
     }
 
     public String getDescription() {
@@ -78,12 +77,30 @@ public class Expense {
         this.date = date;
     }
 
-    public String getExpenseGroup()
-    {
-        return expenseGroup;
+    public void setKey(ExpenseKey key){
+        this.key = key;
     }
 
-    public void setExpenseGroup(String expenseGroup) {
-        this.expenseGroup = expenseGroup;
+    public ExpenseKey getKey(){
+        return key;
+    }
+
+    public static class ExpenseKey {
+        private Long id;
+
+        private String expenseGroup;
+
+        public ExpenseKey(Long id, String expenseGroup){
+            this.id = id;
+            this.expenseGroup = expenseGroup;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public String getExpenseGroup() {
+            return expenseGroup;
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.es.jointexpensetracker.web;
 
 import com.es.jointexpensetracker.exception.DataNotFoundException;
 import com.es.jointexpensetracker.model.Expense;
+import com.es.jointexpensetracker.model.Expense.ExpenseKey;
 import com.es.jointexpensetracker.service.ExpenseService;
 import com.es.jointexpensetracker.service.ExpenseServiceSingleton;
 import com.es.jointexpensetracker.service.NotificationService;
@@ -34,7 +35,8 @@ public class ExpenseServlet extends HttpServlet {
         if (request.getPathInfo().equals("/add")) {
             request.getRequestDispatcher(EXPENSE_ADD_JSP_PATH).forward(request, response);
         } else {
-            Expense expense = loadExpense(service, request.getPathInfo().substring(1));
+            String id = request.getPathInfo().substring(1);
+            Expense expense = loadExpense(service, id, getExpenseGroup(request));
             request.setAttribute(
                     "expense",
                     expense
@@ -47,23 +49,25 @@ public class ExpenseServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final ExpenseService service = ExpenseServiceSingleton.getInstance();
-            switch (request.getPathInfo()) {
-                case "/delete":
-                    delete(request, service);
-                    break;
-                case "/add":
-                    create(request, service);
-                    break;
-                default:
-                    update(request, service);
-                    break;
-            }
-            ExpenseServiceSingleton.getInstance().save();
-            response.sendRedirect(getServletContext().getContextPath() + "/expenses");
+        switch (request.getPathInfo()) {
+            case "/delete":
+                delete(request, service);
+                break;
+            case "/add":
+                create(request, service);
+                break;
+            default:
+                update(request, service);
+                break;
+        }
+        String expenseGroupPath = (String) request.getAttribute("expenseGroupPath");
+        ExpenseServiceSingleton.getInstance().save();
+        response.sendRedirect(expenseGroupPath + "/expenses");
     }
 
     private void delete(HttpServletRequest request, ExpenseService service) throws DataNotFoundException{
-        Expense expense = loadExpense(service, request.getParameter("id"));
+        String id = request.getParameter("id");
+        Expense expense = loadExpense(service, id, getExpenseGroup(request));
         service.removeExpense(expense);
         notificationService.attachMessage(
                 request,
@@ -81,7 +85,8 @@ public class ExpenseServlet extends HttpServlet {
     }
 
     private void update(HttpServletRequest request, ExpenseService service){
-        Expense expense = loadExpense(service, request.getPathInfo().substring(1));
+        String id = request.getPathInfo().substring(1);
+        Expense expense = loadExpense(service, id, getExpenseGroup(request));
         updateExpense(request, expense);
         notificationService.attachMessage(
                 request,
@@ -89,10 +94,16 @@ public class ExpenseServlet extends HttpServlet {
         );
     }
 
-    private Expense loadExpense(ExpenseService service, String id)
-            throws DataNotFoundException{
-        long expenseId = Long.parseLong(id);
-        return service.loadExpenseById(expenseId);
+    private Expense loadExpense(ExpenseService service, String id, String expenseGroup) throws DataNotFoundException{
+        ExpenseKey key = new ExpenseKey(
+                Long.parseLong(id),
+                expenseGroup
+        );
+        return service.loadExpenseByKey(key);
+    }
+
+    private String getExpenseGroup(HttpServletRequest request){
+        return request.getParameter("expenseGroup");
     }
 
     private void updateExpense(HttpServletRequest request, Expense expense){
