@@ -4,6 +4,7 @@ import com.es.jointexpensetracker.model.Debt;
 import com.es.jointexpensetracker.model.Expense;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -13,7 +14,7 @@ public class StatisticsServiceImpl implements StatisticsService{
     public Map<String, BigDecimal> getChartInfo(List<Expense> expenses){
         return expenses.stream()
                 .collect(Collectors.toMap(
-                        (a) -> String.format("'%s'", a.getPerson()),
+                        Expense::getPerson,
                         Expense::getAmount,
                         BigDecimal::add,
                         LinkedHashMap::new
@@ -27,7 +28,7 @@ public class StatisticsServiceImpl implements StatisticsService{
         List<Debt> debts = createDebtList(names);
 
         expenses.forEach(e -> {
-                    BigDecimal value = e.getAmount().divide(namesAmount);
+                    BigDecimal value = e.getAmount().divide(namesAmount, 2, RoundingMode.HALF_EVEN);
                     debts.forEach(debt -> debt.processIncome(e.getPerson(), value));
                 });
         return debts.stream()

@@ -2,7 +2,7 @@ package com.es.jointexpensetracker.service;
 
 import com.es.jointexpensetracker.exception.DataNotFoundException;
 import com.es.jointexpensetracker.model.Expense;
-import com.es.jointexpensetracker.model.Expense.ExpenseKey;
+import com.es.jointexpensetracker.model.ExpenseKey;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,7 +11,8 @@ import java.util.stream.Collectors;
 
 public class ExpenseServiceSingleton implements ExpenseService {
 
-    private ArrayList<Expense> expenses;
+    private List<Expense> expenses;
+    private List<String> expenseGroups;
 
     private long lastId;
     private String expenseGroup;
@@ -19,6 +20,7 @@ public class ExpenseServiceSingleton implements ExpenseService {
     private final static ExpenseServiceSingleton instance = new ExpenseServiceSingleton();
 
     private ExpenseServiceSingleton() {
+        initExpenseGroups();
         initExpenses();
         this.lastId = this.expenses.size();
     }
@@ -27,9 +29,15 @@ public class ExpenseServiceSingleton implements ExpenseService {
         return instance;
     }
 
-    private void initExpenses() {
+    private void initExpenseGroups(){
         this.expenseGroup = UUID.randomUUID().toString();
-        expenses = new ArrayList<>(Arrays.asList(
+        System.out.println("ExpenseServiceSingleton: expenseGroup="+this.expenseGroup);
+        this.expenseGroups = new LinkedList<>();
+        expenseGroups.add(expenseGroup);
+    }
+
+    private void initExpenses() {
+        expenses = new LinkedList<>(Arrays.asList(
                 new Expense(1L, "Train tickets from Minsk to Warsaw", new BigDecimal(200), "Andrei", expenseGroup),
                 new Expense(2L, "Air tickets from Warsaw to Gran Carania and back", new BigDecimal(2000), "Ivan", expenseGroup),
                 new Expense(3L, "Restaurant", new BigDecimal(90), "Andrei", expenseGroup),
@@ -49,28 +57,24 @@ public class ExpenseServiceSingleton implements ExpenseService {
 
     @Override
     public List<Expense> getExpensesByGroup(String expenseGroup) {
-        List<Expense> result = expenses.stream()
-                .filter(e -> e.getExpenseGroup().equals(expenseGroup))
-                .collect(Collectors.toList());
-        if (result.isEmpty()) {
+        if (!expenseGroups.contains(expenseGroup)) {
             throw new DataNotFoundException("Can't find expense group: " + expenseGroup);
         }
-        return result;
+        return expenses.stream()
+                .filter(e -> e.getExpenseGroup().equals(expenseGroup))
+                .collect(Collectors.toList());
     }
 
     @Override
     public Expense loadExpenseByKey(ExpenseKey key) throws DataNotFoundException {
-        Long id = key.getId();
-        String expenseGroup = key.getExpenseGroup();
         return expenses.stream()
-                .filter((a) -> a.getId() == id &&
-                                a.getExpenseGroup().equals(expenseGroup))
+                .filter((a) -> a.getKey().equals(key))
                 .findFirst()
                 .orElseThrow(() -> new DataNotFoundException("Can't find expense"));
     }
 
     @Override
-    public Expense createExpense() {
+    public Expense addExpense(String expenseGroup) {
         Expense expense = new Expense();
         expense.setKey(new ExpenseKey(++lastId, expenseGroup));
         expense.setDate(LocalDate.now());
@@ -92,8 +96,13 @@ public class ExpenseServiceSingleton implements ExpenseService {
         //saving
     }
 
-    //temporary method for redirecting from index.jsp to existing expense group
-    public String getExpenseGroup(){
-        return this.expenseGroup;
+    @Override
+    public String createExpenseGroup(){
+        String newExpenseGroup;
+        do {
+            newExpenseGroup = UUID.randomUUID().toString();
+        } while (expenseGroups.contains(newExpenseGroup));
+        expenseGroups.add(newExpenseGroup);
+        return newExpenseGroup;
     }
 }

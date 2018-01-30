@@ -2,7 +2,7 @@ package com.es.jointexpensetracker.web;
 
 import com.es.jointexpensetracker.exception.DataNotFoundException;
 import com.es.jointexpensetracker.model.Expense;
-import com.es.jointexpensetracker.model.Expense.ExpenseKey;
+import com.es.jointexpensetracker.model.ExpenseKey;
 import com.es.jointexpensetracker.service.ExpenseService;
 import com.es.jointexpensetracker.service.ExpenseServiceSingleton;
 import com.es.jointexpensetracker.service.NotificationService;
@@ -76,7 +76,8 @@ public class ExpenseServlet extends HttpServlet {
     }
 
     private void create(HttpServletRequest request, ExpenseService service){
-        Expense expense = service.createExpense();
+        String expenseGroup = request.getParameter("expenseGroup");
+        Expense expense = service.addExpense(expenseGroup);
         updateExpense(request, expense);
         notificationService.attachMessage(
                 request,
