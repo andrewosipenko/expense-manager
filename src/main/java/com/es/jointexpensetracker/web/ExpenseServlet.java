@@ -76,7 +76,8 @@ public class ExpenseServlet extends HttpServlet {
     }
 
     private void create(HttpServletRequest request, ExpenseService service){
-        Expense expense = service.createExpense();
+        String expenseGroup = request.getParameter("expenseGroup");
+        Expense expense = service.addExpense(expenseGroup);
         updateExpense(request, expense);
         notificationService.attachMessage(
                 request,

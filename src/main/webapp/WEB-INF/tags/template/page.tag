@@ -1,4 +1,5 @@
 <%@ tag body-content="scriptless" trimDirectiveWhitespaces="true" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ attribute name="expensesTabIsActive" type="java.lang.Boolean" %>
 <%@ attribute name="statisticsTabIsActive" type="java.lang.Boolean" %>
 <!DOCTYPE html>
@@ -25,8 +26,9 @@
                     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <a class="navbar-brand mr-5" href="/joint-expense-tracker">Joint Expense Tracker</a>
+                    <a class="navbar-brand mr-5" href="${pageContext.request.contextPath}">Joint Expense Tracker</a>
 
+                    <c:if test="${expenseGroupPath != null}">
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item ${expensesTabIsActive ? 'active' : ''}">
@@ -43,6 +45,7 @@
                             </li>
                         </ul>
                     </div>
+                    </c:if>
                 </nav>
                 <jsp:doBody/>
             </div>

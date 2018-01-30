@@ -2,20 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
 <template:page expensesTabIsActive="${true}">
-    <div class="jumbotron">
-        <h1 class="display-3">Track joint expenses easily</h1>
-        <p class="lead">This simple app helps to track joint expenses for a group of people.</p>
-        <hr class="my-4">
-        <p>So you can easily share the costs and ensure that everyone spends the same amount of cache</p>
+    <template:jumbotron>
         <p class="lead">
             <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
         </p>
-    </div>
+    </template:jumbotron>
 
     <c:if test="${sessionScope.containsKey(\"message\")}">
-        <div class="alert alert-success" role="alert">
-            ${sessionScope.get("message")}
-        </div>
+        <template:alert-success message="${sessionScope.get(\"message\")}"/>
     </c:if>
 
     <table class="table table-hover">
