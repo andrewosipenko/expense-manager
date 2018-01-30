@@ -2,7 +2,7 @@ package com.es.jointexpensetracker.service;
 
 import com.es.jointexpensetracker.exception.DataNotFoundException;
 import com.es.jointexpensetracker.model.Expense;
-import com.es.jointexpensetracker.model.Expense.ExpenseKey;
+import com.es.jointexpensetracker.model.ExpenseKey;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -67,11 +67,8 @@ public class ExpenseServiceSingleton implements ExpenseService {
 
     @Override
     public Expense loadExpenseByKey(ExpenseKey key) throws DataNotFoundException {
-        Long id = key.getId();
-        String expenseGroup = key.getExpenseGroup();
         return expenses.stream()
-                .filter((a) -> a.getId().equals(id) &&
-                                a.getExpenseGroup().equals(expenseGroup))
+                .filter((a) -> a.getKey().equals(key))
                 .findFirst()
                 .orElseThrow(() -> new DataNotFoundException("Can't find expense"));
     }

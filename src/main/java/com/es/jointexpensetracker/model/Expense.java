@@ -3,7 +3,6 @@ package com.es.jointexpensetracker.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Currency;
-import java.util.Objects;
 
 public class Expense {
     private ExpenseKey key;
@@ -85,22 +84,18 @@ public class Expense {
         return key;
     }
 
-    public static class ExpenseKey {
-        private Long id;
-
-        private String expenseGroup;
-
-        public ExpenseKey(Long id, String expenseGroup){
-            this.id = id;
-            this.expenseGroup = expenseGroup;
-        }
-
-        public Long getId() {
-            return id;
-        }
-
-        public String getExpenseGroup() {
-            return expenseGroup;
-        }
+    @Override
+    public int hashCode() {
+        return key.hashCode();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+        if(obj == null) return false;
+        if(!(obj instanceof Expense)) return false;
+        Expense other = (Expense) obj;
+        return this.getKey().equals(other.getKey());
+    }
+
 }

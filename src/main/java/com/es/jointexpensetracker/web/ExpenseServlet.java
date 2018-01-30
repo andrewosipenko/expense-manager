@@ -2,7 +2,7 @@ package com.es.jointexpensetracker.web;
 
 import com.es.jointexpensetracker.exception.DataNotFoundException;
 import com.es.jointexpensetracker.model.Expense;
-import com.es.jointexpensetracker.model.Expense.ExpenseKey;
+import com.es.jointexpensetracker.model.ExpenseKey;
 import com.es.jointexpensetracker.service.ExpenseService;
 import com.es.jointexpensetracker.service.ExpenseServiceSingleton;
 import com.es.jointexpensetracker.service.NotificationService;

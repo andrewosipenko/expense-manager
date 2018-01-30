@@ -14,7 +14,7 @@ public class StatisticsServiceImpl implements StatisticsService{
     public Map<String, BigDecimal> getChartInfo(List<Expense> expenses){
         return expenses.stream()
                 .collect(Collectors.toMap(
-                        (a) -> String.format("'%s'", a.getPerson()),
+                        Expense::getPerson,
                         Expense::getAmount,
                         BigDecimal::add,
                         LinkedHashMap::new

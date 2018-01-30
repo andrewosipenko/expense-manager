@@ -17,7 +17,12 @@
             var myPieChart = new Chart(ctxP, {
                 type: 'pie',
                 data: {
-                    labels: ${chartNames},
+                    labels: [
+                        <c:forEach var="name" items="${chartNames}" varStatus="status">
+                        '<c:out value="${name}"/>'
+                        <c:if test="${!status.last}">,</c:if>
+                        </c:forEach>
+                    ],
                     datasets: [
                         {
                             data: ${chartData},
