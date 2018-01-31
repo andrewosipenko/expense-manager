@@ -13,10 +13,10 @@
         </thead>
         <tbody>
             <tr>
-                <td>${expense.person}</td>
-                <td>${expense.amount} ${expense.currency.getCurrencyCode()}</td>
-                <td>${expense.description}</td>
-                <td>${expense.date}</td>
+                <td><c:out value="${expense.person}"/></td>
+                <td><c:out value="${expense.amount} ${expense.currency.getCurrencyCode()}"/></td>
+                <td><c:out value="${expense.description}"/></td>
+                <td><c:out value="${expense.date}"/></td>
             </tr>
         </tbody>
     </table>
@@ -34,7 +34,7 @@
                 </label>
                 <select style="height:35px; width:70px; vertical-align: top" name="currency">
                     <c:forTokens var="code" items="USD, EUR, RUB, BYN, CNY" delims=", ">
-                        <option value="${code}" ${expense.currency.getCurrencyCode().equals(code) ? 'selected' : ''}>${code}</option>
+                        <option value="${code}" ${expense.currency.getCurrencyCode().equals(code) ? 'selected' : ''}><c:out value="${code}"/></option>
                     </c:forTokens>
                 </select>
             </span>

@@ -2,17 +2,22 @@ package com.es.jointexpensetracker.service;
 
 import com.es.jointexpensetracker.model.Expense;
 
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class ExpenseService {
-    private static ExpenseService instance;
+public final class ExpenseService {
     private Map<Long, Expense> expenses;
 
     private ExpenseService() {
         String expenseGroup = UUID.randomUUID().toString();
-        List<Expense> tmp = Arrays.asList(
+        // TODO for future: either ConcurrentHashMap or synchronized-write methods
+        expenses = Stream.of(
                 new Expense(1L, "Train tickets from Minsk to Warsaw", new BigDecimal(200), "Andrei", expenseGroup),
                 new Expense(2L, "Air tickets from Warsaw to Gran Carania and back", new BigDecimal(2000), "Ivan", expenseGroup),
                 new Expense(3L, "Restaurant", new BigDecimal(90), "Andrei", expenseGroup),
@@ -28,18 +33,11 @@ public class ExpenseService {
                 new Expense(13L, "Air wing", new BigDecimal(50), "Sergei", expenseGroup),
                 new Expense(14L, "Bus tickets from Warsaw to Minsk", new BigDecimal(200), "Andrei", expenseGroup),
                 new Expense(15L, "Test expense with another currency", new BigDecimal(500), Currency.getInstance("CNY"), "Egor", LocalDate.of(1999, 1, 20), expenseGroup)
-        );
-        // TODO for future: either ConcurrentHashMap or synchronized-write methods
-        expenses = new HashMap<>();
-        for (Expense expense : tmp)
-            expenses.put(expense.getId(), expense);
+        ).collect(Collectors.toMap(Expense::getId, Function.identity(), (one, two)->one, HashMap::new));
     }
 
-    public static synchronized ExpenseService getInstance(){
-        if (instance != null)
-            return instance;
-        else
-            return instance = new ExpenseService();
+    public static ExpenseService getInstance(){
+        return ExpenseServiceHolder.instance;
     }
 
     public Map<Long, Expense> getExpenseMap(){
@@ -52,5 +50,9 @@ public class ExpenseService {
 
     public Expense getExpenseById(long id){
         return expenses.get(id);
+    }
+
+    private static class ExpenseServiceHolder{
+        private static ExpenseService instance = new ExpenseService();
     }
 }

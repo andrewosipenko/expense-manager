@@ -12,7 +12,7 @@
         </p>
     </div>
     <c:if test="${updateSuccessMessage != null}">
-        <p style="color: limegreen">${updateSuccessMessage.extractMessage()}</p>
+        <p style="color: limegreen"><c:out value="${updateSuccessMessage}"/></p>
     </c:if>
     <table class="table table-hover">
         <thead>
@@ -26,9 +26,9 @@
         <tbody>
             <c:forEach var="expense" items="${expenses}">
                 <tr>
-                    <td>${expense.description}</td>
-                    <td>${expense.amount} ${expense.currency.getSymbol()}</td>
-                    <td>${expense.person}</td>
+                    <td><c:out value="${expense.description}"/></td>
+                    <td><c:out value="${expense.amount} ${expense.currency.getSymbol()}"/></td>
+                    <td><c:out value="${expense.person}"/></td>
                     <td>
                         <a class="btn btn-outline-primary" href="expenses/${expense.id}">View</a>
                     </td>

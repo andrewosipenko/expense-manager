@@ -85,6 +85,6 @@ public class UpdateExpenseFormParser extends FormParser {
 
     @Override
     public String getErrorMessage() {
-        return "Update failed for some reasons:<br/>- " + super.getErrorMessage();
+        return isValid() ?  null : "Update failed for some reasons:<br/>- " + super.getErrorMessage();
     }
 }
