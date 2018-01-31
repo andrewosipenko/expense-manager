@@ -2,6 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
 <template:page >
+    <c:if test="${not empty flashMessage}">
+        <p align="center">Expense update failed</p>
+        <p align="center"  >${flashMessage}</p>
+    </c:if>
     <div class="jumbotron">
         <p class="lead">Here you can see expense details</p>
     </div>
@@ -18,7 +22,7 @@
         <tbody>
             <tr>
                 <form method="POST">
-                <td width="200%" ><textarea  name="description">${expense.description}</textarea></td>
+                <td width="200%"><textarea  name="description">${expense.description}</textarea></td>
                 <td><input name="amount" type="number" value="${expense.amount}"></td>
                 <td><input name="person" type="text" value="${expense.person}"></td>
                 <td><input name="currency" type="text" value="${expense.currency}"></td>
@@ -28,5 +32,4 @@
             </tr>
         </tbody>
     </table>
-
 </template:page>

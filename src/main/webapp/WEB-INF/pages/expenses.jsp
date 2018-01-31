@@ -2,6 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
 <template:page expensesTabIsActive="${true}">
+    <c:if test="${not empty flashMessage}">
+        <p align="center">${flashMessage}</p>
+    </c:if>
     <div class="jumbotron">
         <h1 class="display-3">Track joint expenses easily</h1>
         <p class="lead">This simple app helps to track joint expenses for a group of people.</p>

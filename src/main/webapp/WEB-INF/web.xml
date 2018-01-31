@@ -16,6 +16,10 @@
     <servlet-name>statistics</servlet-name>
     <jsp-file>/WEB-INF/pages/statistics.jsp</jsp-file>
   </servlet>
+  <filter>
+    <filter-name>flashScope</filter-name>
+    <filter-class>com.es.jointexpensetracker.filter.FlashScopeFilter</filter-class>
+  </filter>
 
   <servlet-mapping>
     <servlet-name>expenseList</servlet-name>
@@ -29,4 +33,16 @@
     <servlet-name>statistics</servlet-name>
     <url-pattern>/statistics</url-pattern>
   </servlet-mapping>
-</web-app>
+  <filter-mapping>
+    <filter-name>flashScope</filter-name>
+    <servlet-name>expenseList</servlet-name>
+    <servlet-name>expense</servlet-name>
+  </filter-mapping>
+
+<error-page>
+  <error-code>404</error-code>
+  <location>/WEB-INF/pages/page404.jsp</location>
+</error-page>
+  </web-app>
+
+

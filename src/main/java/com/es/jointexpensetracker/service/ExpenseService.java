@@ -34,13 +34,13 @@ public class ExpenseService {
 
     public static ExpenseService getInstance()
     {
-        if (instance==null)
+        if (instance == null)
         {
             synchronized (ExpenseService.class)
             {
-                if (instance==null)
+                if (instance == null)
                 {
-                    instance=new ExpenseService();
+                    instance = new ExpenseService();
                 }
             }
 
@@ -48,9 +48,10 @@ public class ExpenseService {
         return instance;
     }
 
-    public Expense getExpense(int index)
+    public Expense getExpense(Long id) throws IllegalArgumentException
     {
-        return expenses.get(index);
+       return expenses.stream().filter(expense -> expense.getId().equals(id)).findAny().
+               orElseThrow(IllegalArgumentException::new);
     }
 
     public void addExpense(Expense newExpense)

@@ -3,8 +3,6 @@
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
 <template:page >
     <div class="jumbotron">
-         <h1 class="display-3">Ooops, something went wrong.</h1>
-         <p class="lead">${exception}</p>
-
+        <h1 class="display-3">There is no such page.</h1>
     </div>
 </template:page>

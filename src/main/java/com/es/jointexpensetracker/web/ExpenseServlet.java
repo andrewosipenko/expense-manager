@@ -7,9 +7,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -21,19 +21,13 @@ public class ExpenseServlet extends HttpServlet {
     {
         try
         {
-            int id = getExpenseID(request);
-            if(id<1 || id>ExpenseService.getInstance().getExpenses().size())
-            {
-                throw new NumberFormatException();
-            }
-            request.setAttribute("expense", ExpenseService.getInstance().getExpense(id-1));
+            Long id = getExpenseID(request);
+            request.setAttribute("expense", ExpenseService.getInstance().getExpense(id));
             request.getRequestDispatcher("/WEB-INF/pages/expense.jsp").forward(request,response);
         }
-        catch (NumberFormatException e)
+        catch (IllegalArgumentException e)
         {
-            request.setAttribute("exception","There is no such page :c");
-            request.getRequestDispatcher("/WEB-INF/pages/page404.jsp").forward(request,response);
-            return;
+            response.sendError(response.SC_NOT_FOUND,"There is no such page");
         }
     }
 
@@ -42,47 +36,45 @@ public class ExpenseServlet extends HttpServlet {
     {
         try
         {
-            int id = getExpenseID(request);
+            Long id = getExpenseID(request);
 
             String description =  request.getParameter("description");
 
-            Integer amountValue = Integer.parseInt( request.getParameter("amount"));
-            BigDecimal amount = new BigDecimal(amountValue);
+            BigDecimal amount = new BigDecimal( getAmount(request) );
 
             String person =  request.getParameter("person");
 
-            Currency currency;
-            if ( isValidCurrency( request.getParameter("currency") ) )
-            {
-                currency = Currency.getInstance( request.getParameter("currency"));
-            }
-            else
-            {
-                throw new IllegalArgumentException("Invalid currency");
-            }
+            Currency currency = getCurrency(request);
 
             LocalDate date = getExpenseDate(request);
 
-            Expense expense = ExpenseService.getInstance().getExpense(id-1);
+            Expense expense = ExpenseService.getInstance().getExpense(id);
             expense.setDescription(description);
             expense.setAmount(amount);
             expense.setPerson(person);
             expense.setCurrency(currency);
             expense.setDate(date);
 
+            HttpSession session = request.getSession(true);
+            session.setAttribute("flashMessage","Expense "+
+                    "\""+expense.getDescription()+"\""+" was added successfully");
             response.sendRedirect(request.getContextPath()+"/expenses");
         }
-        catch (IllegalArgumentException |DateTimeParseException e )
+        catch (NumberFormatException e)
         {
-            request.setAttribute("exception",e.getMessage());
-            request.getRequestDispatcher("/WEB-INF/pages/page404.jsp").forward(request,response);
-            return;
+            response.sendError(response.SC_NOT_FOUND);
+        }
+        catch (IllegalArgumentException | DateTimeParseException e )
+        {
+            HttpSession session = request.getSession(true);
+            session.setAttribute("flashMessage", e.getMessage());
+            response.sendRedirect(request.getRequestURL().toString());
         }
     }
 
-    private int getExpenseID(HttpServletRequest request) throws NumberFormatException
+    private Long getExpenseID(HttpServletRequest request) throws NumberFormatException
     {
-        return Integer.parseInt(request.getPathInfo().substring(1));
+        return Long.parseLong(request.getPathInfo().substring(1));
     }
 
     private LocalDate getExpenseDate(HttpServletRequest request) throws DateTimeParseException
@@ -108,6 +100,33 @@ public class ExpenseServlet extends HttpServlet {
         }
         return false;
     }
+
+    private Currency getCurrency(HttpServletRequest request) throws IllegalArgumentException
+    {
+        if ( isValidCurrency( request.getParameter("currency") ) )
+        {
+            return Currency.getInstance( request.getParameter("currency"));
+        }
+        else
+        {
+            throw new IllegalArgumentException("Invalid currency");
+        }
+    }
+
+    private Double getAmount(HttpServletRequest request) throws IllegalArgumentException
+    {
+        Double amountValue = Double.parseDouble( request.getParameter("amount"));
+        if (amountValue < 0)
+        {
+            throw new IllegalArgumentException("Amount shouldn't be negative");
+        }
+        else
+        {
+            return amountValue;
+        }
+    }
+
+
 
 
 }
