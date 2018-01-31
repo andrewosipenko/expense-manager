@@ -52,4 +52,7 @@
             <p style="color: red">${updateErrorMessage}</p>
         </c:if>
     </div>
+    <form method="post" style="margin: 0 auto; text-align: center">
+        <input class="btn btn-success" name="delete" type="submit" value="Delete expense"/>
+    </form>
 </template:page>

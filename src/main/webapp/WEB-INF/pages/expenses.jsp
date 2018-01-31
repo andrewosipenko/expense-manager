@@ -1,3 +1,4 @@
+<%@ page import="com.es.jointexpensetracker.model.Expense" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
@@ -14,6 +15,9 @@
     <c:if test="${updateSuccessMessage != null}">
         <p style="color: limegreen"><c:out value="${updateSuccessMessage}"/></p>
     </c:if>
+    <c:if test="${deleteSuccessMessage != null}">
+        <p style="color: limegreen"><c:out value="${deleteSuccessMessage}"/></p>
+    </c:if>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -25,10 +29,11 @@
         </thead>
         <tbody>
             <c:forEach var="expense" items="${expenses}">
+                <c:set var="helper" value="${expense.helper}"/>
                 <tr>
-                    <td><c:out value="${expense.description}"/></td>
-                    <td><c:out value="${expense.amount} ${expense.currency.getSymbol()}"/></td>
-                    <td><c:out value="${expense.person}"/></td>
+                    <td><c:out value="${helper.description}"/></td>
+                    <td><c:out value="${helper.amount} ${helper.currency.getSymbol()}"/></td>
+                    <td><c:out value="${helper.person}"/></td>
                     <td>
                         <a class="btn btn-outline-primary" href="expenses/${expense.id}">View</a>
                     </td>

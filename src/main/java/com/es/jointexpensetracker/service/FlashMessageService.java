@@ -1,15 +1,18 @@
 package com.es.jointexpensetracker.service;
 
 import javax.servlet.http.HttpSession;
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-public final class SessionMessageService {
+public class FlashMessageService {
+    private static final FlashMessageService instance = new FlashMessageService();
     private static final String SESSION_FLASH_MESSAGES_ATTR = "flashMessageNames";
     private static final String SESSION_LOCK_ATTR = "sessionLock";
-    private static final Object globalLock = new Object();
-
-    private SessionMessageService(){}
+    private static final Object globalLock = new Object(); /* if irl this class hadn't followed a singleton pattern, the synchronization
+                                                              mechanism could be handled like in ExpenseService class */
+    private FlashMessageService(){}
 
     private Object getSessionLock(HttpSession session){
         Object lock;
@@ -64,13 +67,9 @@ public final class SessionMessageService {
         }
     }
 
-    public static SessionMessageService getInstance() {
-        return SessionMessageServiceHolder.instance;
+    public static FlashMessageService getInstance() {
+        return instance;
     }
 
-    private static class MessageNameList extends ArrayList<String>{} // avoid unchecked class cast to List<String>
-
-    private static class SessionMessageServiceHolder{
-        private static SessionMessageService instance = new SessionMessageService();
-    }
+    private static class MessageNameList extends ArrayList<String> {} // avoid unchecked class cast to List<String>
 }

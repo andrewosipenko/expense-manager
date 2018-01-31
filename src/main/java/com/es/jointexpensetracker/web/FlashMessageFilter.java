@@ -1,20 +1,19 @@
 package com.es.jointexpensetracker.web;
 
-import com.es.jointexpensetracker.service.SessionMessageService;
+import com.es.jointexpensetracker.service.FlashMessageService;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 
-public class SessionMessageServiceFilter implements Filter{
-    private SessionMessageService service;
+public class FlashMessageFilter implements Filter {
+    private FlashMessageService service;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        service = SessionMessageService.getInstance();
+        service = FlashMessageService.getInstance();
     }
 
     @Override

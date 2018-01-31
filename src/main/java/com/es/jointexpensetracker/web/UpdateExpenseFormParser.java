@@ -32,7 +32,7 @@ public class UpdateExpenseFormParser extends FormParser {
         LocalDate date = null;
         try{
             date = LocalDate.parse(request.getParameter("date"));
-        } catch (DateTimeParseException e){
+        } catch (DateTimeParseException | NullPointerException e){
             setErrorState("Failed to parse date parameter");
         }
 
@@ -40,7 +40,7 @@ public class UpdateExpenseFormParser extends FormParser {
         Currency currency = null;
         try{
             currency = Currency.getInstance(request.getParameter("currency"));
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException | NullPointerException e){
             setErrorState("Failed to parse currency parameter");
         }
 
@@ -50,7 +50,7 @@ public class UpdateExpenseFormParser extends FormParser {
             amount = new BigDecimal(request.getParameter("amount"));
             if (amount.compareTo(BigDecimal.valueOf(0)) <= 0)
                 setErrorState("Amount must be correct decimal number greater than 0");
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException | NullPointerException e){
             setErrorState("Amount must be correct decimal number greater than 0");
         }
 
