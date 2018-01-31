@@ -2,6 +2,7 @@
 <%@ tag body-content="scriptless" trimDirectiveWhitespaces="true" pageEncoding="UTF-8" %>
 <%@ attribute name="expensesTabIsActive" type="java.lang.Boolean" %>
 <%@ attribute name="statisticsTabIsActive" type="java.lang.Boolean" %>
+<%@ attribute name="enabledAddButton" type="java.lang.Boolean" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,12 +38,15 @@
                                 <a class="nav-link" href="${pageContext.request.contextPath}/statistics" > Statistics</a>
                             </li>
                         </ul>
+                        <c:if test="${enabledAddButton ne false}">
+                                <ul class="navbar-nav ml-auto">
+                                    <li class="nav-item">
+                                        <a class="btn btn-success" onclick="redirect:/expenses">Add expense</a>
+                                    </li>
+                                </ul>
+                        </c:if>
 
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item">
-                                <a class="btn btn-success" onclick="redirect:/expenses">Add expense</a>
-                            </li>
-                        </ul>
+
                     </div>
                 </nav>
                 <jsp:doBody/>

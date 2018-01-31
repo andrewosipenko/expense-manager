@@ -79,4 +79,5 @@ public class Expense {
     public void setExpenseGroup(String expenseGroup) {
         this.expenseGroup = expenseGroup;
     }
+
 }

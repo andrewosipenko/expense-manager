@@ -2,113 +2,99 @@ package com.es.jointexpensetracker.web;
 
 
 import com.es.jointexpensetracker.constants.Constants;
+import com.es.jointexpensetracker.exception.ExpenseNotFoundException;
+import com.es.jointexpensetracker.exception.InvalidPathException;
 import com.es.jointexpensetracker.model.Expense;
 import com.es.jointexpensetracker.service.ExpenseService;
+import com.es.jointexpensetracker.service.MessageService;
+import com.es.jointexpensetracker.utils.ExpenseUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Currency;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class ExpenseServlet extends HttpServlet {
 
+    private ExpenseService expenseService;
+    private MessageService messageService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+
+        expenseService = ExpenseService.getInstance();
+        messageService = MessageService.getInstance();
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+     try {
+       Long id = ExpenseUtil.getId(request);
 
-        final int PATH_MISMATCH = 0;
+        request.setAttribute("expense", expenseService.getExpense(id).get());
+        request.setAttribute("currencies", Currency.getAvailableCurrencies());
+        request.getRequestDispatcher("/WEB-INF/pages/expense.jsp").forward(request, response);
+     }  catch (InvalidPathException | NoSuchElementException e) {
+         String errorMessage = e.getMessage();
+         if(errorMessage != null)
+              request.setAttribute(Constants.ERROR_MESSAGE_ATTRIBUTE,errorMessage);
+         response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+     }
 
-        Long id = getID(request);
-        if(id != PATH_MISMATCH) {
-            request.setAttribute("expense", ExpenseService.getInstance().getOne(id));
-            request.setAttribute("currencies", Currency.getAvailableCurrencies());
-            request.getRequestDispatcher("/WEB-INF/pages/expense.jsp").forward(request, response);
-        }
-        else {
-            throw new IllegalArgumentException("Request path mismatch");
-        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            Long id = ExpenseUtil.getId(request);
 
-        Long id = getID(request);
-        if(id != Constants.PATH_MISMATCH) {
-            Expense expense = getValidExpense(request);
-            if(expense != null) {
-
-                setExpenseUpdate(expense);
-                response.sendRedirect(request.getContextPath()+"/expenses");
-            } else {
-                request.setAttribute("expense", ExpenseService.getInstance().getOne(id));
-                request.setAttribute("currencies", Currency.getAvailableCurrencies());
-                request.getRequestDispatcher("/WEB-INF/pages/expense.jsp").forward(request, response);
+            if(request.getParameter("update") != null) {
+                onUpdate(request,response,id);
+            } else if (request.getParameter("delete") != null) {
+                onDelete(request,response,id);
             }
+        } catch (InvalidPathException | ExpenseNotFoundException e) {
+            String errorMessage = e.getMessage();
+            if(errorMessage != null)
+                request.setAttribute(Constants.ERROR_MESSAGE_ATTRIBUTE,errorMessage);
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+        }
+    }
 
+    private void onUpdate(HttpServletRequest request,HttpServletResponse response, Long id) throws IOException, ServletException, InvalidPathException, ExpenseNotFoundException {
+
+        Expense expense;
+        Optional<Expense> expenseOptional = ExpenseUtil.getValidExpense(request, response);
+        if(expenseOptional.isPresent()) {
+            expense = expenseOptional.get();
+            expenseService.updateExpense(expense);
+            messageService.setMessage(request,"Expense  "+expense.getDescription()+" was updated successfully ");
+
+            response.sendRedirect(request.getContextPath()+"/expenses");
         } else {
-            throw new IllegalArgumentException("Request path mismatch");
-        }
-
-    }
-
-
-    private Long getID(HttpServletRequest request) {
-
-        String pathInfo = request.getPathInfo();
-        if(pathInfo.substring(Constants.SKIP_SLASH).matches("[1-9]+[0-9]*")) {
-            return Long.parseLong(pathInfo.substring(Constants.SKIP_SLASH));
-        }
-        else {
-            return ((long) Constants.PATH_MISMATCH);
+            request.setAttribute("expense", expenseService.getExpense(id).orElseThrow(ExpenseNotFoundException::new));
+            request.setAttribute("currencies", Currency.getAvailableCurrencies());
+            messageService.setMessage(request, "Check the data for valid input ");
+            request.getRequestDispatcher("/WEB-INF/pages/expense.jsp").forward(request, response);
         }
     }
 
-    private void setExpenseUpdate(Expense expense) {
+    private void onDelete(HttpServletRequest request, HttpServletResponse response, Long id) throws IOException, ServletException, ExpenseNotFoundException {
 
-        ExpenseService.getInstance().getOne(expense.getId()).setDescription(expense.getDescription());
-        ExpenseService.getInstance().getOne(expense.getId()).setAmount(expense.getAmount());
-        ExpenseService.getInstance().getOne(expense.getId()).setCurrency(expense.getCurrency());
-        ExpenseService.getInstance().getOne(expense.getId()).setPerson(expense.getPerson());
-        ExpenseService.getInstance().getOne(expense.getId()).setDate(expense.getDate());
-        ExpenseService.getInstance().getOne(expense.getId()).setExpenseGroup(expense.getExpenseGroup());
-    }
-
-    private Expense getValidExpense(HttpServletRequest request) {
-
-        Expense expense = null;
-        boolean emptyInput = false;
-
-        Map<String,String> params = new HashMap<>();
-        params.put("description",request.getParameter("description"));
-        params.put("amount",request.getParameter("amount"));
-        params.put("person",request.getParameter("person"));
-        params.put("expenseGroup",request.getParameter("expenseGroup"));
-
-        for(Map.Entry<String,String> entry : params.entrySet()) {
-            if(entry.getValue().trim().equals("")) {
-                emptyInput = true;
-                break;
-            }
+        Optional<Expense> expense = expenseService.getExpense(id);
+        if(expense.isPresent()) {
+            expenseService.delete(id);
+            messageService.setMessage(request,"Expense  "+expense.get().getDescription()+" was deleted successfully");
+            response.sendRedirect(request.getContextPath()+"/expenses");
+        }  else {
+            throw new ExpenseNotFoundException("Expense to be deleted does not exist");
         }
-
-        if(!emptyInput) {
-             expense = new Expense(
-                    (getID(request)),
-                    request.getParameter("description"),
-                    BigDecimal.valueOf(Long.valueOf(request.getParameter("amount"))),
-                    Currency.getInstance(request.getParameter("currency")),
-                    request.getParameter("person"),
-                    LocalDate.parse(request.getParameter("date")),
-                    request.getParameter("expenseGroup")
-            );
-        }
-
-        return expense;
     }
 }

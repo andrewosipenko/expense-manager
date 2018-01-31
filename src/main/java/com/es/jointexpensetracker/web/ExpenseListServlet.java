@@ -1,6 +1,8 @@
 package com.es.jointexpensetracker.web;
 
 import com.es.jointexpensetracker.service.ExpenseService;
+import com.es.jointexpensetracker.service.MessageService;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,5 +16,6 @@ public class ExpenseListServlet extends HttpServlet {
 
         request.setAttribute("expenses", ExpenseService.getInstance().getExpenses());
         request.getRequestDispatcher("WEB-INF/pages/expenses.jsp").forward(request, response);
+
     }
 }

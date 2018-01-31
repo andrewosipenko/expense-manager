@@ -2,10 +2,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-<template:page expensesTabIsActive="${true}">
+<template:page expensesTabIsActive="${true}" enabledAddButton="${true}" >
     <div class="jumbotron">
         <h1 class="display-3">Expense details</h1>
     </div>
+
+    <c:if test="${message ne null}">
+        <div class="alert alert-danger">
+            <strong>${message}</strong>
+        </div>
+    </c:if>
+
     <form method="post" >
     <table class="table table-hover">
         <thead>
@@ -39,7 +46,10 @@
 
         </tbody>
     </table>
-    <input class="btn btn-outline-primary" type="submit" value="Update expense" />
+        <div class="d-flex justify-content-between">
+            <input class ="btn btn-success" type="submit" value="Update" name="update" />
+            <input class="btn btn-danger" type="submit" value="Delete" name="delete" />
+        </div>
     </form>
 </template:page>
 

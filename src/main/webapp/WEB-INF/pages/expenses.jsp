@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
-<template:page expensesTabIsActive="${true}">
+<template:page expensesTabIsActive="${true}" enabledAddButton="${true}" >
     <div class="jumbotron">
         <h1 class="display-3">Track joint expenses easily</h1>
         <p class="lead">This simple app helps to track joint expenses for a group of people.</p>
@@ -11,6 +11,13 @@
             <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
         </p>
     </div>
+
+    <c:if test="${message ne null}">
+        <div class="alert alert-success">
+            <strong>${message}</strong>
+        </div>
+    </c:if>
+
     <table class="table table-hover">
         <thead>
             <tr>
