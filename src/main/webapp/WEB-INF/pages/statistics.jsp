@@ -17,10 +17,15 @@
             var myPieChart = new Chart(ctxP, {
                 type: 'pie',
                 data: {
-                    labels: ["Andre", "Igor", "Sergei", "Ivan", "Dark Grey"],
+                    labels: [
+                        <c:forEach var="name" items="${chartNames}" varStatus="status">
+                        '<c:out value="${name}"/>'
+                        <c:if test="${!status.last}">,</c:if>
+                        </c:forEach>
+                    ],
                     datasets: [
                         {
-                            data: [300, 50, 100, 40, 120],
+                            data: ${chartData},
                             backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
                             hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
                         }
@@ -45,23 +50,20 @@
                     </tr>
                     </thead>
                     <tbody>
+                    <c:forEach var="debt" items="${debts}">
                         <tr>
-                            <td>Andrei</td>
-                            <td>owes 200$ to</td>
-                            <td>Sergei</td>
+                            <td>${debt.debtor}</td>
+                            <td>owes ${debt.amount}$ to</td>
+                            <td>${debt.creditor}</td>
                         </tr>
-                        <tr>
-                            <td>Andrei</td>
-                            <td>owes 100$ to</td>
-                            <td>Ivan</td>
-                        </tr>
-                        <tr>
-                            <td>Ivan</td>
-                            <td>owes 50$ to</td>
-                            <td>Sergei</td>
-                        </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
+                <c:if test="${empty debts}">
+                    <div class="alert alert-success" role="alert">
+                        There is no debts
+                    </div>
+                </c:if>
             </div>
         </div>
     </div>
