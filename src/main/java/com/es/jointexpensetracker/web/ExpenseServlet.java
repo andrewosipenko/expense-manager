@@ -34,6 +34,7 @@ public class ExpenseServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+        System.out.println("Post");
         try
         {
             Long id = getExpenseID(request);
@@ -57,7 +58,7 @@ public class ExpenseServlet extends HttpServlet {
 
             HttpSession session = request.getSession(true);
             session.setAttribute("flashMessage","Expense "+
-                    "\""+expense.getDescription()+"\""+" was added successfully");
+                    "\""+expense.getDescription()+"\""+" was updated successfully");
             response.sendRedirect(request.getContextPath()+"/expenses");
         }
         catch (NumberFormatException e)
@@ -67,17 +68,17 @@ public class ExpenseServlet extends HttpServlet {
         catch (IllegalArgumentException | DateTimeParseException e )
         {
             HttpSession session = request.getSession(true);
-            session.setAttribute("flashMessage", e.getMessage());
+            session.setAttribute("flashMessage", "Update failed. "+ e.getMessage());
             response.sendRedirect(request.getRequestURL().toString());
         }
     }
 
-    private Long getExpenseID(HttpServletRequest request) throws NumberFormatException
+    protected Long getExpenseID(HttpServletRequest request) throws NumberFormatException
     {
         return Long.parseLong(request.getPathInfo().substring(1));
     }
 
-    private LocalDate getExpenseDate(HttpServletRequest request) throws DateTimeParseException
+    protected LocalDate getExpenseDate(HttpServletRequest request) throws DateTimeParseException
     {
         try
         {
@@ -89,7 +90,7 @@ public class ExpenseServlet extends HttpServlet {
         }
     }
 
-    private boolean isValidCurrency(String currency)
+    protected boolean isValidCurrency(String currency)
     {
         for (Currency availableCurrency : Currency.getAvailableCurrencies())
         {
@@ -101,7 +102,7 @@ public class ExpenseServlet extends HttpServlet {
         return false;
     }
 
-    private Currency getCurrency(HttpServletRequest request) throws IllegalArgumentException
+    protected Currency getCurrency(HttpServletRequest request) throws IllegalArgumentException
     {
         if ( isValidCurrency( request.getParameter("currency") ) )
         {
@@ -113,7 +114,7 @@ public class ExpenseServlet extends HttpServlet {
         }
     }
 
-    private Double getAmount(HttpServletRequest request) throws IllegalArgumentException
+    protected Double getAmount(HttpServletRequest request) throws IllegalArgumentException
     {
         Double amountValue = Double.parseDouble( request.getParameter("amount"));
         if (amountValue < 0)
@@ -125,8 +126,4 @@ public class ExpenseServlet extends HttpServlet {
             return amountValue;
         }
     }
-
-
-
-
 }

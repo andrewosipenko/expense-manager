@@ -3,7 +3,6 @@
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
 <template:page >
     <c:if test="${not empty flashMessage}">
-        <p align="center">Expense update failed</p>
         <p align="center"  >${flashMessage}</p>
     </c:if>
     <div class="jumbotron">
@@ -22,13 +21,22 @@
         <tbody>
             <tr>
                 <form method="POST">
-                <td width="200%"><textarea  name="description">${expense.description}</textarea></td>
-                <td><input name="amount" type="number" value="${expense.amount}"></td>
-                <td><input name="person" type="text" value="${expense.person}"></td>
-                <td><input name="currency" type="text" value="${expense.currency}"></td>
-                <td><input name="date" type="date" value="${expense.date}" ></td>
-                <td><input class="btn btn-outline-primary" type="submit" value="Update"></td>
+                    <td width="200%"><textarea  name="description">${expense.description}</textarea></td>
+                    <td><input name="amount" type="number" value="${expense.amount}"></td>
+                    <td><input name="person" type="text" value="${expense.person}"></td>
+                    <td><input name="currency" type="text" value="${expense.currency}"></td>
+                    <td><input name="date" type="date" value="${expense.date}" ></td>
+                    <td><input class="btn btn-outline-primary" type="submit" value="Update"></td>
+                    <td>
+                        <button formaction="/deleteExpense/${expense.id}" class="btn btn-outline-primary" type="submit">Delete</button>
+                    </td>
                 </form>
+
+                <%--<form method="post" action="/deleteExpense/${expense.id}">
+                    <td>
+                        <input type="submit" value="Delete">
+                    </td>
+                </form>--%>
             </tr>
         </tbody>
     </table>

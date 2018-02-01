@@ -51,13 +51,20 @@ public class ExpenseService {
     public Expense getExpense(Long id) throws IllegalArgumentException
     {
        return expenses.stream().filter(expense -> expense.getId().equals(id)).findAny().
-               orElseThrow(IllegalArgumentException::new);
+               orElseThrow(()->new IllegalArgumentException("There is no expense with id "+id));
     }
 
     public void addExpense(Expense newExpense)
     {
         expenses.add(newExpense);
     }
+
+    public void deleteExpense(Long id) throws IllegalArgumentException
+    {
+        Expense expenseToDelete = getExpense(id);
+        expenses.remove(expenseToDelete);
+    }
+
 
     public ArrayList<Expense> getExpenses() {
         return expenses;
