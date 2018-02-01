@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Currency;
 import java.util.Optional;
 
@@ -46,8 +48,8 @@ public class ExpenseUtil {
         if(pathInfo.substring(Constants.SKIP_SLASH).matches("[1-9]+[0-9]*")) {
             return Long.parseLong(pathInfo.substring(Constants.SKIP_SLASH));
         }
-        else {
-           throw new InvalidPathException("Invalid URL path");
-        }
+        else if (pathInfo.substring(Constants.SKIP_SLASH).equals("add")) {
+           return  Collections.max(ExpenseService.getInstance().getExpenses(),Comparator.comparing(Expense::getId)).getId() +1;
+        } else throw new InvalidPathException("Invalid URL path");
     }
 }

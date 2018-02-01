@@ -74,6 +74,10 @@ public class ExpenseService {
 
     }
 
+    public void add(Expense expense) {
+        expenses.add(expense);
+    }
+
 
 }
 

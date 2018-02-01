@@ -41,12 +41,10 @@
                         <c:if test="${enabledAddButton ne false}">
                                 <ul class="navbar-nav ml-auto">
                                     <li class="nav-item">
-                                        <a class="btn btn-success" onclick="redirect:/expenses">Add expense</a>
+                                        <a class="btn btn-success" href="${pageContext.request.contextPath}/expenses/add" >Add expense</a>
                                     </li>
                                 </ul>
                         </c:if>
-
-
                     </div>
                 </nav>
                 <jsp:doBody/>
