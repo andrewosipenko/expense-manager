@@ -24,7 +24,7 @@
 
   <filter>
     <filter-name>MainFilter</filter-name>
-    <filter-class>com.es.jointexpensetracker.filter.MainFilter</filter-class>
+    <filter-class>com.es.jointexpensetracker.filter.MessageFilter</filter-class>
   </filter>
   <servlet>
     <servlet-name>expenseList</servlet-name>
