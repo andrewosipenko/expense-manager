@@ -31,12 +31,6 @@
                         <button formaction="/deleteExpense/${expense.id}" class="btn btn-outline-primary" type="submit">Delete</button>
                     </td>
                 </form>
-
-                <%--<form method="post" action="/deleteExpense/${expense.id}">
-                    <td>
-                        <input type="submit" value="Delete">
-                    </td>
-                </form>--%>
             </tr>
         </tbody>
     </table>
