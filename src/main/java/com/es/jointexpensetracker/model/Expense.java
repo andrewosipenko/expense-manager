@@ -3,9 +3,12 @@ package com.es.jointexpensetracker.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Currency;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 public class Expense {
+    private final static AtomicLong atomicCounter = new AtomicLong(0);
     private final Long id;
     private String description;
     private BigDecimal amount;
@@ -14,12 +17,18 @@ public class Expense {
     private LocalDate date;
     private final String expenseGroup;
 
-    public Expense(Long id, String description, BigDecimal amount, String person, String expenseGroup) {
-        this(id, description, amount, Currency.getInstance("USD"), person, LocalDate.now(), expenseGroup);
+    public Expense()
+    {
+        id = getNewID();
+        expenseGroup = UUID.randomUUID().toString();
     }
 
-    public Expense(Long id, String description, BigDecimal amount, Currency currency, String person, LocalDate date, String expenseGroup) {
-        this.id = id;
+    public Expense(String description, BigDecimal amount, String person, String expenseGroup) {
+        this(description, amount, Currency.getInstance("USD"), person, LocalDate.now(), expenseGroup);
+    }
+
+    public Expense(String description, BigDecimal amount, Currency currency, String person, LocalDate date, String expenseGroup) {
+        this.id = getNewID();
         this.description = description;
         this.amount = amount;
         this.currency = currency;
@@ -27,6 +36,11 @@ public class Expense {
         this.date = date;
         this.expenseGroup = expenseGroup;
 
+    }
+
+    private Long getNewID()
+    {
+        return atomicCounter.addAndGet(1);
     }
 
     public Long getId() {

@@ -5,6 +5,14 @@
   <display-name>Joint Expense Tracker (ES servlet-api training task)</display-name>
 
   <servlet>
+    <servlet-name>addExpense</servlet-name>
+    <servlet-class>com.es.jointexpensetracker.web.AddExpenseServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>deleteExpense</servlet-name>
+    <servlet-class>com.es.jointexpensetracker.web.DeleteExpenseServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>expenseList</servlet-name>
     <servlet-class>com.es.jointexpensetracker.web.ExpenseListServlet</servlet-class>
   </servlet>
@@ -20,7 +28,15 @@
     <filter-name>flashScope</filter-name>
     <filter-class>com.es.jointexpensetracker.filter.FlashScopeFilter</filter-class>
   </filter>
-
+  
+  <servlet-mapping>
+    <servlet-name>addExpense</servlet-name>
+    <url-pattern>/expenses/add</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>deleteExpense</servlet-name>
+    <url-pattern>/deleteExpense/*</url-pattern>
+  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>expenseList</servlet-name>
     <url-pattern>/expenses</url-pattern>
@@ -33,10 +49,12 @@
     <servlet-name>statistics</servlet-name>
     <url-pattern>/statistics</url-pattern>
   </servlet-mapping>
+
   <filter-mapping>
     <filter-name>flashScope</filter-name>
     <servlet-name>expenseList</servlet-name>
     <servlet-name>expense</servlet-name>
+    <servlet-name>addExpense</servlet-name>
   </filter-mapping>
 
 <error-page>

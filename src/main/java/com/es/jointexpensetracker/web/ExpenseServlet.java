@@ -14,8 +14,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Currency;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ExpenseServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -34,27 +37,12 @@ public class ExpenseServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        System.out.println("Post");
         try
         {
             Long id = getExpenseID(request);
-
-            String description =  request.getParameter("description");
-
-            BigDecimal amount = new BigDecimal( getAmount(request) );
-
-            String person =  request.getParameter("person");
-
-            Currency currency = getCurrency(request);
-
-            LocalDate date = getExpenseDate(request);
-
             Expense expense = ExpenseService.getInstance().getExpense(id);
-            expense.setDescription(description);
-            expense.setAmount(amount);
-            expense.setPerson(person);
-            expense.setCurrency(currency);
-            expense.setDate(date);
+            Map<String,Object> expenseData = parseExpenseData(request);
+            fillExpenseWith(expense,expenseData);
 
             HttpSession session = request.getSession(true);
             session.setAttribute("flashMessage","Expense "+
@@ -71,6 +59,38 @@ public class ExpenseServlet extends HttpServlet {
             session.setAttribute("flashMessage", "Update failed. "+ e.getMessage());
             response.sendRedirect(request.getRequestURL().toString());
         }
+    }
+
+    protected Map<String,Object> parseExpenseData(HttpServletRequest request)
+    {
+        String description =  request.getParameter("description");
+        BigDecimal amount = new BigDecimal( getAmount(request) );
+        String person =  request.getParameter("person");
+        Currency currency = getCurrency(request);
+        LocalDate date = getExpenseDate(request);
+
+        Map<String,Object> expenseData = new HashMap<>();
+        expenseData.put("description",description);
+        expenseData.put("amount",amount);
+        expenseData.put("person",person);
+        expenseData.put("currency",currency);
+        expenseData.put("date",date);
+        return expenseData;
+    }
+
+    protected void fillExpenseWith(Expense expense,Map<String,Object> expenseData)
+    {
+        String description =  (String) expenseData.get("description");
+        BigDecimal amount = (BigDecimal) expenseData.get("amount");
+        String person =  (String) expenseData.get("person");
+        Currency currency = (Currency) expenseData.get("currency");
+        LocalDate date = (LocalDate) expenseData.get("date");
+
+        expense.setDescription(description);
+        expense.setAmount(amount);
+        expense.setPerson(person);
+        expense.setCurrency(currency);
+        expense.setDate(date);
     }
 
     protected Long getExpenseID(HttpServletRequest request) throws NumberFormatException
@@ -116,7 +136,12 @@ public class ExpenseServlet extends HttpServlet {
 
     protected Double getAmount(HttpServletRequest request) throws IllegalArgumentException
     {
-        Double amountValue = Double.parseDouble( request.getParameter("amount"));
+        String amount = request.getParameter("amount");
+        if (amount.length()<1)
+        {
+            throw new IllegalArgumentException("Amount shouldn't be empty");
+        }
+        Double amountValue = Double.parseDouble( amount );
         if (amountValue < 0)
         {
             throw new IllegalArgumentException("Amount shouldn't be negative");
