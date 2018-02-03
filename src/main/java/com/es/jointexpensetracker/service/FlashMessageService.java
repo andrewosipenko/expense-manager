@@ -10,8 +10,8 @@ public class FlashMessageService {
     private static final FlashMessageService instance = new FlashMessageService();
     private static final String SESSION_FLASH_MESSAGES_ATTR = "flashMessageNames";
     private static final String SESSION_LOCK_ATTR = "sessionLock";
-    private static final Object globalLock = new Object(); /* if irl this class hadn't followed a singleton pattern, the synchronization
-                                                              mechanism could be handled like in ExpenseService class */
+    private static final Object globalLock = new Object();
+
     private FlashMessageService(){}
 
     private Object getSessionLock(HttpSession session){
@@ -54,13 +54,13 @@ public class FlashMessageService {
                 return Collections.emptyMap();
             else if (messageNamesObj instanceof MessageNameList) {
                 MessageNameList messageNames = (MessageNameList) messageNamesObj;
-                session.removeAttribute(SESSION_FLASH_MESSAGES_ATTR);
                 Map<String, Object> messages = new HashMap<>();
                 messageNames.forEach(name -> {
                     Object val = session.getAttribute(name);
                     session.removeAttribute(name);
                     messages.put(name, val);
                 });
+                messageNames.clear();
                 return messages;
             } else
                 throw new IllegalStateException("Session already has a flash message list attribute of wrong type");

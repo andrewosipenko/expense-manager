@@ -12,11 +12,8 @@
             <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
         </p>
     </div>
-    <c:if test="${updateSuccessMessage != null}">
-        <p style="color: limegreen"><c:out value="${updateSuccessMessage}"/></p>
-    </c:if>
-    <c:if test="${deleteSuccessMessage != null}">
-        <p style="color: limegreen"><c:out value="${deleteSuccessMessage}"/></p>
+    <c:if test="${operationSuccessMessage != null}">
+        <p style="color: limegreen"><c:out value="${operationSuccessMessage}"/></p>
     </c:if>
     <table class="table table-hover">
         <thead>

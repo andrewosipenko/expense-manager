@@ -8,14 +8,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Currency;
 
-public class UpdateExpenseFormParser extends FormParser {
+public class ExpenseFormParser extends FormParser {
     private String person;
     private String description;
     private BigDecimal amount;
     private Currency currency;
     private LocalDate date;
 
-    public UpdateExpenseFormParser(HttpServletRequest request){
+    public ExpenseFormParser(HttpServletRequest request){
         setDelimiter("<br/>- ");
 
         // Validate person

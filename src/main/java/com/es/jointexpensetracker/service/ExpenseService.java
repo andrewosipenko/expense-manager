@@ -2,12 +2,11 @@ package com.es.jointexpensetracker.service;
 
 import com.es.jointexpensetracker.model.Expense;
 
-import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BinaryOperator;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -15,10 +14,11 @@ import java.util.stream.Stream;
 public final class ExpenseService {
     private static final ExpenseService instance = new ExpenseService();
     private Map<Long, Expense> expenses;
-    private final Object lock = new Object(); // assuming that it would not be a singleton and each user would have his own service (and lock) instances
+    private AtomicLong nextId;
+    private String expenseGroup;
 
     private ExpenseService() {
-        String expenseGroup = UUID.randomUUID().toString();
+        expenseGroup = UUID.randomUUID().toString();
         expenses = Stream.of(
                 new Expense(1L, "Train tickets from Minsk to Warsaw", new BigDecimal(200), "Andrei", expenseGroup),
                 new Expense(2L, "Air tickets from Warsaw to Gran Carania and back", new BigDecimal(2000), "Ivan", expenseGroup),
@@ -34,7 +34,8 @@ public final class ExpenseService {
                 new Expense(12L, "Surfing", new BigDecimal(30), "Sergei", expenseGroup),
                 new Expense(13L, "Air wing", new BigDecimal(50), "Sergei", expenseGroup),
                 new Expense(14L, "Bus tickets from Warsaw to Minsk", new BigDecimal(200), "Andrei", expenseGroup)
-        ).collect(Collectors.toMap(Expense::getId, Function.identity(), (one, two)->one, HashMap::new));
+        ).collect(Collectors.toMap(Expense::getId, Function.identity(), (one, two)->one, ConcurrentHashMap::new));
+        nextId = new AtomicLong(15L);
     }
 
     public static ExpenseService getInstance(){
@@ -42,9 +43,7 @@ public final class ExpenseService {
     }
 
     public Collection<Expense> getExpenses(){
-        synchronized (lock) {
-            return new ArrayList<>(expenses.values());
-        }
+        return Collections.unmodifiableCollection(expenses.values());
     }
 
     public Expense getExpenseById(long id){
@@ -52,9 +51,13 @@ public final class ExpenseService {
     }
 
     public void removeExpense(Expense expense){
-        synchronized (lock) {
-            expenses.remove(expense.getId());
-        }
+        expenses.remove(expense.getId());
     }
 
+    public Expense addExpense(String person, String description, BigDecimal amount, Currency currency, LocalDate date){
+        long id = nextId.getAndIncrement();
+        Expense expense = new Expense(id, description, amount, currency, person, date, expenseGroup);
+        expenses.put(id, expense);
+        return expense;
+    }
 }
