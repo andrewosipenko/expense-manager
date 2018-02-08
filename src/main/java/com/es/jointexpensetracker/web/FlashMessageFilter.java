@@ -4,9 +4,7 @@ import com.es.jointexpensetracker.service.FlashMessageService;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Map;
 
 public class FlashMessageFilter implements Filter {
     private FlashMessageService service;
@@ -19,14 +17,10 @@ public class FlashMessageFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        HttpSession session = request.getSession();
-        Map<String, Object> messages = service.getFlashMessages(session);
-        messages.forEach(request::setAttribute);
+        service.forwardFlashMessages(request);
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override
-    public void destroy() {
-
-    }
+    public void destroy() {}
 }

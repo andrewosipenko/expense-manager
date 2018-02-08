@@ -1,16 +1,15 @@
 package com.es.jointexpensetracker.service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 
-public class FlashMessageService {
+public final class FlashMessageService {
     private static final FlashMessageService instance = new FlashMessageService();
     private static final String SESSION_FLASH_MESSAGES_ATTR = "flashMessageNames";
     private static final String SESSION_LOCK_ATTR = "sessionLock";
     private static final Object globalLock = new Object();
+    public static final String DEFAULT_MESSAGE_NAME = "flashMessage";
 
     private FlashMessageService(){}
 
@@ -27,43 +26,44 @@ public class FlashMessageService {
         return lock;
     }
 
-    public void putFlashMessage(HttpSession session, String name, Object message) throws IllegalStateException, IllegalArgumentException{
-        if (name == null || message == null)
-            throw new IllegalArgumentException("Message name and value mustn't be null-strings");
+    public void putFlashMessage(HttpServletRequest request, String name, Object message) throws IllegalStateException, IllegalArgumentException{
+        HttpSession session = request.getSession();
+        if (name == null)
+            throw new IllegalArgumentException("Message name mustn't be null");
+        if (message == null)
+            throw new IllegalArgumentException("Message value mustn't be null");
         if (session == null)
             throw new IllegalArgumentException("Session object mustn't be null");
         synchronized (getSessionLock(session)){
-            Object messageNamesObj = session.getAttribute(SESSION_FLASH_MESSAGES_ATTR);
-            if (messageNamesObj == null){
-                messageNamesObj = new MessageNameList();
-                session.setAttribute(SESSION_FLASH_MESSAGES_ATTR, messageNamesObj);
-            } else if (!(messageNamesObj instanceof MessageNameList))
-                throw new IllegalStateException("Session already has a flash message list attribute of wrong type");
-            MessageNameList messageNames = (MessageNameList) messageNamesObj;
-            session.setAttribute(name, message);
-            messageNames.add(name);
+            Object messagesObj = session.getAttribute(SESSION_FLASH_MESSAGES_ATTR);
+            if (messagesObj == null){
+                messagesObj = new MessageMap();
+                session.setAttribute(SESSION_FLASH_MESSAGES_ATTR, messagesObj);
+            } else if (!(messagesObj instanceof MessageMap))
+                throw new IllegalStateException("Session already has a flash message map attribute of wrong type");
+            MessageMap messageNames = (MessageMap) messagesObj;
+            messageNames.put(name, message);
         }
     }
 
-    public Map<String, Object> getFlashMessages(HttpSession session) throws IllegalStateException, IllegalArgumentException{
+    public void putFlashMessage(HttpServletRequest request, Object message){
+        putFlashMessage(request, DEFAULT_MESSAGE_NAME, message);
+    }
+
+    public void forwardFlashMessages(HttpServletRequest request) throws IllegalStateException, IllegalArgumentException{
+        HttpSession session = request.getSession();
         if (session == null)
             throw new IllegalArgumentException("Session object mustn't be null");
         synchronized (getSessionLock(session)){
-            Object messageNamesObj = session.getAttribute(SESSION_FLASH_MESSAGES_ATTR);
-            if (messageNamesObj == null)
-                return Collections.emptyMap();
-            else if (messageNamesObj instanceof MessageNameList) {
-                MessageNameList messageNames = (MessageNameList) messageNamesObj;
-                Map<String, Object> messages = new HashMap<>();
-                messageNames.forEach(name -> {
-                    Object val = session.getAttribute(name);
-                    session.removeAttribute(name);
-                    messages.put(name, val);
-                });
-                messageNames.clear();
-                return messages;
+            Object messagesObj = session.getAttribute(SESSION_FLASH_MESSAGES_ATTR);
+            session.removeAttribute(SESSION_FLASH_MESSAGES_ATTR);
+            if (messagesObj == null)
+                return;
+            if (messagesObj instanceof MessageMap) {
+                MessageMap messages = (MessageMap) messagesObj;
+                messages.forEach(request::setAttribute);
             } else
-                throw new IllegalStateException("Session already has a flash message list attribute of wrong type");
+                throw new IllegalStateException("Session already has a flash message map attribute of wrong type");
         }
     }
 
@@ -71,5 +71,5 @@ public class FlashMessageService {
         return instance;
     }
 
-    private static class MessageNameList extends ArrayList<String> {} // avoid unchecked class cast to List<String>
+    private static class MessageMap extends HashMap<String, Object> {} // avoid unchecked class cast to Map<String, Object>
 }

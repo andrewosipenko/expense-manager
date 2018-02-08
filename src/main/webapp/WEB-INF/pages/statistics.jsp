@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
 <template:page statisticsTabIsActive="${true}">
+    <br/>
     <h1 class="page-header">Total expenses per person</h1>
     <div class="container">
         <div class="row">
@@ -17,12 +18,28 @@
             var myPieChart = new Chart(ctxP, {
                 type: 'pie',
                 data: {
-                    labels: ["Andre", "Igor", "Sergei", "Ivan", "Dark Grey"],
+                    labels: [
+                        <c:forEach var="name" items="${names}">
+                            "${name}",
+                        </c:forEach>
+                    ],
                     datasets: [
                         {
-                            data: [300, 50, 100, 40, 120],
-                            backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
-                            hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+                            data: [
+                                <c:forEach var="amount" items="${amounts}">
+                                    ${amount},
+                                </c:forEach>
+                            ],
+                            backgroundColor: [
+                                <c:forEach var="color" items="${colors}">
+                                    "${color}",
+                                </c:forEach>
+                            ],
+                            hoverBackgroundColor: [
+                                <c:forEach var="color" items="${highlightedColors}">
+                                    "${color}",
+                                </c:forEach>
+                            ]
                         }
                     ]
                 },
@@ -32,6 +49,7 @@
             });
         });
     </script>
+    <br/>
     <h1 class="page-header">Debts</h1>
     <div class="container">
         <div class="row">

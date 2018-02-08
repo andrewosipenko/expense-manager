@@ -1,8 +1,9 @@
-<%@ page import="com.es.jointexpensetracker.model.Expense" %>
+<%@ page import="com.es.jointexpensetracker.service.FlashMessageService" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
 <template:page expensesTabIsActive="${true}">
+    <c:set var="flashMessageName" value="<%=FlashMessageService.DEFAULT_MESSAGE_NAME%>"/>
     <div class="jumbotron">
         <h1 class="display-3">Track joint expenses easily</h1>
         <p class="lead">This simple app helps to track joint expenses for a group of people.</p>
@@ -12,6 +13,7 @@
             <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
         </p>
     </div>
+    <c:set var="operationSuccessMessage" value="${requestScope[flashMessageName]}"/>
     <c:if test="${operationSuccessMessage != null}">
         <p style="color: limegreen"><c:out value="${operationSuccessMessage}"/></p>
     </c:if>
@@ -29,7 +31,7 @@
                 <c:set var="helper" value="${expense.helper}"/>
                 <tr>
                     <td><c:out value="${helper.description}"/></td>
-                    <td><c:out value="${helper.amount} ${helper.currency.getSymbol()}"/></td>
+                    <td><c:out value="${helper.amount} ${helper.currency.symbol}"/></td>
                     <td><c:out value="${helper.person}"/></td>
                     <td>
                         <a class="btn btn-outline-primary" href="expenses/${expense.id}">View</a>

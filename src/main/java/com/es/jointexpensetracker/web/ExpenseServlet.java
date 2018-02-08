@@ -11,6 +11,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ExpenseServlet extends HttpServlet {
+    private ExpenseService expenseService;
+    private FlashMessageService messageService;
+
+    @Override
+    public void init() throws ServletException {
+        expenseService = ExpenseService.getInstance();
+        messageService = FlashMessageService.getInstance();
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getPathInfo().substring(1);
@@ -30,50 +39,54 @@ public class ExpenseServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getPathInfo().substring(1);
-        FlashMessageService messageService = FlashMessageService.getInstance();
         if (path.equals("add")){
-            if (request.getParameter("add") != null) {
-                ExpenseFormParser parser = new ExpenseFormParser(request);
-                if (parser.isValid()) {
-                    ExpenseService expenseService = ExpenseService.getInstance();
-                    Expense expense = expenseService.addExpense(parser.getPerson(), parser.getDescription(), parser.getAmount(), parser.getCurrency(), parser.getDate());
-                    messageService.putFlashMessage(request.getSession(), "operationSuccessMessage",
-                            "Expense '" + expense.getHelper().getDescription() + "' has been created successfully");
-                    response.sendRedirect(request.getContextPath() + "/expenses");
-                } else {
-                    messageService.putFlashMessage(request.getSession(), "formErrorMessage", parser.getErrorMessage());
-                    response.sendRedirect(request.getRequestURI());
-                }
-            } else {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            }
+            processAddExpense(request, response);
             return;
         }
         Expense expense = getExpenseByUrlPath(path);
-        if (expense != null){
-            if (request.getParameter("update") != null){
-                ExpenseFormParser parser = new ExpenseFormParser(request);
-                if (parser.isValid()){
-                    expense.update(parser.getPerson(), parser.getDescription(), parser.getAmount(), parser.getCurrency(), parser.getDate());
-                    messageService.putFlashMessage(request.getSession(), "operationSuccessMessage",
-                            "Expense '" + expense.getHelper().getDescription() + "' has been updated successfully");
-                    response.sendRedirect(request.getContextPath() + "/expenses");
-                } else {
-                    messageService.putFlashMessage(request.getSession(), "formErrorMessage", parser.getErrorMessage());
-                    response.sendRedirect(request.getRequestURI());
-                }
-            } else if (request.getParameter("delete") != null){
-                ExpenseService expenseService = ExpenseService.getInstance();
-                expenseService.removeExpense(expense);
-                messageService.putFlashMessage(request.getSession(), "operationSuccessMessage",
-                        "Expense '" + expense.getHelper().getDescription() + "' has been deleted successfully");
-                response.sendRedirect(request.getContextPath() + "/expenses");
-            } else {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            }
-        } else {
+        if (expense == null){
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
         }
+        if (request.getParameter("update") != null)
+            processUpdateExpense(request, response, expense);
+        else if (request.getParameter("delete") != null)
+            processDeleteExpense(request, response, expense);
+        else
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    private void processAddExpense(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ExpenseFormParser parser = new ExpenseFormParser(request);
+        if (parser.isValid()) {
+            Expense expense = expenseService.addExpense(parser.getPerson(), parser.getDescription(), parser.getAmount(), parser.getCurrency(), parser.getDate());
+            setFlashMessageAndRedirect(request, response, request.getContextPath() + "/expenses",
+                    "Expense '" + expense.getHelper().getDescription() + "' has been created successfully");
+        } else {
+            setFlashMessageAndRedirect(request, response, request.getRequestURI(), parser.getErrorMessage());
+        }
+    }
+
+    private void processUpdateExpense(HttpServletRequest request, HttpServletResponse response, Expense expense) throws IOException {
+        ExpenseFormParser parser = new ExpenseFormParser(request);
+        if (parser.isValid()){
+            expense.update(parser.getPerson(), parser.getDescription(), parser.getAmount(), parser.getCurrency(), parser.getDate());
+            setFlashMessageAndRedirect(request, response, request.getContextPath() + "/expenses",
+                    "Expense '" + expense.getHelper().getDescription() + "' has been updated successfully");
+        } else {
+            setFlashMessageAndRedirect(request, response, request.getRequestURI(), parser.getErrorMessage());
+        }
+    }
+
+    private void processDeleteExpense(HttpServletRequest request, HttpServletResponse response, Expense expense) throws IOException {
+        expenseService.removeExpense(expense);
+        setFlashMessageAndRedirect(request, response, request.getContextPath() + "/expenses",
+                "Expense '" + expense.getHelper().getDescription() + "' has been deleted successfully");
+    }
+
+    private void setFlashMessageAndRedirect(HttpServletRequest request, HttpServletResponse response, String url, String message) throws IOException {
+        messageService.putFlashMessage(request, message);
+        response.sendRedirect(url);
     }
 
     private Expense getExpenseByUrlPath(String path){
@@ -81,7 +94,7 @@ public class ExpenseServlet extends HttpServlet {
             Expense expense = null;
             try{
                 long id = Long.parseLong(path);
-                expense = ExpenseService.getInstance().getExpenseById(id);
+                expense = expenseService.getExpenseById(id);
             } catch (NumberFormatException ignored) {}
             return expense;
         }
