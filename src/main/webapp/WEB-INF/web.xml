@@ -3,32 +3,32 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
   <display-name>Joint Expense Tracker (ES servlet-api training task)</display-name>
-
+  
+  <servlet>
+    <servlet-name>statistics</servlet-name>
+    <servlet-class>com.es.jointexpensetracker.web.servlet.StatisticsServlet</servlet-class>
+  </servlet>
   <servlet>
     <servlet-name>addExpense</servlet-name>
-    <servlet-class>com.es.jointexpensetracker.web.AddExpenseServlet</servlet-class>
+    <servlet-class>com.es.jointexpensetracker.web.servlet.AddExpenseServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>deleteExpense</servlet-name>
-    <servlet-class>com.es.jointexpensetracker.web.DeleteExpenseServlet</servlet-class>
+    <servlet-class>com.es.jointexpensetracker.web.servlet.DeleteExpenseServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>expenseList</servlet-name>
-    <servlet-class>com.es.jointexpensetracker.web.ExpenseListServlet</servlet-class>
+    <servlet-class>com.es.jointexpensetracker.web.servlet.ExpenseListServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>expense</servlet-name>
-    <servlet-class>com.es.jointexpensetracker.web.ExpenseServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>statistics</servlet-name>
-    <jsp-file>/WEB-INF/pages/statistics.jsp</jsp-file>
+    <servlet-class>com.es.jointexpensetracker.web.servlet.ExpenseServlet</servlet-class>
   </servlet>
   <filter>
     <filter-name>flashScope</filter-name>
     <filter-class>com.es.jointexpensetracker.filter.FlashScopeFilter</filter-class>
   </filter>
-  
+
   <servlet-mapping>
     <servlet-name>addExpense</servlet-name>
     <url-pattern>/expenses/add</url-pattern>
