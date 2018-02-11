@@ -50,7 +50,7 @@ public final class FlashMessageService {
         putFlashMessage(request, DEFAULT_MESSAGE_NAME, message);
     }
 
-    public void forwardFlashMessages(HttpServletRequest request) throws IllegalStateException, IllegalArgumentException{
+    public boolean forwardFlashMessages(HttpServletRequest request) throws IllegalStateException, IllegalArgumentException{
         HttpSession session = request.getSession();
         if (session == null)
             throw new IllegalArgumentException("Session object mustn't be null");
@@ -58,10 +58,11 @@ public final class FlashMessageService {
             Object messagesObj = session.getAttribute(SESSION_FLASH_MESSAGES_ATTR);
             session.removeAttribute(SESSION_FLASH_MESSAGES_ATTR);
             if (messagesObj == null)
-                return;
+                return false;
             if (messagesObj instanceof MessageMap) {
                 MessageMap messages = (MessageMap) messagesObj;
                 messages.forEach(request::setAttribute);
+                return !messages.isEmpty();
             } else
                 throw new IllegalStateException("Session already has a flash message map attribute of wrong type");
         }

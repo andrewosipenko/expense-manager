@@ -17,7 +17,9 @@ public class FlashMessageFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        service.forwardFlashMessages(request);
+        boolean hasMessages = service.forwardFlashMessages(request);
+        if (hasMessages)
+            request.setAttribute("defaultMessageName", FlashMessageService.DEFAULT_MESSAGE_NAME);
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

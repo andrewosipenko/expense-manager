@@ -1,10 +1,8 @@
-<%@ page import="com.es.jointexpensetracker.service.FlashMessageService" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
 <template:page expensesTabIsActive="${true}">
-    <c:set var="flashMessageName" value="<%=FlashMessageService.DEFAULT_MESSAGE_NAME%>"/>
-    <c:set var="isAddPage" value="${requestScope['javax.servlet.forward.path_info'].equals('/add')}"/>
+    <c:set var="isAddPage" value="${requestScope['javax.servlet.forward.path_info'] eq '/add'}"/>
     <c:if test="${!isAddPage}">
         <c:set var="helper" value="${expense.helper}"/>
         <table class="table table-hover" style="margin-top: 30px">
@@ -18,7 +16,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><c:out value="${helper.person}" /></td>
+                    <td><c:out value="${helper.person}"/></td>
                     <td><c:out value="${helper.amount} ${helper.currency.currencyCode}"/></td>
                     <td><c:out value="${helper.description}"/></td>
                     <td><c:out value="${helper.date}"/></td>
@@ -35,8 +33,8 @@
                 <h3>Update expense</h3>
             </c:otherwise>
         </c:choose>
-        <c:set var="formErrorMessage" value="${requestScope[flashMessageName]}"/>
-        <c:if test="${formErrorMessage != null}">
+        <c:set var="formErrorMessage" value="${requestScope[defaultMessageName]}"/>
+        <c:if test="${not empty formErrorMessage}">
             <p style="color: red">${formErrorMessage}</p>
         </c:if>
         <form method="post">

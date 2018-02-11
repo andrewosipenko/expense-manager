@@ -63,21 +63,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Andrei</td>
-                            <td>owes 200$ to</td>
-                            <td>Sergei</td>
-                        </tr>
-                        <tr>
-                            <td>Andrei</td>
-                            <td>owes 100$ to</td>
-                            <td>Ivan</td>
-                        </tr>
-                        <tr>
-                            <td>Ivan</td>
-                            <td>owes 50$ to</td>
-                            <td>Sergei</td>
-                        </tr>
+                        <c:forEach var="debt" items="${debts}">
+                            <tr>
+                                <td><c:out value="${debt.debtorName}"/></td>
+                                <td><c:out value="owes ${debt.amount}${debtsCurrency.symbol} to"/></td>
+                                <td><c:out value="${debt.creditorName}"/></td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
             </div>
