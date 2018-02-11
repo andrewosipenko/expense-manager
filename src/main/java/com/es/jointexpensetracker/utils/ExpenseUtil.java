@@ -3,17 +3,16 @@ package com.es.jointexpensetracker.utils;
 import com.es.jointexpensetracker.constants.Constants;
 import com.es.jointexpensetracker.exception.InvalidPathException;
 import com.es.jointexpensetracker.model.Expense;
+import com.es.jointexpensetracker.service.DebtService;
 import com.es.jointexpensetracker.service.ExpenseService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Currency;
-import java.util.Optional;
+import java.util.*;
 
 public class ExpenseUtil {
 
@@ -21,8 +20,7 @@ public class ExpenseUtil {
 
         Expense expense = null;
 
-        if(!isEmptyInput(request,"description") &&
-                !isEmptyInput(request,"amount") &&
+        if(!isEmptyInput(request,"amount") &&
                 !isEmptyInput(request,"person")) {
             expense = new Expense(
                     (getId(request)),
@@ -52,4 +50,5 @@ public class ExpenseUtil {
            return  Collections.max(ExpenseService.getInstance().getExpenses(),Comparator.comparing(Expense::getId)).getId() +1;
         } else throw new InvalidPathException("Invalid URL path");
     }
+
 }

@@ -14,7 +14,7 @@
 
     <c:if test="${message ne null}">
         <div class="alert alert-success">
-            <strong>${message}</strong>
+            <strong><c:out value = "${message}"/></strong>
         </div>
     </c:if>
 
@@ -30,9 +30,9 @@
         <tbody>
             <c:forEach var="expense" items="${expenses}">
                 <tr>
-                    <td>${expense.description}</td>
-                    <td>${expense.amount}</td>
-                    <td>${expense.person}</td>
+                    <td><c:out value = "${expense.description}"/></td>
+                    <td><c:out value = "${expense.amount}"/></td>
+                    <td><c:out value = "${expense.person}"/></td>
                     <td>
                         <a class="btn btn-outline-primary" href="expenses/${expense.id}">View</a>
                     </td>

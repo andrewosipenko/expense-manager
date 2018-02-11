@@ -9,7 +9,7 @@
 
     <c:if test="${message ne null}">
         <div class="alert alert-danger">
-            <strong>${message}</strong>
+            <strong><c:out value = "${message}"/></strong>
         </div>
     </c:if>
 
@@ -18,32 +18,42 @@
             <table class="table table-hover">
                 <tbody>
                 <tr>
-                    <td><input name="description" type="text" class="form-control"
-                               autofocus="true" value="${expense.description  ne null ? expense.description : ' '}"/></td>
-                    <td>Description</td>
+                    <td>
+                        <label for="description">Description</label>
+                        <input name="description" type="text" class="form-control" id="description"
+                               autofocus="true" value="${expense.description  ne null ? expense.description : ''}"/>
+                    </td>
                 </tr>
                 <tr>
-                    <td><input name="amount" type="number" class="form-control"
-                               autofocus="true" value="${expense.amount  ne null ? expense.amount : ' '}"/></td>
-                    <td>Amount</td>
+                    <td>
+                    <label for="amount">Amount</label>
+                    <input name="amount" type="number" class="form-control" id="amount"
+                               autofocus="true" value="${expense.amount  ne null ? expense.amount : ''}"/>
+                    </td>
                 </tr>
                 <tr>
-                    <td><input name="person" type="text" class="form-control"
-                               autofocus="true" value="${expense.person ne null ? expense.person : ' '} "/></td>
-                    <td>Person</td>
+                    <td>
+                    <label for="person">Person</label>
+                    <input name="person" type="text" class="form-control" id="person"
+                               autofocus="true" value="${expense.person ne null ? expense.person : ''} "/>
+                    </td>
                 </tr>
                 <tr>
-                    <td><select class="form-control" name="currency" id="currency" autofocus="true">
+                    <td>
+                    <label for="currency">Currency</label>
+                        <select class="form-control" name="currency" id="currency" autofocus="true" id="currency">
                         <c:forEach var="currency" items="${currencies}">
                             <option ${currency == expense.currency ? 'selected' : ''}>${currency}</option>
                         </c:forEach>
-                    </select></td>
-                    <td>Currency</td>
+                        </select>
+                    </td>
                 </tr>
                 <tr>
-                    <td><input name="date" type="date" class="form-control"
-                               autofocus="true" value="${expense.date}"/></td>
-                    <th>Date</th>
+                    <td>
+                    <label for="date">Date</label>
+                    <input name="date" type="date" class="form-control" id="date"
+                               autofocus="true" value="${expense.date}"/>
+                    </td>
                 </tr>
                 </tbody>
             </table>

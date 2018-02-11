@@ -37,8 +37,13 @@ public class ExpenseServlet extends HttpServlet {
         if(!isAddRequest(request)) {
             try {
                 Long id = ExpenseUtil.getId(request);
-
-                request.setAttribute("expense", expenseService.getExpense(id).orElseThrow(InvalidPathException::new));
+                Optional<Expense> requestedExpense = expenseService.getExpense(id);
+                if(requestedExpense.isPresent()) {
+                    request.setAttribute("expense", requestedExpense.get());
+                }
+                else {
+                    throw new InvalidPathException("Invalid path");
+                }
 
             } catch (InvalidPathException | NoSuchElementException e) {
                 String errorMessage = e.getMessage();
@@ -57,7 +62,7 @@ public class ExpenseServlet extends HttpServlet {
             Long id = ExpenseUtil.getId(request);
             if (request.getParameter("delete") != null) {
                     onDelete(request, response, id);
-                } else  {
+            } else  {
                     onEdit(request, response, id);
                 }
         } catch(InvalidPathException | ExpenseNotFoundException e){
@@ -70,10 +75,9 @@ public class ExpenseServlet extends HttpServlet {
 
     private void onEdit(HttpServletRequest request, HttpServletResponse response, Long id) throws IOException, ServletException, InvalidPathException, ExpenseNotFoundException {
 
-        Expense expense;
         Optional<Expense> expenseOptional = ExpenseUtil.getValidExpense(request, response);
         if(expenseOptional.isPresent()) {
-            expense = expenseOptional.get();
+            Expense expense = expenseOptional.get();
             if (request.getParameter("update") != null) {
                 expenseService.updateExpense(expense);
                 messageService.setMessage(request,"Expense  "+expense.getDescription()+" was updated successfully ");
