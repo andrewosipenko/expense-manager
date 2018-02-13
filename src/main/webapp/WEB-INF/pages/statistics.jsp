@@ -18,9 +18,9 @@
             var hoverBackgroundColor = [];
 
             for (var i = 0;i < ${people.size()}; i++) {
-                var r = Math.floor(200 * Math.random());
-                var g = Math.floor(100 * Math.random() + 100);
-                var b = Math.floor(100 * Math.random() + 150);
+                var r = Math.floor(256 * Math.random());
+                var g = Math.floor(150 * Math.random() + 100);
+                var b = Math.floor(200 * Math.random() + 50);
                 backgroundColor.push("rgba(" + r + "," + g + "," + b + ",1)");
                 hoverBackgroundColor.push("rgba(" + r + "," + g + "," + b + ",0.5)");
             }
@@ -63,21 +63,13 @@
                     </tr>
                     </thead>
                     <tbody>
+                    <c:forEach var="debtor" items="${debtors}">
                         <tr>
-                            <td>Andrei</td>
-                            <td>owes 200$ to</td>
-                            <td>Sergei</td>
+                            <td><c:out value = "${debtor.name}"/></td>
+                            <td><c:out value = "owes ${debtor.amount} $ to"/></td>
+                            <td><c:out value = "${debtor.person}"/></td>
                         </tr>
-                        <tr>
-                            <td>Andrei</td>
-                            <td>owes 100$ to</td>
-                            <td>Ivan</td>
-                        </tr>
-                        <tr>
-                            <td>Ivan</td>
-                            <td>owes 50$ to</td>
-                            <td>Sergei</td>
-                        </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
             </div>

@@ -3,12 +3,10 @@ package com.es.jointexpensetracker.utils;
 import com.es.jointexpensetracker.constants.Constants;
 import com.es.jointexpensetracker.exception.InvalidPathException;
 import com.es.jointexpensetracker.model.Expense;
-import com.es.jointexpensetracker.service.DebtService;
 import com.es.jointexpensetracker.service.ExpenseService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -27,7 +25,7 @@ public class ExpenseUtil {
                     request.getParameter("description"),
                     BigDecimal.valueOf(Long.valueOf(request.getParameter("amount"))),
                     Currency.getInstance(request.getParameter("currency")),
-                    request.getParameter("person"),
+                    request.getParameter("person").trim(),
                     LocalDate.parse(request.getParameter("date")),
                     ExpenseService.getInstance().getExpenseGroup()
             );
