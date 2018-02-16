@@ -19,25 +19,25 @@
                 type: 'pie',
                 data: {
                     labels: [
-                        <c:forEach var="name" items="${names}">
-                            "${name}",
+                        <c:forEach var="dataItem" items="${chartData}">
+                            "<c:out value="${dataItem.name}"/>",
                         </c:forEach>
                     ],
                     datasets: [
                         {
                             data: [
-                                <c:forEach var="amount" items="${amounts}">
-                                    ${amount},
+                                <c:forEach var="dataItem" items="${chartData}">
+                                    ${dataItem.totalAmount},
                                 </c:forEach>
                             ],
                             backgroundColor: [
-                                <c:forEach var="color" items="${colors}">
-                                    "${color}",
+                                <c:forEach var="dataItem" items="${chartData}">
+                                    "${dataItem.hexColor}",
                                 </c:forEach>
                             ],
                             hoverBackgroundColor: [
-                                <c:forEach var="color" items="${highlightedColors}">
-                                    "${color}",
+                                <c:forEach var="dataItem" items="${chartData}">
+                                    "${dataItem.hexHighlightedColor}",
                                 </c:forEach>
                             ]
                         }

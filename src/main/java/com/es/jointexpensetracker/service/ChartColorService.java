@@ -3,7 +3,7 @@ package com.es.jointexpensetracker.service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public final class ChartColorService {
+final class ChartColorService {
     private static final ChartColorService instance = new ChartColorService();
     private List<Integer> colors = new ArrayList<>();
     private final Object lock = new Object();
@@ -12,7 +12,7 @@ public final class ChartColorService {
         colors.addAll(Arrays.asList(0xF7464A, 0x46BFBD, 0xFDB45C, 0x949FB1, 0x4D5360));
     }
 
-    public List<Integer> getColors(int number){
+    List<Integer> getColors(int number){
         // todo: improve somehow. it still allows similar (and even same, probably) colors, and any unpleasant colors, depending on random
         if (colors.size() < number)
             synchronized (lock) {
@@ -22,7 +22,7 @@ public final class ChartColorService {
         return Collections.unmodifiableList(colors.subList(0, number));
     }
 
-    public List<Integer> getHighlightedColors(int number){
+    List<Integer> getHighlightedColors(int number){
         if (colors.size() < number)
             synchronized (lock) {
                 if (colors.size() < number)
@@ -36,11 +36,11 @@ public final class ChartColorService {
         }).collect(Collectors.toList()));
     }
 
-    public List<String> getColorsAsHexStrings(int number){
+    List<String> getColorsAsHexStrings(int number){
         return getColors(number).stream().map(num -> String.format("#%X", num)).collect(Collectors.toList());
     }
 
-    public List<String> getHighlightedColorsAsHexStrings(int number){
+    List<String> getHighlightedColorsAsHexStrings(int number){
         return getHighlightedColors(number).stream().map(num -> String.format("#%X", num)).collect(Collectors.toList());
     }
 
@@ -50,7 +50,7 @@ public final class ChartColorService {
             colors.add(random.nextInt(0xfeeeee-0x222222)+0x222222);
     }
 
-    public static ChartColorService getInstance() {
+    static ChartColorService getInstance() {
         return instance;
     }
 }
