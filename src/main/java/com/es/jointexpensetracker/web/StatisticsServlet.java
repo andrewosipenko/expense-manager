@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class StatisticsServlet extends HttpServlet {
-
     private DebtService debtService;
 
     @Override
@@ -22,11 +21,10 @@ public class StatisticsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         Map<String, BigDecimal> expenseMap = debtService.getTotalExpenses();
-        request.setAttribute("people" , expenseMap.keySet() );
+        request.setAttribute("people" , expenseMap.keySet());
         request.setAttribute("amounts", expenseMap.values());
-        request.setAttribute("debtors",debtService.getDebtors());
+        request.setAttribute("debtors", debtService.getDebtors());
         request.getRequestDispatcher("WEB-INF/pages/statistics.jsp").forward(request, response);
     }
 }

@@ -11,11 +11,8 @@ import java.io.IOException;
 
 public class ExpenseListServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("expenses", ExpenseService.getInstance().getExpenses());
         request.getRequestDispatcher("WEB-INF/pages/expenses.jsp").forward(request, response);
-
     }
 }

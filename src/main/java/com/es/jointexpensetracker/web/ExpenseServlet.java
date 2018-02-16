@@ -1,6 +1,5 @@
 package com.es.jointexpensetracker.web;
 
-
 import com.es.jointexpensetracker.constants.Constants;
 import com.es.jointexpensetracker.exception.ExpenseNotFoundException;
 import com.es.jointexpensetracker.exception.InvalidPathException;
@@ -18,16 +17,13 @@ import java.util.Currency;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-
 public class ExpenseServlet extends HttpServlet {
-
     private ExpenseService expenseService;
     private MessageService messageService;
 
     @Override
     public void init() throws ServletException {
         super.init();
-
         expenseService = ExpenseService.getInstance();
         messageService = MessageService.getInstance();
     }
@@ -44,7 +40,6 @@ public class ExpenseServlet extends HttpServlet {
                 else {
                     throw new InvalidPathException("Invalid path");
                 }
-
             } catch (InvalidPathException | NoSuchElementException e) {
                 String errorMessage = e.getMessage();
                 if (errorMessage != null)
@@ -74,18 +69,17 @@ public class ExpenseServlet extends HttpServlet {
     }
 
     private void onEdit(HttpServletRequest request, HttpServletResponse response, Long id) throws IOException, ServletException, InvalidPathException, ExpenseNotFoundException {
-
-        Optional<Expense> expenseOptional = ExpenseUtil.getValidExpense(request, response);
+        Optional<Expense> expenseOptional = ExpenseUtil.getValidExpense(request);
         if(expenseOptional.isPresent()) {
             Expense expense = expenseOptional.get();
             if (request.getParameter("update") != null) {
                 expenseService.updateExpense(expense);
-                messageService.setMessage(request,"Expense  "+expense.getDescription()+" was updated successfully ");
+                messageService.setMessage(request,"Expense  " + expense.getDescription() + " was updated successfully ");
             } else if (isAddRequest(request)) {
                 expenseService.add(expense);
-                messageService.setMessage(request,"Expense  "+expense.getDescription()+" was created successfully ");
+                messageService.setMessage(request,"Expense  " + expense.getDescription() + " was created successfully ");
             }
-            response.sendRedirect(request.getContextPath()+"/expenses");
+            response.sendRedirect(request.getContextPath() + "/expenses");
         } else {
             request.setAttribute("expense", expenseService.getExpense(id).orElse(null));
             request.setAttribute("currencies", Currency.getAvailableCurrencies());

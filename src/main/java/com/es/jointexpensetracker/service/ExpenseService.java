@@ -12,27 +12,13 @@ public class ExpenseService {
     private static volatile ExpenseService expenseService;
 
     private ExpenseService(){
-
         expenseGroup = UUID.randomUUID().toString();
         expenses = new ArrayList<>();
         expenses.add( new Expense(1L, "Train tickets from Minsk to Warsaw", new BigDecimal(200), "Andrei", expenseGroup));
         expenses.add(new Expense(2L, "Air tickets from Warsaw to Gran Carania and back", new BigDecimal(2000), "Ivan", expenseGroup));
-        expenses.add(new Expense(3L, "Restaurant", new BigDecimal(90), "Andrei", expenseGroup));
-        expenses.add(new Expense(4L, "Rent a car", new BigDecimal(700), "Sergei", expenseGroup));
-        expenses.add(new Expense(5L, "Rent a car", new BigDecimal(500), "Igor", expenseGroup));
-        expenses.add(new Expense(6L, "Rent a house", new BigDecimal(2000), "Igor", expenseGroup));
-        expenses.add(new Expense(7L, "Restaurant", new BigDecimal(60), "Andrei", expenseGroup));
-        expenses.add(new Expense(8L, "Gazoline", new BigDecimal(50), "Sergei", expenseGroup));
-        expenses.add(new Expense(9L, "Gazoline", new BigDecimal(50), "Igor", expenseGroup));
-        expenses.add(new Expense(10L, "Surfing", new BigDecimal(30), "Sergei", expenseGroup));
-        expenses.add(new Expense(11L, "New year party shopping", new BigDecimal(30), "Igor", expenseGroup));
-        expenses.add(new Expense(12L, "Surfing", new BigDecimal(30), "Sergei", expenseGroup));
-        expenses.add(new Expense(13L, "Air wing", new BigDecimal(50), "Sergei", expenseGroup));
-        expenses.add(new Expense(14L, "Bus tickets from Warsaw to Minsk", new BigDecimal(200), "Andrei", expenseGroup));
     }
 
     public Optional<Expense> getExpense(Long id){
-
         return  expenses.stream().filter(expense -> id.equals(expense.getId())).findFirst();
     }
 
@@ -69,14 +55,11 @@ public class ExpenseService {
     }
 
     public void delete(Long id) {
-
         expenses=expenses.stream().filter(expense -> !id.equals(expense.getId())).collect(Collectors.toList());
-
     }
 
     public void add(Expense expense) {
         expenses.add(expense);
     }
-
 }
 
