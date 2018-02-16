@@ -10,7 +10,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class DemoDataExpenseService extends ExpenseService{
+class DemoDataExpenseService extends ExpenseService {
     DemoDataExpenseService() {
         expenseGroup = UUID.randomUUID().toString();
         expenses = Stream.of(
@@ -28,7 +28,7 @@ class DemoDataExpenseService extends ExpenseService{
                 new Expense(12L, "Surfing", new BigDecimal(30), "Sergei", expenseGroup),
                 new Expense(13L, "Air wing", new BigDecimal(50), "Sergei", expenseGroup),
                 new Expense(14L, "Bus tickets from Warsaw to Minsk", new BigDecimal(200), "Andrei", expenseGroup)
-        ).collect(Collectors.toMap(Expense::getId, Function.identity(), (one, two)->one, ConcurrentHashMap::new));
+        ).collect(Collectors.toMap(Expense::getId, Function.identity(), (one, two) -> one, ConcurrentHashMap::new));
         nextId = new AtomicLong(15L);
     }
 }

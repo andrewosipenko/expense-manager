@@ -15,46 +15,46 @@ public class ExpenseFormParser extends FormParser {
     private Currency currency;
     private LocalDate date;
 
-    public ExpenseFormParser(HttpServletRequest request){
+    public ExpenseFormParser(HttpServletRequest request) {
         setDelimiter("<br/>- ");
 
         // Validate person
         String person = request.getParameter("person");
-        if (person==null || person.equals(""))
+        if (person == null || person.equals(""))
             setErrorState("Person must be correctly specified non-empty string");
 
         // Validate description
         String description = request.getParameter("description");
-        if (description==null)
+        if (description == null)
             setErrorState("Description parameter is not specified");
 
         // Validate date
         LocalDate date = null;
-        try{
+        try {
             date = LocalDate.parse(request.getParameter("date"));
-        } catch (DateTimeParseException | NullPointerException e){
+        } catch (DateTimeParseException | NullPointerException e) {
             setErrorState("Failed to parse date parameter");
         }
 
         // Validate currency
         Currency currency = null;
-        try{
+        try {
             currency = Currency.getInstance(request.getParameter("currency"));
-        } catch (IllegalArgumentException | NullPointerException e){
+        } catch (IllegalArgumentException | NullPointerException e) {
             setErrorState("Failed to parse currency parameter");
         }
 
         // Validate amount
         BigDecimal amount = null;
-        try{
+        try {
             amount = new BigDecimal(request.getParameter("amount"));
             if (amount.compareTo(BigDecimal.valueOf(0)) <= 0)
                 setErrorState("Amount must be correct decimal number greater than 0");
-        } catch (NumberFormatException | NullPointerException e){
+        } catch (NumberFormatException | NullPointerException e) {
             setErrorState("Amount must be correct decimal number greater than 0");
         }
 
-        if (isValid()){
+        if (isValid()) {
             this.person = person;
             this.description = description;
             this.amount = amount;
@@ -85,6 +85,6 @@ public class ExpenseFormParser extends FormParser {
 
     @Override
     public String getErrorMessage() {
-        return isValid() ?  null : "Update failed for some reasons:<br/>- " + super.getErrorMessage();
+        return isValid() ? null : "Update failed for some reasons:<br/>- " + super.getErrorMessage();
     }
 }

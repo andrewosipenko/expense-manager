@@ -27,15 +27,15 @@ public class Expense {
         return expenseGroup;
     }
 
-    public void update(String person, String description, BigDecimal amount, Currency currency, LocalDate date){
+    public void update(String person, String description, BigDecimal amount, Currency currency, LocalDate date) {
         helper = new ConsistencyHelper(person, description, amount, currency, date);
     }
 
-    public ConsistencyHelper getHelper(){
+    public ConsistencyHelper getHelper() {
         return helper;
     }
 
-    public static class ConsistencyHelper{
+    public static class ConsistencyHelper {
         private final String person;
         private final String description;
         private final BigDecimal amount;

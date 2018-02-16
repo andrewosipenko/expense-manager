@@ -13,13 +13,13 @@ public final class StatisticsService {
     private static final StatisticsService instance = new StatisticsService();
     private final ChartColorService colorService = ChartColorService.getInstance();
 
-    private StatisticsService(){}
+    private StatisticsService() {}
 
     public static StatisticsService getInstance() {
         return instance;
     }
 
-    public List<PersonTotalChartItem> getChartData(Collection<Expense> expenses){
+    public List<PersonTotalChartItem> getChartData(Collection<Expense> expenses) {
         if (expenses.isEmpty())
             return Collections.emptyList();
         List<PersonTotalChartItem> items = expenses.stream()
@@ -38,7 +38,7 @@ public final class StatisticsService {
         return items;
     }
 
-    public List<Debt> getDebts(List<PersonTotalChartItem> totalChartItems){
+    public List<Debt> getDebts(List<PersonTotalChartItem> totalChartItems) {
         if (totalChartItems.isEmpty())
             return Collections.emptyList();
         totalChartItems = totalChartItems.stream()
@@ -56,13 +56,13 @@ public final class StatisticsService {
 
         int i = 0, j = amounts.length-1;
         List<Debt> debts = new ArrayList<>();
-        while (i < j){
+        while (i < j) {
             BigDecimal oneDiff = average.subtract(amounts[i]), twoDiff = amounts[j].subtract(average);
-            if (oneDiff.compareTo(twoDiff) < 0){
+            if (oneDiff.compareTo(twoDiff) < 0) {
                 debts.add(new Debt(names[j], names[i], oneDiff));
                 amounts[j] = amounts[j].subtract(oneDiff);
                 i++;
-            } else if (oneDiff.compareTo(twoDiff) > 0){
+            } else if (oneDiff.compareTo(twoDiff) > 0) {
                 debts.add(new Debt(names[j], names[i], twoDiff));
                 amounts[i] = amounts[i].add(twoDiff);
                 j--;

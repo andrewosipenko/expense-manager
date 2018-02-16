@@ -11,14 +11,14 @@ public final class FlashMessageService {
     private static final Object globalLock = new Object();
     public static final String DEFAULT_MESSAGE_NAME = "flashMessage";
 
-    private FlashMessageService(){}
+    private FlashMessageService() {}
 
-    private Object getSessionLock(HttpSession session){
+    private Object getSessionLock(HttpSession session) {
         Object lock;
         if ((lock = session.getAttribute(SESSION_LOCK_ATTR)) != null)
             return lock;
-        synchronized (globalLock){
-            if ((lock = session.getAttribute(SESSION_LOCK_ATTR)) == null){
+        synchronized (globalLock) {
+            if ((lock = session.getAttribute(SESSION_LOCK_ATTR)) == null) {
                 lock = new Object();
                 session.setAttribute(SESSION_LOCK_ATTR, lock);
             }
@@ -26,7 +26,7 @@ public final class FlashMessageService {
         return lock;
     }
 
-    public void putFlashMessage(HttpServletRequest request, String name, Object message) throws IllegalStateException, IllegalArgumentException{
+    public void putFlashMessage(HttpServletRequest request, String name, Object message) throws IllegalStateException, IllegalArgumentException {
         HttpSession session = request.getSession();
         if (name == null)
             throw new IllegalArgumentException("Message name mustn't be null");
@@ -34,9 +34,9 @@ public final class FlashMessageService {
             throw new IllegalArgumentException("Message value mustn't be null");
         if (session == null)
             throw new IllegalArgumentException("Session object mustn't be null");
-        synchronized (getSessionLock(session)){
+        synchronized (getSessionLock(session)) {
             Object messagesObj = session.getAttribute(SESSION_FLASH_MESSAGES_ATTR);
-            if (messagesObj == null){
+            if (messagesObj == null) {
                 messagesObj = new MessageMap();
                 session.setAttribute(SESSION_FLASH_MESSAGES_ATTR, messagesObj);
             } else if (!(messagesObj instanceof MessageMap))
@@ -46,15 +46,15 @@ public final class FlashMessageService {
         }
     }
 
-    public void putFlashMessage(HttpServletRequest request, Object message){
+    public void putFlashMessage(HttpServletRequest request, Object message) {
         putFlashMessage(request, DEFAULT_MESSAGE_NAME, message);
     }
 
-    public boolean forwardFlashMessages(HttpServletRequest request) throws IllegalStateException, IllegalArgumentException{
+    public boolean forwardFlashMessages(HttpServletRequest request) throws IllegalStateException, IllegalArgumentException {
         HttpSession session = request.getSession();
         if (session == null)
             throw new IllegalArgumentException("Session object mustn't be null");
-        synchronized (getSessionLock(session)){
+        synchronized (getSessionLock(session)) {
             Object messagesObj = session.getAttribute(SESSION_FLASH_MESSAGES_ATTR);
             session.removeAttribute(SESSION_FLASH_MESSAGES_ATTR);
             if (messagesObj == null)

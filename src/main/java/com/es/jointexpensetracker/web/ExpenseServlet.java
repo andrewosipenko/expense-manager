@@ -39,12 +39,12 @@ public class ExpenseServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getPathInfo().substring(1);
-        if (path.equals("add")){
+        if (path.equals("add")) {
             processAddExpense(request, response);
             return;
         }
         Expense expense = getExpenseByUrlPath(path);
-        if (expense == null){
+        if (expense == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
@@ -69,7 +69,7 @@ public class ExpenseServlet extends HttpServlet {
 
     private void processUpdateExpense(HttpServletRequest request, HttpServletResponse response, Expense expense) throws IOException {
         ExpenseFormParser parser = new ExpenseFormParser(request);
-        if (parser.isValid()){
+        if (parser.isValid()) {
             expense.update(parser.getPerson(), parser.getDescription(), parser.getAmount(), parser.getCurrency(), parser.getDate());
             setFlashMessageAndRedirect(request, response, request.getContextPath() + "/expenses",
                     "Expense '" + expense.getHelper().getDescription() + "' has been updated successfully");
@@ -89,10 +89,10 @@ public class ExpenseServlet extends HttpServlet {
         response.sendRedirect(url);
     }
 
-    private Expense getExpenseByUrlPath(String path){
-        if (path.matches("[1-9]\\d{0,18}")){
+    private Expense getExpenseByUrlPath(String path) {
+        if (path.matches("[1-9]\\d{0,18}")) {
             Expense expense = null;
-            try{
+            try {
                 long id = Long.parseLong(path);
                 expense = expenseService.getExpenseById(id);
             } catch (NumberFormatException ignored) {}

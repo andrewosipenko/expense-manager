@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.Currency;
 import java.util.List;
 
-public class StatisticsServlet extends HttpServlet{
+public class StatisticsServlet extends HttpServlet {
     private ExpenseService expenseService;
     private StatisticsService statisticsService;
 
