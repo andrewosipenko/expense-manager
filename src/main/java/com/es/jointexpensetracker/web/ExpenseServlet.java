@@ -27,9 +27,11 @@ public class ExpenseServlet extends HttpServlet {
         }
         String path = request.getPathInfo().substring(1);
         if (path.equals("add")) {
+            request.setAttribute("isAddPage", true);
             request.getRequestDispatcher("/WEB-INF/pages/expense.jsp").forward(request, response);
             return;
         }
+        request.setAttribute("isAddPage", false);
         Expense expense = getExpenseByUrlPath(path, expenseService);
         if (expense != null) {
             request.setAttribute("expense", expense);

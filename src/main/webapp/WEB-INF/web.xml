@@ -5,6 +5,10 @@
   <display-name>Joint Expense Tracker (ES servlet-api training task)</display-name>
 
   <filter>
+    <filter-name>ExpenseGroupServlet</filter-name>
+    <filter-class>com.es.jointexpensetracker.web.ExpenseGroupFilter</filter-class>
+  </filter>
+  <filter>
     <filter-name>RequestEncodingFilter</filter-name>
     <filter-class>com.es.jointexpensetracker.web.RequestEncodingFilter</filter-class>
   </filter>
@@ -21,14 +25,14 @@
     <filter-name>FlashMessageFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+  <filter-mapping>
+    <filter-name>ExpenseGroupServlet</filter-name>
+    <url-pattern>/expense-groups/*</url-pattern>
+  </filter-mapping>
 
   <servlet>
     <servlet-name>WelcomeServlet</servlet-name>
     <servlet-class>com.es.jointexpensetracker.web.WelcomeServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>ExpenseGroupServlet</servlet-name>
-    <servlet-class>com.es.jointexpensetracker.web.ExpenseGroupServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>ExpenseListServlet</servlet-name>
@@ -46,10 +50,6 @@
   <servlet-mapping>
     <servlet-name>WelcomeServlet</servlet-name>
     <url-pattern>/home</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ExpenseGroupServlet</servlet-name>
-    <url-pattern>/expense-groups/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>ExpenseListServlet</servlet-name>

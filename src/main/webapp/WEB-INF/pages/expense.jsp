@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
 <template:page expensesTabIsActive="${true}">
-    <c:set var="isAddPage" value="${requestScope['javax.servlet.forward.path_info'] eq '/add'}"/>
+    <p>${requestScope['javax.servlet.forward.path_info']}</p>
     <c:if test="${!isAddPage}">
         <c:set var="helper" value="${expense.helper}"/>
         <table class="table table-hover" style="margin-top: 30px">

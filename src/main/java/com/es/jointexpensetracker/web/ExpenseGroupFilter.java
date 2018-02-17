@@ -2,9 +2,7 @@ package com.es.jointexpensetracker.web;
 
 import com.es.jointexpensetracker.service.expenses.ExpenseService;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
@@ -13,24 +11,18 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ExpenseGroupServlet extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
-    }
+public class ExpenseGroupFilter implements Filter {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
-    }
+    public void init(FilterConfig filterConfig) throws ServletException {}
 
-    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getPathInfo() == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
-        Pattern pattern = Pattern.compile("/(\\p{XDigit}{8}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{12})(.*)");
-        Matcher matcher = pattern.matcher(request.getPathInfo());
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+
+        Pattern pattern = Pattern.compile("/expense-groups/(\\p{XDigit}{8}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{12})(.*)");
+        Matcher matcher = pattern.matcher(request.getServletPath());
         if (!matcher.matches()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
@@ -42,7 +34,7 @@ public class ExpenseGroupServlet extends HttpServlet {
         }
         request.setAttribute("expenseService", expenseService);
 
-        String contextPath = request.getContextPath() + request.getServletPath() + "/" + matcher.group(1);
+        String contextPath = request.getContextPath() + "/expense-groups/" + matcher.group(1);
         request = new RewriteContextPathRequestWrapper(request, contextPath);
 
         String path = matcher.group(2);
@@ -56,6 +48,9 @@ public class ExpenseGroupServlet extends HttpServlet {
         else
             requestDispatcher.forward(request, response);
     }
+
+    @Override
+    public void destroy() {}
 
     private static class RewriteContextPathRequestWrapper extends HttpServletRequestWrapper {
         private String contextPath;
