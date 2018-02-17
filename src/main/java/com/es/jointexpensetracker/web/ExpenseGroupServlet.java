@@ -1,6 +1,6 @@
 package com.es.jointexpensetracker.web;
 
-import com.es.jointexpensetracker.service.ExpenseService;
+import com.es.jointexpensetracker.service.expenses.ExpenseService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -53,7 +53,7 @@ public class ExpenseGroupServlet extends HttpServlet {
     private static class RewriteContextPathRequestWrapper extends HttpServletRequestWrapper {
         private String contextPath;
 
-        public RewriteContextPathRequestWrapper(HttpServletRequest request, String contextPath) {
+        private RewriteContextPathRequestWrapper(HttpServletRequest request, String contextPath) {
             super(request);
             this.contextPath = contextPath;
         }

@@ -1,6 +1,6 @@
 package com.es.jointexpensetracker.web;
 
-import com.es.jointexpensetracker.service.ExpenseService;
+import com.es.jointexpensetracker.service.expenses.ExpenseService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

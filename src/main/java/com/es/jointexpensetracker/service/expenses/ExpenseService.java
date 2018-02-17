@@ -1,4 +1,4 @@
-package com.es.jointexpensetracker.service;
+package com.es.jointexpensetracker.service.expenses;
 
 import com.es.jointexpensetracker.model.Expense;
 

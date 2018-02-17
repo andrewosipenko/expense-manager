@@ -1,7 +1,7 @@
 package com.es.jointexpensetracker.web;
 
 import com.es.jointexpensetracker.model.Expense;
-import com.es.jointexpensetracker.service.ExpenseService;
+import com.es.jointexpensetracker.service.expenses.ExpenseService;
 import com.es.jointexpensetracker.service.FlashMessageService;
 
 import javax.servlet.ServletException;

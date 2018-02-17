@@ -3,7 +3,7 @@ package com.es.jointexpensetracker.web;
 import com.es.jointexpensetracker.model.Debt;
 import com.es.jointexpensetracker.model.Expense;
 import com.es.jointexpensetracker.model.PersonTotalChartItem;
-import com.es.jointexpensetracker.service.ExpenseService;
+import com.es.jointexpensetracker.service.expenses.ExpenseService;
 import com.es.jointexpensetracker.service.StatisticsService;
 
 import javax.servlet.ServletException;
