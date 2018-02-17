@@ -9,7 +9,10 @@ final class ExpenseServicePool {
     private Map<UUID, ExpenseService> serviceMap = new HashMap<>();
     private final Object lock = new Object();
 
-    private ExpenseServicePool() {}
+    private ExpenseServicePool() {
+        UUID demoGroup = UUID.fromString("00000000-0000-0000-0000-000000000000");
+        serviceMap.put(demoGroup, new DemoDataExpenseService(demoGroup));
+    }
 
     static ExpenseServicePool getInstance() { return instance; }
 
@@ -29,6 +32,6 @@ final class ExpenseServicePool {
 
     private void addService(UUID expenseGroup) {
         // whatever logic of acquiring an ExpenseService object by its expenseGroup uuid
-        serviceMap.put(expenseGroup, new DemoDataExpenseService(expenseGroup));
+        serviceMap.put(expenseGroup, new BlankExpenseService(expenseGroup));
     }
 }

@@ -29,7 +29,7 @@ public class ExpenseGroupServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-        Pattern pattern = Pattern.compile("/(\\p{XDigit}{8}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{12})/(.+)");
+        Pattern pattern = Pattern.compile("/(\\p{XDigit}{8}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{12})(.*)");
         Matcher matcher = pattern.matcher(request.getPathInfo());
         if (!matcher.matches()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -41,9 +41,16 @@ public class ExpenseGroupServlet extends HttpServlet {
             return;
         }
         request.setAttribute("expenseService", expenseService);
+
         String contextPath = request.getContextPath() + request.getServletPath() + "/" + matcher.group(1);
         request = new RewriteContextPathRequestWrapper(request, contextPath);
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/" + matcher.group(2));
+
+        String path = matcher.group(2);
+        if (path.equals("")){
+            response.sendRedirect(contextPath + "/expenses");
+            return;
+        }
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(matcher.group(2));
         if (requestDispatcher == null)
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         else
