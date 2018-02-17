@@ -1,5 +1,6 @@
 package com.es.jointexpensetracker.web;
 
+import com.es.jointexpensetracker.model.PersonExpense;
 import com.es.jointexpensetracker.service.DebtService;
 
 import javax.servlet.ServletException;
@@ -8,8 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class StatisticsServlet extends HttpServlet {
     private DebtService debtService;
@@ -21,9 +24,8 @@ public class StatisticsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Map<String, BigDecimal> expenseMap = debtService.getTotalExpenses();
-        request.setAttribute("people" , expenseMap.keySet());
-        request.setAttribute("amounts", expenseMap.values());
+        List<PersonExpense> personExpenseList = debtService.getPersonExpenseList();
+        request.setAttribute("people" , personExpenseList);
         request.setAttribute("debtors", debtService.getDebtors());
         request.getRequestDispatcher("WEB-INF/pages/statistics.jsp").forward(request, response);
     }

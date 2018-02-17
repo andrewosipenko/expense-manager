@@ -29,14 +29,14 @@
                 data: {
                     labels: [
                         <c:forEach var="person" items="${people}" >
-                        "<c:out value = "${person}"/>",
+                        "<c:out value = "${person.name}"/>",
                         </c:forEach>
                             ],
                     datasets: [
                         {
                             data: [
-                                <c:forEach var="amount" items="${amounts}" >
-                                "<c:out value = "${amount}"/>",
+                                <c:forEach var="person" items="${people}" >
+                                "<c:out value = "${person.amount}"/>",
                                 </c:forEach>
                             ],
                             backgroundColor: backgroundColor ,

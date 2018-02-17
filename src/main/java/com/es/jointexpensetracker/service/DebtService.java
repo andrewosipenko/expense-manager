@@ -2,6 +2,8 @@ package com.es.jointexpensetracker.service;
 
 import com.es.jointexpensetracker.model.Debtor;
 import com.es.jointexpensetracker.model.Expense;
+import com.es.jointexpensetracker.model.PersonExpense;
+
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,7 +38,7 @@ public class DebtService {
                 .reduce(BigDecimal::add);
     }
 
-    private BigDecimal expensePerPerson(int amount) {
+    private BigDecimal expensePerPerson(final int amount) {
         return expenseSum().isPresent() ?
                 expenseSum()
                         .get()
@@ -44,7 +46,7 @@ public class DebtService {
                 : BigDecimal.ZERO;
     }
 
-    public Map<String, BigDecimal> getTotalExpenses() {
+    private Map<String, BigDecimal> getTotalExpenses() {
         return   expenseService.getExpenses()
                 .stream()
                 .collect(Collectors.toMap(Expense::getPerson, Expense::getAmount, BigDecimal::add))
@@ -57,6 +59,14 @@ public class DebtService {
                         (e1, e2) -> e1,
                         LinkedHashMap::new
                 ));
+    }
+
+    public List<PersonExpense> getPersonExpenseList() {
+     return  getTotalExpenses()
+             .entrySet()
+             .stream()
+             .map(e -> new PersonExpense(e.getKey(),e.getValue()))
+             .collect(Collectors.toList());
     }
 
     public List<Debtor> getDebtors() {
