@@ -10,9 +10,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class DemoDataExpenseService extends ExpenseService {
-    DemoDataExpenseService() {
-        expenseGroup = UUID.randomUUID().toString();
+final class DemoDataExpenseService extends ExpenseService {
+    DemoDataExpenseService(UUID expenseGroup) {
+        this.expenseGroup = expenseGroup;
         expenses = Stream.of(
                 new Expense(1L, "Train tickets from Minsk to Warsaw", new BigDecimal(200), "Andrei", expenseGroup),
                 new Expense(2L, "Air tickets from Warsaw to Gran Carania and back", new BigDecimal(2000), "Ivan", expenseGroup),

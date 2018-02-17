@@ -4,21 +4,24 @@ import com.es.jointexpensetracker.model.Expense;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Currency;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class ExpenseService {
+    private static ExpenseServicePool servicePool = ExpenseServicePool.getInstance();
     Map<Long, Expense> expenses;
     AtomicLong nextId;
-    String expenseGroup;
+    UUID expenseGroup;
 
     ExpenseService() {}
 
-    public static ExpenseService getInstance() {
-        return ExpenseServiceHolder.instance;
+    public static ExpenseService getInstance(UUID expenseGroup) {
+        return servicePool.getService(expenseGroup);
+    }
+
+    public static ExpenseService getInstance(String expenseGroupString) throws IllegalArgumentException {
+        UUID expenseGroup = UUID.fromString(expenseGroupString);
+        return servicePool.getService(expenseGroup);
     }
 
     public Collection<Expense> getExpenses() {
@@ -38,9 +41,5 @@ public class ExpenseService {
         Expense expense = new Expense(id, description, amount, currency, person, date, expenseGroup);
         expenses.put(id, expense);
         return expense;
-    }
-
-    private static class ExpenseServiceHolder {
-        private static final ExpenseService instance = new DemoDataExpenseService();
     }
 }

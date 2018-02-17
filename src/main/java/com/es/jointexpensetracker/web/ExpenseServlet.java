@@ -11,23 +11,26 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ExpenseServlet extends HttpServlet {
-    private ExpenseService expenseService;
     private FlashMessageService messageService;
 
     @Override
     public void init() throws ServletException {
-        expenseService = ExpenseService.getInstance();
         messageService = FlashMessageService.getInstance();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ExpenseService expenseService = getExpenseService(request);
+        if (expenseService == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
         String path = request.getPathInfo().substring(1);
         if (path.equals("add")) {
             request.getRequestDispatcher("/WEB-INF/pages/expense.jsp").forward(request, response);
             return;
         }
-        Expense expense = getExpenseByUrlPath(path);
+        Expense expense = getExpenseByUrlPath(path, expenseService);
         if (expense != null) {
             request.setAttribute("expense", expense);
             request.getRequestDispatcher("/WEB-INF/pages/expense.jsp").forward(request, response);
@@ -38,12 +41,17 @@ public class ExpenseServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String path = request.getPathInfo().substring(1);
-        if (path.equals("add")) {
-            processAddExpense(request, response);
+        ExpenseService expenseService = getExpenseService(request);
+        if (expenseService == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-        Expense expense = getExpenseByUrlPath(path);
+        String path = request.getPathInfo().substring(1);
+        if (path.equals("add")) {
+            processAddExpense(request, response, expenseService);
+            return;
+        }
+        Expense expense = getExpenseByUrlPath(path, expenseService);
         if (expense == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
@@ -51,12 +59,12 @@ public class ExpenseServlet extends HttpServlet {
         if (request.getParameter("update") != null)
             processUpdateExpense(request, response, expense);
         else if (request.getParameter("delete") != null)
-            processDeleteExpense(request, response, expense);
+            processDeleteExpense(request, response, expenseService, expense);
         else
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
 
-    private void processAddExpense(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void processAddExpense(HttpServletRequest request, HttpServletResponse response, ExpenseService expenseService) throws ServletException, IOException {
         ExpenseFormParser parser = new ExpenseFormParser(request);
         if (parser.isValid()) {
             Expense expense = expenseService.addExpense(parser.getPerson(), parser.getDescription(), parser.getAmount(), parser.getCurrency(), parser.getDate());
@@ -78,7 +86,7 @@ public class ExpenseServlet extends HttpServlet {
         }
     }
 
-    private void processDeleteExpense(HttpServletRequest request, HttpServletResponse response, Expense expense) throws IOException {
+    private void processDeleteExpense(HttpServletRequest request, HttpServletResponse response, ExpenseService expenseService, Expense expense) throws IOException {
         expenseService.removeExpense(expense);
         setFlashMessageAndRedirect(request, response, request.getContextPath() + "/expenses",
                 "Expense '" + expense.getHelper().getDescription() + "' has been deleted successfully");
@@ -89,7 +97,7 @@ public class ExpenseServlet extends HttpServlet {
         response.sendRedirect(url);
     }
 
-    private Expense getExpenseByUrlPath(String path) {
+    private Expense getExpenseByUrlPath(String path, ExpenseService expenseService) {
         if (path.matches("[1-9]\\d{0,18}")) {
             Expense expense = null;
             try {
@@ -99,5 +107,9 @@ public class ExpenseServlet extends HttpServlet {
             return expense;
         }
         return null;
+    }
+
+    private ExpenseService getExpenseService(HttpServletRequest request) {
+        return (ExpenseService) request.getAttribute("expenseService");
     }
 }

@@ -16,17 +16,20 @@ import java.util.Currency;
 import java.util.List;
 
 public class StatisticsServlet extends HttpServlet {
-    private ExpenseService expenseService;
     private StatisticsService statisticsService;
 
     @Override
     public void init() throws ServletException {
-        expenseService = ExpenseService.getInstance();
         statisticsService = StatisticsService.getInstance();
     }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        ExpenseService expenseService = (ExpenseService) request.getAttribute("expenseService");
+        if (expenseService == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
         Collection<Expense> expenses = expenseService.getExpenses();
         List<PersonTotalChartItem> chartData = statisticsService.getChartData(expenses);
         List<Debt> debts = statisticsService.getDebts(chartData);

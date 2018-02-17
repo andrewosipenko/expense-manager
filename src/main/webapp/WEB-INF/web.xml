@@ -23,8 +23,13 @@
   </filter-mapping>
 
   <servlet>
+    <servlet-name>ExpenseGroupServlet</servlet-name>
+    <servlet-class>com.es.jointexpensetracker.web.ExpenseGroupServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>ExpenseListServlet</servlet-name>
     <servlet-class>com.es.jointexpensetracker.web.ExpenseListServlet</servlet-class>
+    
   </servlet>
   <servlet>
     <servlet-name>ExpenseServlet</servlet-name>
@@ -35,6 +40,10 @@
     <servlet-class>com.es.jointexpensetracker.web.StatisticsServlet</servlet-class>
   </servlet>
 
+  <servlet-mapping>
+    <servlet-name>ExpenseGroupServlet</servlet-name>
+    <url-pattern>/expense-groups/*</url-pattern>
+  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>ExpenseListServlet</servlet-name>
     <url-pattern>/expenses</url-pattern>

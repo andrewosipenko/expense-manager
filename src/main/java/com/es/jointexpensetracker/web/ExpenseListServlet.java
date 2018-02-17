@@ -11,8 +11,12 @@ import java.io.IOException;
 public class ExpenseListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ExpenseService service = ExpenseService.getInstance();
-        request.setAttribute("expenses", service.getExpenses());
+        ExpenseService expenseService = (ExpenseService) request.getAttribute("expenseService");
+        if (expenseService == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+        request.setAttribute("expenses", expenseService.getExpenses());
         request.getRequestDispatcher("/WEB-INF/pages/expenses.jsp").forward(request, response);
     }
 }
