@@ -7,26 +7,21 @@ import java.io.IOException;
 
 public class FlashScopeFilter implements Filter
 {
-
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-            throws IOException,ServletException
+            throws IOException, ServletException
     {
-        if (servletRequest instanceof HttpServletRequest)
-        {
-            HttpServletRequest request = (HttpServletRequest)servletRequest;
-            HttpSession session = request.getSession(false);
-            if (session!=null)
-            {
-                String attributeName  = "flashMessage";
-                String flashMsg = (String)session.getAttribute(attributeName);
-                if (flashMsg!=null)
-                {
-                    servletRequest.setAttribute(attributeName,flashMsg);
-                    session.removeAttribute(attributeName);
-                }
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            String attributeName = "flashMessage";
+            String flashMsg = (String) session.getAttribute(attributeName);
+            if (flashMsg != null) {
+                servletRequest.setAttribute(attributeName, flashMsg);
+                session.removeAttribute(attributeName);
             }
         }
+        servletRequest.setCharacterEncoding("UTF-8");
         filterChain.doFilter(servletRequest,servletResponse);
     }
 
