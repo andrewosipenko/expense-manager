@@ -14,21 +14,21 @@ public class ExpenseService {
     private ExpenseService()
     {
         String expenseGroup = UUID.randomUUID().toString();
-        expenses= new ArrayList<>(Arrays.asList(
-                new Expense(1L, "Train tickets from Minsk to Warsaw", new BigDecimal(200), "Andrei", expenseGroup),
-                new Expense(2L, "Air tickets from Warsaw to Gran Carania and back", new BigDecimal(2000), "Ivan", expenseGroup),
-                new Expense(3L, "Restaurant", new BigDecimal(90), "Andrei", expenseGroup),
-                new Expense(4L, "Rent a car", new BigDecimal(700), "Sergei", expenseGroup),
-                new Expense(5L, "Rent a car", new BigDecimal(500), "Igor", expenseGroup),
-                new Expense(6L, "Rent a house", new BigDecimal(2000), "Igor", expenseGroup),
-                new Expense(7L, "Restaurant", new BigDecimal(60), "Andrei", expenseGroup),
-                new Expense(8L, "Gazoline", new BigDecimal(50), "Sergei", expenseGroup),
-                new Expense(9L, "Gazoline", new BigDecimal(50), "Igor", expenseGroup),
-                new Expense(10L, "Surfing", new BigDecimal(30), "Sergei", expenseGroup),
-                new Expense(11L, "New year party shopping", new BigDecimal(30), "Igor", expenseGroup),
-                new Expense(12L, "Surfing", new BigDecimal(30), "Sergei", expenseGroup),
-                new Expense(13L, "Air wing", new BigDecimal(50), "Sergei", expenseGroup),
-                new Expense(14L, "Bus tickets from Warsaw to Minsk", new BigDecimal(200), "Andrei", expenseGroup)
+        expenses = new ArrayList<>(Arrays.asList(
+                new Expense( "Train tickets from Minsk to Warsaw", new BigDecimal(200), "Andrei", expenseGroup),
+                new Expense( "Air tickets from Warsaw to Gran Carania and back", new BigDecimal(2000), "Ivan", expenseGroup),
+                new Expense( "Restaurant", new BigDecimal(90), "Andrei", expenseGroup),
+                new Expense( "Rent a car", new BigDecimal(700), "Sergei", expenseGroup),
+                new Expense( "Rent a car", new BigDecimal(500), "Igor", expenseGroup),
+                new Expense( "Rent a house", new BigDecimal(2000), "Igor", expenseGroup),
+                new Expense( "Restaurant", new BigDecimal(60), "Andrei", expenseGroup),
+                new Expense( "Gazoline", new BigDecimal(50), "Sergei", expenseGroup),
+                new Expense( "Gazoline", new BigDecimal(50), "Igor", expenseGroup),
+                new Expense( "Surfing", new BigDecimal(30), "Sergei", expenseGroup),
+                new Expense( "New year party shopping", new BigDecimal(30), "Igor", expenseGroup),
+                new Expense( "Surfing", new BigDecimal(30), "Sergei", expenseGroup),
+                new Expense( "Air wing", new BigDecimal(50), "Sergei", expenseGroup),
+                new Expense( "Bus tickets from Warsaw to Minsk", new BigDecimal(200), "Andrei", expenseGroup)
         ));
     }
 
@@ -43,7 +43,6 @@ public class ExpenseService {
                     instance = new ExpenseService();
                 }
             }
-
         }
         return instance;
     }
@@ -51,7 +50,7 @@ public class ExpenseService {
     public Expense getExpense(Long id) throws IllegalArgumentException
     {
        return expenses.stream().filter(expense -> expense.getId().equals(id)).findAny().
-               orElseThrow(()->new IllegalArgumentException("There is no expense with id "+id));
+               orElseThrow(() -> new IllegalArgumentException("There is no expense with id " + id));
     }
 
     public void addExpense(Expense newExpense)
@@ -64,7 +63,6 @@ public class ExpenseService {
         Expense expenseToDelete = getExpense(id);
         expenses.remove(expenseToDelete);
     }
-
 
     public ArrayList<Expense> getExpenses() {
         return expenses;
