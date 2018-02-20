@@ -7,7 +7,8 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 
-public class Expense {
+public class Expense
+{
     private final static AtomicLong atomicCounter = new AtomicLong(0);
     private final Long id;
     private String description;
@@ -23,11 +24,13 @@ public class Expense {
         expenseGroup = UUID.randomUUID().toString();
     }
 
-    public Expense(String description, BigDecimal amount, String person, String expenseGroup) {
+    public Expense(String description, BigDecimal amount, String person, String expenseGroup)
+    {
         this(description, amount, Currency.getInstance("USD"), person, LocalDate.now(), expenseGroup);
     }
 
-    public Expense(String description, BigDecimal amount, Currency currency, String person, LocalDate date, String expenseGroup) {
+    public Expense(String description, BigDecimal amount, Currency currency, String person, LocalDate date, String expenseGroup)
+    {
         this.id = getNewID();
         this.description = description;
         this.amount = amount;
@@ -35,7 +38,6 @@ public class Expense {
         this.person = person;
         this.date = date;
         this.expenseGroup = expenseGroup;
-
     }
 
     private Long getNewID()
