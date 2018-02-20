@@ -13,10 +13,11 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
 
-public class AddExpenseServlet extends HttpServlet {
-
+public class AddExpenseServlet extends HttpServlet
+{
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         request.getRequestDispatcher("/WEB-INF/pages/expense.jsp").forward(request,response);
     }
 
@@ -29,8 +30,8 @@ public class AddExpenseServlet extends HttpServlet {
             ExpenseService.getInstance().addExpense(newExpense);
 
             MessageService.sendMessage(request,MessageService.FLASH_MESSAGE,
-                    "Expense "+newExpense.getDescription()+" was added successfully");
-            response.sendRedirect(request.getContextPath()+"/expenses");
+                    "Expense " + newExpense.getDescription() + " was added successfully");
+            response.sendRedirect(request.getContextPath() + "/expenses");
         }
         catch (NumberFormatException e)
         {
@@ -39,7 +40,7 @@ public class AddExpenseServlet extends HttpServlet {
         catch (IllegalArgumentException | DateTimeParseException e )
         {
             HttpSession session = request.getSession(true);
-            session.setAttribute("flashMessage", "Add failed. "+ e.getMessage());
+            session.setAttribute("flashMessage", "Add failed. " + e.getMessage());
             response.sendRedirect(request.getRequestURL().toString());
         }
     }
