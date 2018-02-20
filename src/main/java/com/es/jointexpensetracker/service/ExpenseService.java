@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
-public class ExpenseService {
+public class ExpenseService
+{
     private ArrayList<Expense> expenses;
     private static volatile ExpenseService instance;
 
