@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class DeleteExpenseServlet extends HttpServlet{
+public class DeleteExpenseServlet extends HttpServlet
+{
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
@@ -29,6 +30,5 @@ public class DeleteExpenseServlet extends HttpServlet{
         {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST,e.getMessage());
         }
-
     }
 }
