@@ -11,10 +11,8 @@ import java.util.Currency;
 
 public class ParseExpenseService
 {
-
     public static Expense parseExpenseData(HttpServletRequest request)
     {
-
         Expense parsedExpense = new Expense();
 
         String description =  request.getParameter("description");
@@ -102,5 +100,4 @@ public class ParseExpenseService
             return amountValue;
         }
     }
-
 }
