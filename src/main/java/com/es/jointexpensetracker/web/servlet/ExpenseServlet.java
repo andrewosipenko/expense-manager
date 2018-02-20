@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
 
-public class ExpenseServlet extends HttpServlet {
-
+public class ExpenseServlet extends HttpServlet
+{
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -54,5 +54,4 @@ public class ExpenseServlet extends HttpServlet {
             response.sendRedirect(request.getRequestURL().toString());
         }
     }
-
 }
