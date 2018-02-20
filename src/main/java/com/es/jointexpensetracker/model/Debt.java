@@ -2,7 +2,8 @@ package com.es.jointexpensetracker.model;
 
 import java.math.BigDecimal;
 
-public class Debt {
+public class Debt
+{
     private String debtor;
     private BigDecimal amount;
     private String receiver;
