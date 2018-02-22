@@ -11,6 +11,10 @@
             <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
         </p>
     </div>
+    <c:set var="operationSuccessMessage" value="${requestScope[defaultMessageName]}"/>
+    <c:if test="${not empty operationSuccessMessage}">
+        <p style="color: limegreen"><c:out value="${operationSuccessMessage}"/></p>
+    </c:if>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -22,10 +26,11 @@
         </thead>
         <tbody>
             <c:forEach var="expense" items="${expenses}">
+                <c:set var="helper" value="${expense.helper}"/>
                 <tr>
-                    <td>${expense.description}</td>
-                    <td>${expense.amount}</td>
-                    <td>${expense.person}</td>
+                    <td><c:out value="${helper.description}"/></td>
+                    <td><c:out value="${helper.amount} ${helper.currency.symbol}"/></td>
+                    <td><c:out value="${helper.person}"/></td>
                     <td>
                         <a class="btn btn-outline-primary" href="expenses/${expense.id}">View</a>
                     </td>

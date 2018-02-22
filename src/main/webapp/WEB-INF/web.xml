@@ -4,29 +4,78 @@
          version="3.1">
   <display-name>Joint Expense Tracker (ES servlet-api training task)</display-name>
 
+  <filter>
+    <filter-name>ExpenseGroupServlet</filter-name>
+    <filter-class>com.es.jointexpensetracker.web.ExpenseGroupFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>ExpenseServiceFilter</filter-name>
+    <filter-class>com.es.jointexpensetracker.web.ExpenseServiceFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>RequestEncodingFilter</filter-name>
+    <filter-class>com.es.jointexpensetracker.web.RequestEncodingFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>FlashMessageFilter</filter-name>
+    <filter-class>com.es.jointexpensetracker.web.FlashMessageFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>RequestEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>ExpenseServiceFilter</filter-name>
+    <url-pattern>/expenses</url-pattern>
+    <url-pattern>/expenses/*</url-pattern>
+    <url-pattern>/statistics</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>FlashMessageFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>ExpenseGroupServlet</filter-name>
+    <url-pattern>/expense-groups/*</url-pattern>
+  </filter-mapping>
+
   <servlet>
-    <servlet-name>expenseList</servlet-name>
+    <servlet-name>WelcomeServlet</servlet-name>
+    <servlet-class>com.es.jointexpensetracker.web.WelcomeServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ExpenseListServlet</servlet-name>
     <servlet-class>com.es.jointexpensetracker.web.ExpenseListServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>expense</servlet-name>
+    <servlet-name>ExpenseServlet</servlet-name>
     <servlet-class>com.es.jointexpensetracker.web.ExpenseServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>statistics</servlet-name>
-    <jsp-file>/WEB-INF/pages/statistics.jsp</jsp-file>
+    <servlet-name>StatisticsServlet</servlet-name>
+    <servlet-class>com.es.jointexpensetracker.web.StatisticsServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>expenseList</servlet-name>
+    <servlet-name>WelcomeServlet</servlet-name>
+    <url-pattern>/home</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ExpenseListServlet</servlet-name>
     <url-pattern>/expenses</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>expense</servlet-name>
+    <servlet-name>ExpenseServlet</servlet-name>
     <url-pattern>/expenses/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>statistics</servlet-name>
+    <servlet-name>StatisticsServlet</servlet-name>
     <url-pattern>/statistics</url-pattern>
   </servlet-mapping>
+
+  <welcome-file-list>
+    <welcome-file>home</welcome-file>
+  </welcome-file-list>
+
 </web-app>
