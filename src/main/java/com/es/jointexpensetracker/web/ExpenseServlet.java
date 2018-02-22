@@ -21,10 +21,6 @@ public class ExpenseServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ExpenseService expenseService = getExpenseService(request);
-        if (expenseService == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
         String path = request.getPathInfo().substring(1);
         if (path.equals("add")) {
             request.setAttribute("isAddPage", true);
@@ -44,10 +40,6 @@ public class ExpenseServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ExpenseService expenseService = getExpenseService(request);
-        if (expenseService == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
         String path = request.getPathInfo().substring(1);
         if (path.equals("add")) {
             processAddExpense(request, response, expenseService);

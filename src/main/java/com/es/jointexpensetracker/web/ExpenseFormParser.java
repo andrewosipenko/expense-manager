@@ -15,7 +15,7 @@ public class ExpenseFormParser extends FormParser {
     private Currency currency;
     private LocalDate date;
 
-    public ExpenseFormParser(HttpServletRequest request) {
+    ExpenseFormParser(HttpServletRequest request) {
         setDelimiter("<br/>- ");
 
         // Validate person
@@ -48,7 +48,7 @@ public class ExpenseFormParser extends FormParser {
         BigDecimal amount = null;
         try {
             amount = new BigDecimal(request.getParameter("amount"));
-            if (amount.compareTo(BigDecimal.valueOf(0)) <= 0)
+            if (amount.compareTo(BigDecimal.valueOf(0)) < 0)
                 setErrorState("Amount must be correct decimal number greater than 0");
         } catch (NumberFormatException | NullPointerException e) {
             setErrorState("Amount must be correct decimal number greater than 0");
@@ -63,23 +63,23 @@ public class ExpenseFormParser extends FormParser {
         }
     }
 
-    public String getPerson() {
+    String getPerson() {
         return person;
     }
 
-    public String getDescription() {
+    String getDescription() {
         return description;
     }
 
-    public BigDecimal getAmount() {
+    BigDecimal getAmount() {
         return amount;
     }
 
-    public Currency getCurrency() {
+    Currency getCurrency() {
         return currency;
     }
 
-    public LocalDate getDate() {
+    LocalDate getDate() {
         return date;
     }
 

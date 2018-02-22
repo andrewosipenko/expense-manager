@@ -12,19 +12,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ExpenseGroupFilter implements Filter {
+    private Pattern urlPattern;
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {}
+    public void init(FilterConfig filterConfig) throws ServletException {
+        urlPattern = Pattern.compile("/expense-groups/(\\p{XDigit}{8}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{12})(.*)");
+    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        Pattern pattern = Pattern.compile("/expense-groups/(\\p{XDigit}{8}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{12})(.*)");
-        Matcher matcher = pattern.matcher(request.getServletPath());
+        Matcher matcher = urlPattern.matcher(request.getServletPath());
         if (!matcher.matches()) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
         ExpenseService expenseService = ExpenseService.getInstance(UUID.fromString(matcher.group(1)));
@@ -34,10 +36,8 @@ public class ExpenseGroupFilter implements Filter {
         }
         request.setAttribute("expenseService", expenseService);
 
-        String contextPath = request.getContextPath() + "/expense-groups/" + matcher.group(1);
-        request = new RewriteContextPathRequestWrapper(request, contextPath);
-
         String path = matcher.group(2);
+        String contextPath = request.getContextPath() + "/expense-groups/" + matcher.group(1);
         if (path.equals("")){
             response.sendRedirect(contextPath + "/expenses");
             return;
@@ -46,7 +46,7 @@ public class ExpenseGroupFilter implements Filter {
         if (requestDispatcher == null)
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         else
-            requestDispatcher.forward(request, response);
+            requestDispatcher.forward(new RewriteContextPathRequestWrapper(request, contextPath), response);
     }
 
     @Override
