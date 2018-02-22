@@ -8,7 +8,6 @@ public class URLpatternHandler
     public static String getURLafterUUID(HttpServletRequest request) throws StringIndexOutOfBoundsException
     {
         String uri = request.getRequestURI();
-        System.out.println(uri);
         uri = uri.substring(uri.indexOf(ExpenseGroupUUIDService.UUID_START_FLAG));
         uri = uri.substring(uri.indexOf("/") + 1);
         uri = uri.substring(uri.indexOf("/"));
