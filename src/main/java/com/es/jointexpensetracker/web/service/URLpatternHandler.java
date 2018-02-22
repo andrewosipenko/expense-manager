@@ -16,7 +16,7 @@ public class URLpatternHandler
     }
 
     // returns string <uuid> from */UUID_START_FLAG/<uuid>/*
-    public static String getUUIDfromURI(String uri)
+    public static String getUUIDfromURI(String uri) throws StringIndexOutOfBoundsException
     {
         uri = uri.substring(uri.indexOf(ExpenseGroupUUIDService.UUID_START_FLAG));
         uri = uri.substring(uri.indexOf("/") + 1);

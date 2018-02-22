@@ -17,25 +17,25 @@ public class ExpenseGroupServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-        HttpSession session = req.getSession(true);
-        String uuid = URLpatternHandler.getUUIDfromURI(req.getRequestURI());
-        if (!ExpenseService.getInstance().containsGroup(uuid))
+        try
         {
-            MessageService.sendMessage(req, MessageService.FLASH_MESSAGE,
-                    "Seems like you've used invalid group id or haven't already created it");
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
-        }
-        else
-        {
-            try
+            HttpSession session = req.getSession(true);
+            String uuid = URLpatternHandler.getUUIDfromURI(req.getRequestURI());
+            if (!ExpenseService.getInstance().containsGroup(uuid))
+            {
+                MessageService.sendMessage(req, MessageService.FLASH_MESSAGE,
+                        "Seems like you've used invalid group id or haven't already created it");
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            }
+            else
             {
                 session.setAttribute(ExpenseGroupUUIDService.UUID, uuid);
                 req.getRequestDispatcher(URLpatternHandler.getURLafterUUID(req)).forward(req, resp);
             }
-            catch (StringIndexOutOfBoundsException e)
-            {
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND);
-            }
+        }
+        catch (StringIndexOutOfBoundsException e)
+        {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
