@@ -3,6 +3,7 @@
 <%@ attribute name="expensesTabIsActive" type="java.lang.Boolean" %>
 <%@ attribute name="statisticsTabIsActive" type="java.lang.Boolean" %>
 <%@ attribute name="enabledAddButton" type="java.lang.Boolean" %>
+<%@ attribute name="enabledMenuBar" type="java.lang.Boolean" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,25 +28,28 @@
                     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <a class="navbar-brand mr-5" href="expenses">Joint Expense Tracker</a>
-
+                    <c:if test="${enabledMenuBar ne false}">
+                    <a class="navbar-brand mr-5" href=${pageContext.request.contextPath}/expense-groups/${groupId}/expenses">Joint Expense Tracker</a>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item ${expensesTabIsActive ? 'active' : ''}">
-                                <a class="nav-link"  href="${pageContext.request.contextPath}/expenses" >Expenses</a>
+                                <a class="nav-link"  href="${pageContext.request.contextPath}/expense-groups/${groupId}/expenses" >Expenses</a>
                             </li>
                             <li class="nav-item ${statisticsTabIsActive ? 'active' : ''}">
-                                <a class="nav-link" href="${pageContext.request.contextPath}/statistics" > Statistics</a>
+                                <a class="nav-link" href="${pageContext.request.contextPath}/expense-groups/${groupId}/statistics" >Statistics</a>
                             </li>
                         </ul>
                         <c:if test="${enabledAddButton ne false}">
                                 <ul class="navbar-nav ml-auto">
                                     <li class="nav-item">
-                                        <a class="btn btn-success" href="${pageContext.request.contextPath}/expenses/add" >Add expense</a>
+                                        <a class="btn btn-success"
+                                           href="${pageContext.request.contextPath}/expense-groups/${groupId}/expenses/add" >
+                                            Add expense</a>
                                     </li>
                                 </ul>
                         </c:if>
                     </div>
+                    </c:if>
                 </nav>
                 <jsp:doBody/>
             </div>

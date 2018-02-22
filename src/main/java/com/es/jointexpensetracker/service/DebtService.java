@@ -13,15 +13,15 @@ public class DebtService {
     private static volatile DebtService debtService;
     private ExpenseService expenseService;
 
-    private DebtService() {
-        expenseService = ExpenseService.getInstance();
+    private DebtService(String groupId) {
+        expenseService = ExpenseService.getInstance(groupId);
     }
 
-    public static DebtService getInstance() {
+    public static DebtService getInstance(String groupId) {
         if (debtService == null) {
             synchronized (DebtService.class) {
                 if (debtService == null) {
-                    debtService = new DebtService();
+                    debtService = new DebtService(groupId);
                 }
             }
         }
@@ -30,7 +30,7 @@ public class DebtService {
 
     private Optional<BigDecimal> expenseSum() {
         return  expenseService
-                .getExpenses()
+                .getCustomGroupExpenses()
                 .stream()
                 .map(Expense::getAmount)
                 .collect(Collectors.toList())
@@ -47,7 +47,7 @@ public class DebtService {
     }
 
     private Map<String, BigDecimal> getTotalExpenses() {
-        return   expenseService.getExpenses()
+        return   expenseService.getCustomGroupExpenses()
                 .stream()
                 .collect(Collectors.toMap(Expense::getPerson, Expense::getAmount, BigDecimal::add))
                 .entrySet()

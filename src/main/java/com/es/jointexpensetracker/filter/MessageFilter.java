@@ -16,7 +16,6 @@ public class MessageFilter implements Filter {
         request.setCharacterEncoding("UTF-8");
         messageService.clearMessage(request);
         chain.doFilter(req, resp);
-
     }
 
     public void init(FilterConfig config) throws ServletException {

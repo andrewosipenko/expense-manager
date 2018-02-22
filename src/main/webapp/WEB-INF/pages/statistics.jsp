@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
-<template:page statisticsTabIsActive="${true}" enabledAddButton="${true}" >
+<template:page statisticsTabIsActive="${true}" enabledAddButton="${true}" enabledMenuBar="${true}" >
     <h1 class="page-header">Total expenses per person</h1>
     <div class="container">
         <div class="row">
@@ -28,15 +28,15 @@
                 type: 'pie',
                 data: {
                     labels: [
-                        <c:forEach var="person" items="${people}" >
-                        "<c:out value = "${person.name}"/>",
+                        <c:forEach var="item" items="${people}" >
+                        "<c:out value = "${item.person}"/>",
                         </c:forEach>
                             ],
                     datasets: [
                         {
                             data: [
-                                <c:forEach var="person" items="${people}" >
-                                "<c:out value = "${person.amount}"/>",
+                                <c:forEach var="item" items="${people}" >
+                                "<c:out value = "${item.amount}"/>",
                                 </c:forEach>
                             ],
                             backgroundColor: backgroundColor ,

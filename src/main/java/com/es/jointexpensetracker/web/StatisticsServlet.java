@@ -1,7 +1,10 @@
 package com.es.jointexpensetracker.web;
 
+import com.es.jointexpensetracker.constants.Constants;
+import com.es.jointexpensetracker.exception.ExpenseGroupNotFoundException;
 import com.es.jointexpensetracker.model.PersonExpense;
 import com.es.jointexpensetracker.service.DebtService;
+import com.es.jointexpensetracker.utils.ExpenseUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,18 +18,20 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class StatisticsServlet extends HttpServlet {
-    private DebtService debtService;
-
     @Override
     public void init() throws ServletException {
-        debtService = DebtService.getInstance();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<PersonExpense> personExpenseList = debtService.getPersonExpenseList();
-        request.setAttribute("people" , personExpenseList);
-        request.setAttribute("debtors", debtService.getDebtors());
-        request.getRequestDispatcher("WEB-INF/pages/statistics.jsp").forward(request, response);
+        try {
+            DebtService debtService = ExpenseUtil.getDebtServiceByRequestPath(request);
+            List<PersonExpense> personExpenseList = debtService.getPersonExpenseList();
+            request.setAttribute("people" , personExpenseList);
+            request.setAttribute("debtors", debtService.getDebtors());
+            request.getRequestDispatcher("WEB-INF/pages/statistics.jsp").forward(request, response);
+        } catch (ExpenseGroupNotFoundException e) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 }
