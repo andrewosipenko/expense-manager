@@ -3,35 +3,59 @@
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
 <template:page statisticsTabIsActive="${true}">
     <h1 class="page-header">Total expenses per person</h1>
-    <div class="container">
-        <div class="row">
-            <div class="col-12 col-md-8">
-                <canvas id="pieChart"></canvas>
+    <c:choose>
+        <c:when test="${not empty expenses}">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-md-8">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <script>
-        $( document ).ready(function() {
-            //pie
-            var ctxP = document.getElementById("pieChart").getContext('2d');
-            var myPieChart = new Chart(ctxP, {
-                type: 'pie',
-                data: {
-                    labels: ["Andre", "Igor", "Sergei", "Ivan", "Dark Grey"],
-                    datasets: [
-                        {
-                            data: [300, 50, 100, 40, 120],
-                            backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
-                            hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true
+
+            <script>
+                function makeRandomColor() {
+
+                    return '#' + Math.floor(Math.random() * 16777215).toString(16)
                 }
-            });
-        });
-    </script>
+
+                $(document).ready(function () {
+                    var names = [<c:forEach items="${expenses}" var="entry" varStatus="counter">
+                        "${entry.key}" <c:if test="${counter.count < expenses.size()}">, </c:if>
+                        </c:forEach>];
+                    var amounts = [<c:forEach items="${expenses}" var="entry" varStatus="counter">
+                        "${entry.value}" <c:if test="${counter.count < expenses.size()}">, </c:if>
+                        </c:forEach>];
+                    var backColors = [<c:forEach items="${expenses}" var="entry" varStatus="counter">
+                        makeRandomColor() <c:if test="${counter.count < expenses.size()}">, </c:if>
+                        </c:forEach>];
+                    var hoverBackColors = backColors;
+                    //pie
+                    var ctxP = document.getElementById("pieChart").getContext('2d');
+                    var myPieChart = new Chart(ctxP, {
+                        type: 'pie',
+                        data: {
+                            labels: names,
+                            datasets: [
+                                {
+                                    data: amounts,
+                                    backgroundColor: backColors,
+                                    hoverBackgroundColor: hoverBackColors
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true
+                        }
+                    });
+                });
+            </script>
+        </c:when>
+        <c:otherwise>
+            <h2>There are no expenses.</h2>
+            <p>To see any statistics please add expenses on the <a href="<c:url value="/expense-group/${sessionScope.UUID}/expenses"/>" class="axis-label">main page</a></p>
+        </c:otherwise>
+    </c:choose>
     <h1 class="page-header">Debts</h1>
     <div class="container">
         <div class="row">
@@ -45,21 +69,23 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Andrei</td>
-                            <td>owes 200$ to</td>
-                            <td>Sergei</td>
-                        </tr>
-                        <tr>
-                            <td>Andrei</td>
-                            <td>owes 100$ to</td>
-                            <td>Ivan</td>
-                        </tr>
-                        <tr>
-                            <td>Ivan</td>
-                            <td>owes 50$ to</td>
-                            <td>Sergei</td>
-                        </tr>
+                    <c:choose>
+                        <c:when test="${not empty debts}">
+                            <c:forEach items="${debts}" var="debt">
+                                <tr>
+                                    <td>${debt.debtor}</td>
+                                    <td>owes ${debt.amount} $ to</td>
+                                    <td>${debt.receiver}</td>
+                                </tr>
+                            </c:forEach>
+                        </c:when>
+
+                        <c:otherwise>
+                            <tr>
+                                <td>No one owes money to anyone</td>
+                            </tr>
+                        </c:otherwise>
+                    </c:choose>
                     </tbody>
                 </table>
             </div>

@@ -1,8 +1,10 @@
 <%@ tag body-content="scriptless" trimDirectiveWhitespaces="true" pageEncoding="UTF-8" %>
 <%@ attribute name="expensesTabIsActive" type="java.lang.Boolean" %>
 <%@ attribute name="statisticsTabIsActive" type="java.lang.Boolean" %>
+<%@ attribute name="isHomePage" type="java.lang.Boolean" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -25,24 +27,25 @@
                     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <a class="navbar-brand mr-5" href="expenses">Joint Expense Tracker</a>
-
+                    <a class="navbar-brand mr-5" href="<c:url value="/"/>">Joint Expense Tracker</a>
+                    <c:if test="${not isHomePage}">
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item ${expensesTabIsActive ? 'active' : ''}">
-                                <a class="nav-link" href="expenses">Expenses</a>
+                                <a class="nav-link" href="<c:url value="/expense-group/${sessionScope.UUID}/expenses"/>">Expenses</a>
                             </li>
                             <li class="nav-item ${statisticsTabIsActive ? 'active' : ''}">
-                                <a class="nav-link" href="statistics">Statistics</a>
+                                <a class="nav-link" href="<c:url value="/expense-group/${sessionScope.UUID}/statistics"/>">Statistics</a>
                             </li>
                         </ul>
 
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item">
-                                <a class="btn btn-success" href="expenses/add">Add expense</a>
+                                <a class="btn btn-success" href="<c:url value="/expense-group/${sessionScope.UUID}/expenses/add"/>">Add expense</a>
                             </li>
                         </ul>
                     </div>
+                    </c:if>
                 </nav>
                 <jsp:doBody/>
             </div>
