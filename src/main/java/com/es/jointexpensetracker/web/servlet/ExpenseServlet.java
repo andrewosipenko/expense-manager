@@ -2,6 +2,7 @@ package com.es.jointexpensetracker.web.servlet;
 
 import com.es.jointexpensetracker.model.Expense;
 import com.es.jointexpensetracker.service.ExpenseService;
+import com.es.jointexpensetracker.web.service.ExpenseGroupUUIDService;
 import com.es.jointexpensetracker.web.service.MessageService;
 import com.es.jointexpensetracker.web.service.ParseExpenseService;
 
@@ -20,7 +21,8 @@ public class ExpenseServlet extends HttpServlet
         try
         {
             Long id = ParseExpenseService.getExpenseID(request);
-            request.setAttribute("expense", ExpenseService.getInstance().getExpense(id));
+            request.setAttribute("expense", ExpenseService.getInstance().
+                    getExpense(ExpenseGroupUUIDService.getCurrentUUID(request), id));
             request.getRequestDispatcher("/WEB-INF/pages/expense.jsp").forward(request,response);
         }
         catch (IllegalArgumentException e)
@@ -35,13 +37,14 @@ public class ExpenseServlet extends HttpServlet
         try
         {
             Long id = ParseExpenseService.getExpenseID(request);
-            Expense expense = ExpenseService.getInstance().getExpense(id);
+            Expense expense = ExpenseService.getInstance().getExpense(ExpenseGroupUUIDService.getCurrentUUID(request), id);
             Expense parsedExpense = ParseExpenseService.parseExpenseData(request);
             ParseExpenseService.copyExpenseData(expense,parsedExpense);
 
             MessageService.sendMessage(request,MessageService.FLASH_MESSAGE,
                     "Expense \"" + expense.getDescription() + "\" was updated successfully");
-            response.sendRedirect(request.getContextPath() + "/expenses");
+            response.sendRedirect(request.getContextPath() +
+                    ExpenseGroupUUIDService.getFlagWithCurrentUUID(request) + "/expenses"); // ? Сделать сервис для хендла uuid
         }
         catch (NumberFormatException e)
         {
@@ -51,7 +54,8 @@ public class ExpenseServlet extends HttpServlet
         {
             MessageService.sendMessage(request,MessageService.FLASH_MESSAGE,
                     "Update failed." + e.getMessage());
-            response.sendRedirect(request.getRequestURL().toString());
+            response.sendRedirect(request.getContextPath() + ExpenseGroupUUIDService.getFlagWithCurrentUUID(request) +
+                     request.getServletPath() + request.getPathInfo());
         }
     }
 }

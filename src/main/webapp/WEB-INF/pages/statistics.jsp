@@ -21,13 +21,13 @@
 
                 $(document).ready(function () {
                     var names = [<c:forEach items="${expenses}" var="entry" varStatus="counter">
-                        "${entry.key}" <c:if test="${counter.count<expenses.size()}">, </c:if>
+                        "${entry.key}" <c:if test="${counter.count < expenses.size()}">, </c:if>
                         </c:forEach>];
                     var amounts = [<c:forEach items="${expenses}" var="entry" varStatus="counter">
-                        "${entry.value}" <c:if test="${counter.count<expenses.size()}">, </c:if>
+                        "${entry.value}" <c:if test="${counter.count < expenses.size()}">, </c:if>
                         </c:forEach>];
                     var backColors = [<c:forEach items="${expenses}" var="entry" varStatus="counter">
-                        makeRandomColor() <c:if test="${counter.count<expenses.size()}">, </c:if>
+                        makeRandomColor() <c:if test="${counter.count < expenses.size()}">, </c:if>
                         </c:forEach>];
                     var hoverBackColors = backColors;
                     //pie
@@ -53,7 +53,7 @@
         </c:when>
         <c:otherwise>
             <h2>There are no expenses.</h2>
-            <p>To see any statistics please add expenses on the <a href="expenses" class="axis-label">main page</a></p>
+            <p>To see any statistics please add expenses on the <a href="<c:url value="/expense-group/${sessionScope.UUID}/expenses"/>" class="axis-label">main page</a></p>
         </c:otherwise>
     </c:choose>
     <h1 class="page-header">Debts</h1>
@@ -71,11 +71,11 @@
                     <tbody>
                     <c:choose>
                         <c:when test="${not empty debts}">
-                            <c:forEach items="${debts}" var="entry">
+                            <c:forEach items="${debts}" var="debt">
                                 <tr>
-                                    <td>${entry.debtor}</td>
-                                    <td>owes ${entry.amount} $ to</td>
-                                    <td>${entry.receiver}</td>
+                                    <td>${debt.debtor}</td>
+                                    <td>owes ${debt.amount} $ to</td>
+                                    <td>${debt.receiver}</td>
                                 </tr>
                             </c:forEach>
                         </c:when>

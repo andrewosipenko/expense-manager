@@ -3,19 +3,18 @@ package com.es.jointexpensetracker.service;
 import com.es.jointexpensetracker.model.Expense;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.UUID;
+import java.util.*;
 
 public class ExpenseService
 {
-    private ArrayList<Expense> expenses;
+    private Map<String, List<Expense>> expenseGroups;
     private static volatile ExpenseService instance;
 
     private ExpenseService()
     {
-        String expenseGroup = UUID.randomUUID().toString();
-        expenses = new ArrayList<>(Arrays.asList(
+        expenseGroups = new HashMap<>();
+        String expenseGroup = "testData";
+        expenseGroups.put(expenseGroup, new ArrayList<>(Arrays.asList(
                 new Expense( "Train tickets from Minsk to Warsaw", new BigDecimal(200), "Andrei", expenseGroup),
                 new Expense( "Air tickets from Warsaw to Gran Carania and back", new BigDecimal(2000), "Ivan", expenseGroup),
                 new Expense( "Restaurant", new BigDecimal(90), "Andrei", expenseGroup),
@@ -30,7 +29,7 @@ public class ExpenseService
                 new Expense( "Surfing", new BigDecimal(30), "Sergei", expenseGroup),
                 new Expense( "Air wing", new BigDecimal(50), "Sergei", expenseGroup),
                 new Expense( "Bus tickets from Warsaw to Minsk", new BigDecimal(200), "Andrei", expenseGroup)
-        ));
+        )));
     }
 
     public static ExpenseService getInstance()
@@ -48,24 +47,46 @@ public class ExpenseService
         return instance;
     }
 
-    public Expense getExpense(Long id) throws IllegalArgumentException
+    public Expense getExpense(String uuid, Long id) throws IllegalArgumentException
     {
-       return expenses.stream().filter(expense -> expense.getId().equals(id)).findAny().
+       return expenseGroups.get(uuid).stream().filter(expense -> expense.getId().equals(id)).findAny().
                orElseThrow(() -> new IllegalArgumentException("There is no expense with id " + id));
     }
 
-    public void addExpense(Expense newExpense)
+    public void addExpense(String uuid ,Expense newExpense) throws IllegalArgumentException
+
     {
-        expenses.add(newExpense);
+        expenseGroups.get(uuid).add(newExpense);
     }
 
-    public void deleteExpense(Long id) throws IllegalArgumentException
+    public void addExpenseGroup(String uuid)
     {
-        Expense expenseToDelete = getExpense(id);
-        expenses.remove(expenseToDelete);
+        expenseGroups.put(uuid, new ArrayList<>());
     }
 
-    public ArrayList<Expense> getExpenses() {
-        return expenses;
+
+    public void deleteExpense(String uuid, Long id) throws IllegalArgumentException
+    {
+        Expense expenseToDelete = getExpense(uuid, id);
+        expenseGroups.get(uuid).remove(expenseToDelete);
     }
+
+    public List<Expense> getExpenses(String uuid) throws IllegalArgumentException
+    {
+        List<Expense> expenses = expenseGroups.get(uuid);
+        if (expenses != null)
+        {
+            return expenses;
+        }
+        else
+        {
+            throw new IllegalArgumentException("There is no such group with uuid " + uuid);
+        }
+    }
+
+    public boolean containsGroup(String uuid)
+    {
+        return expenseGroups.containsKey(uuid);
+    }
+
 }

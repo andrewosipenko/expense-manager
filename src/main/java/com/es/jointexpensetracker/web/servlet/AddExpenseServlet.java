@@ -2,6 +2,7 @@ package com.es.jointexpensetracker.web.servlet;
 
 import com.es.jointexpensetracker.model.Expense;
 import com.es.jointexpensetracker.service.ExpenseService;
+import com.es.jointexpensetracker.web.service.ExpenseGroupUUIDService;
 import com.es.jointexpensetracker.web.service.MessageService;
 import com.es.jointexpensetracker.web.service.ParseExpenseService;
 
@@ -18,6 +19,7 @@ public class AddExpenseServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+        System.out.println(request.getRequestURI());
         request.getRequestDispatcher("/WEB-INF/pages/expense.jsp").forward(request,response);
     }
 
@@ -27,11 +29,11 @@ public class AddExpenseServlet extends HttpServlet
         try
         {
             Expense newExpense = ParseExpenseService.parseExpenseData(request);
-            ExpenseService.getInstance().addExpense(newExpense);
+            ExpenseService.getInstance().addExpense(ExpenseGroupUUIDService.getCurrentUUID(request) ,newExpense);
 
             MessageService.sendMessage(request,MessageService.FLASH_MESSAGE,
                     "Expense " + newExpense.getDescription() + " was added successfully");
-            response.sendRedirect(request.getContextPath() + "/expenses");
+            response.sendRedirect(request.getContextPath() + ExpenseGroupUUIDService.getFlagWithCurrentUUID(request) + "/expenses");
         }
         catch (NumberFormatException e)
         {
@@ -41,7 +43,8 @@ public class AddExpenseServlet extends HttpServlet
         {
             HttpSession session = request.getSession(true);
             session.setAttribute("flashMessage", "Add failed. " + e.getMessage());
-            response.sendRedirect(request.getRequestURL().toString());
+            response.sendRedirect(request.getContextPath() + ExpenseGroupUUIDService.getFlagWithCurrentUUID(request) +
+            request.getServletPath());
         }
     }
 }

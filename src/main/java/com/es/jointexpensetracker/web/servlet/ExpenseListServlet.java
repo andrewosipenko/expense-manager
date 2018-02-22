@@ -2,6 +2,7 @@ package com.es.jointexpensetracker.web.servlet;
 
 
 import com.es.jointexpensetracker.service.ExpenseService;
+import com.es.jointexpensetracker.web.service.ExpenseGroupUUIDService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,7 +17,7 @@ public class ExpenseListServlet extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         request.setAttribute(
-            "expenses", ExpenseService.getInstance().getExpenses());
+            "expenses", ExpenseService.getInstance().getExpenses(ExpenseGroupUUIDService.getCurrentUUID(request)));
         request.getRequestDispatcher("WEB-INF/pages/expenses.jsp").forward(request, response);
     }
 }

@@ -2,6 +2,7 @@ package com.es.jointexpensetracker.web.servlet;
 
 import com.es.jointexpensetracker.model.Expense;
 import com.es.jointexpensetracker.service.ExpenseService;
+import com.es.jointexpensetracker.web.service.ExpenseGroupUUIDService;
 import com.es.jointexpensetracker.web.service.MessageService;
 import com.es.jointexpensetracker.web.service.ParseExpenseService;
 
@@ -18,13 +19,14 @@ public class DeleteExpenseServlet extends HttpServlet
     {
         try
         {
+            String currentUUID = ExpenseGroupUUIDService.getCurrentUUID(req);
             Long id = ParseExpenseService.getExpenseID(req);
-            Expense expense = ExpenseService.getInstance().getExpense(id);
-            ExpenseService.getInstance().deleteExpense(id);
+            Expense expense = ExpenseService.getInstance().getExpense(currentUUID, id);
+            ExpenseService.getInstance().deleteExpense(currentUUID, id);
 
             MessageService.sendMessage(req,MessageService.FLASH_MESSAGE,
                     "Expense " + expense.getDescription() + " was deleted successfully");
-            resp.sendRedirect(req.getContextPath() + "/expenses");
+            resp.sendRedirect(req.getContextPath() + ExpenseGroupUUIDService.getFlagWithCurrentUUID(req) + "/expenses");
         }
         catch (IllegalArgumentException e)
         {

@@ -5,6 +5,14 @@
   <display-name>Joint Expense Tracker (ES servlet-api training task)</display-name>
   
   <servlet>
+    <servlet-name>expenseGroup</servlet-name>
+    <servlet-class>com.es.jointexpensetracker.web.servlet.ExpenseGroupServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>homePage</servlet-name>
+    <servlet-class>com.es.jointexpensetracker.web.servlet.HomePageServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>statistics</servlet-name>
     <servlet-class>com.es.jointexpensetracker.web.servlet.StatisticsServlet</servlet-class>
   </servlet>
@@ -24,11 +32,24 @@
     <servlet-name>expense</servlet-name>
     <servlet-class>com.es.jointexpensetracker.web.servlet.ExpenseServlet</servlet-class>
   </servlet>
+
   <filter>
     <filter-name>flashScope</filter-name>
     <filter-class>com.es.jointexpensetracker.filter.FlashScopeFilter</filter-class>
   </filter>
+  <filter>
+    <filter-name>correctURI</filter-name>
+    <filter-class>com.es.jointexpensetracker.filter.CorrectURIFilter</filter-class>
+  </filter>
 
+  <servlet-mapping>
+    <servlet-name>homePage</servlet-name>
+    <url-pattern></url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>expenseGroup</servlet-name>
+    <url-pattern>/expense-group/*</url-pattern>
+  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>addExpense</servlet-name>
     <url-pattern>/expenses/add</url-pattern>
@@ -51,10 +72,19 @@
   </servlet-mapping>
 
   <filter-mapping>
+    <filter-name>correctURI</filter-name>
+    <servlet-name>addExpense</servlet-name>
+    <servlet-name>deleteExpense</servlet-name>
+    <servlet-name>expenseList</servlet-name>
+    <servlet-name>expense</servlet-name>
+    <servlet-name>statistics</servlet-name>
+  </filter-mapping>
+  <filter-mapping>
     <filter-name>flashScope</filter-name>
     <servlet-name>expenseList</servlet-name>
     <servlet-name>expense</servlet-name>
     <servlet-name>addExpense</servlet-name>
+    <servlet-name>expenseGroup</servlet-name>
   </filter-mapping>
 
 <error-page>
