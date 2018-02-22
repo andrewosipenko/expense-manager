@@ -44,7 +44,7 @@ public class ExpenseServlet extends HttpServlet
             MessageService.sendMessage(request,MessageService.FLASH_MESSAGE,
                     "Expense \"" + expense.getDescription() + "\" was updated successfully");
             response.sendRedirect(request.getContextPath() +
-                    ExpenseGroupUUIDService.getFlagWithCurrentUUID(request) + "/expenses"); // ? Сделать сервис для хендла uuid
+                    ExpenseGroupUUIDService.getFlagWithCurrentUUID(request) + "/expenses");
         }
         catch (NumberFormatException e)
         {
