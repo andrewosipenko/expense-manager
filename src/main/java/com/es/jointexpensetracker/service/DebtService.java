@@ -13,24 +13,28 @@ public class DebtService {
     private static volatile DebtService debtService;
     private ExpenseService expenseService;
 
-    private DebtService(String groupId) {
-        expenseService = ExpenseService.getInstance(groupId);
+    private DebtService() {
+        expenseService = ExpenseService.getInstance();
     }
 
-    public static DebtService getInstance(String groupId) {
-        if (debtService == null) {
+    public static DebtService getInstance() {
+        if(debtService == null) {
             synchronized (DebtService.class) {
-                if (debtService == null) {
-                    debtService = new DebtService(groupId);
+                if(debtService == null) {
+                    debtService = new DebtService();
                 }
             }
         }
         return debtService;
     }
 
-    private Optional<BigDecimal> expenseSum() {
-        return  expenseService
-                .getCustomGroupExpenses()
+    private Optional<BigDecimal> expenseSum(String groupId) {
+        List<Expense> expenses = expenseService
+                .getExpensesByGroupId(groupId);
+        if(expenses.size() == 0) {
+            return Optional.of(BigDecimal.ZERO);
+        }
+        return  expenses
                 .stream()
                 .map(Expense::getAmount)
                 .collect(Collectors.toList())
@@ -38,16 +42,18 @@ public class DebtService {
                 .reduce(BigDecimal::add);
     }
 
-    private BigDecimal expensePerPerson(final int amount) {
-        return expenseSum().isPresent() ?
-                expenseSum()
-                        .get()
-                        .divide(BigDecimal.valueOf(amount), BigDecimal.ROUND_CEILING,2)
+    private BigDecimal expensePerPerson(final int amount, String groupId) {
+        BigDecimal expenseSum = expenseSum(groupId).orElse(BigDecimal.ZERO);
+        return  !expenseSum.equals(BigDecimal.ZERO) ?
+                expenseSum.divide(BigDecimal.valueOf(amount), BigDecimal.ROUND_CEILING,2)
                 : BigDecimal.ZERO;
     }
 
-    private Map<String, BigDecimal> getTotalExpenses() {
-        return   expenseService.getCustomGroupExpenses()
+    private Map<String, BigDecimal> getTotalExpenses(String groupId) {
+        List<Expense> expenses = expenseService.getExpensesByGroupId(groupId);
+        if(expenses.size() == 0)
+            return new HashMap<>();
+        return   expenses
                 .stream()
                 .collect(Collectors.toMap(Expense::getPerson, Expense::getAmount, BigDecimal::add))
                 .entrySet()
@@ -61,19 +67,28 @@ public class DebtService {
                 ));
     }
 
-    public List<PersonExpense> getPersonExpenseList() {
-     return  getTotalExpenses()
+    public List<PersonExpense> getPersonExpenseList(String groupId) {
+        Map<String, BigDecimal> totalExpenses = getTotalExpenses(groupId);
+        if(totalExpenses.size() == 0)
+            return new ArrayList<>();
+     return  totalExpenses
              .entrySet()
              .stream()
              .map(e -> new PersonExpense(e.getKey(),e.getValue()))
              .collect(Collectors.toList());
     }
 
-    public List<Debtor> getDebtors() {
+    public List<Debtor> getDebtors(String groupId) {
         List<Debtor> debtors = new ArrayList<>();
-        Map<String, BigDecimal> totalExpenses = getTotalExpenses();
-        ArrayList<Map.Entry<String, BigDecimal>> debts = new ArrayList<>(totalExpenses.entrySet());
-        BigDecimal expensePerPerson = expensePerPerson(totalExpenses.size());
+        Map<String, BigDecimal> totalExpenses = getTotalExpenses(groupId);
+
+        ArrayList<Map.Entry<String, BigDecimal>> debts;
+        if(totalExpenses.size() == 0) {
+            return new ArrayList<>();
+        } else {
+            debts = new ArrayList<>(totalExpenses.entrySet());
+        }
+        BigDecimal expensePerPerson = expensePerPerson(totalExpenses.size(), groupId);
         int middleIndex = getMiddle(debts, expensePerPerson);
 
         ListIterator<Map.Entry<String,BigDecimal>> begin = debts.listIterator();

@@ -19,21 +19,23 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class ExpenseServlet extends HttpServlet {
+    private ExpenseService expenseService;
     private MessageService messageService;
 
     @Override
     public void init() throws ServletException {
         super.init();
         messageService = MessageService.getInstance();
+        expenseService = ExpenseService.getInstance();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            ExpenseService expenseService = ExpenseUtil.getExpenseServiceByRequestPath(request);
+            String expenseGroupId = ExpenseUtil.getExpenseGroupIdFromRequest(request);
             if (!isAddRequest(request)) {
                 Long id = ExpenseUtil.getId(request);
-                Optional<Expense> requestedExpense = expenseService.getExpense(id);
+                Optional<Expense> requestedExpense = expenseService.getExpense(id, expenseGroupId);
                 if (requestedExpense.isPresent())
                     request.setAttribute("expense", requestedExpense.get());
                  else
@@ -49,7 +51,6 @@ public class ExpenseServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            ExpenseService expenseService = ExpenseUtil.getExpenseServiceByRequestPath(request);
             String expenseGroupId = (String)request.getAttribute(Constants.EXPENSE_GROUP_ID);
             Long id = ExpenseUtil.getId(request);
             if (request.getParameter("delete") != null) {
@@ -65,30 +66,32 @@ public class ExpenseServlet extends HttpServlet {
         }
     }
 
-    private void onEdit(HttpServletRequest request, HttpServletResponse response, Long id, ExpenseService expenseService, String expenseGroupId) throws IOException, ServletException, InvalidPathException, ExpenseNotFoundException {
+    private void onEdit(HttpServletRequest request, HttpServletResponse response, Long id, ExpenseService expenseService, String expenseGroupId) throws IOException, ServletException,
+            InvalidPathException, ExpenseNotFoundException, ExpenseGroupNotFoundException {
         Optional<Expense> expenseOptional = ExpenseUtil.getValidExpense(request);
         if(expenseOptional.isPresent()) {
             Expense expense = expenseOptional.get();
             if (request.getParameter("update") != null) {
-                expenseService.updateExpense(expense);
+                expenseService.updateExpense(expense, expenseGroupId);
                 messageService.setMessage(request,"Expense  " + expense.getDescription() + " was updated successfully ");
             } else if (isAddRequest(request)) {
-                expenseService.add(expense);
+                expenseService.add(expense, expenseGroupId);
                 messageService.setMessage(request,"Expense  " + expense.getDescription() + " was created successfully ");
             }
             response.sendRedirect(request.getContextPath() +"/expense-groups/" + expenseGroupId +  "/expenses");
         } else {
-            request.setAttribute("expense", expenseService.getExpense(id).orElse(null));
+            request.setAttribute("expense", expenseService.getExpense(id, expenseGroupId).orElse(null));
             request.setAttribute("currencies", Currency.getAvailableCurrencies());
             messageService.setMessage(request, "Check the data for valid input ");
             request.getRequestDispatcher("/WEB-INF/pages/expense.jsp").forward(request, response);
         }
     }
 
-    private void onDelete(HttpServletRequest request, HttpServletResponse response, Long id, ExpenseService expenseService, String expenseGroupId) throws IOException, ServletException, ExpenseNotFoundException {
-        Optional<Expense> expense = expenseService.getExpense(id);
+    private void onDelete(HttpServletRequest request, HttpServletResponse response, Long id, ExpenseService expenseService, String expenseGroupId) throws IOException, ServletException,
+            ExpenseNotFoundException, ExpenseGroupNotFoundException {
+        Optional<Expense> expense = expenseService.getExpense(id, expenseGroupId);
         if(expense.isPresent()) {
-            expenseService.delete(id);
+            expenseService.delete(id, expenseGroupId);
             messageService.setMessage(request,"Expense  "+expense.get().getDescription()+" was deleted successfully");
             response.sendRedirect(request.getContextPath() +"/expense-groups/" + expenseGroupId +  "/expenses");
         }  else

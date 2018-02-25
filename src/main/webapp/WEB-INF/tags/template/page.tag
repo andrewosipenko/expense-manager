@@ -29,7 +29,7 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <c:if test="${enabledMenuBar ne false}">
-                    <a class="navbar-brand mr-5" href=${pageContext.request.contextPath}/expense-groups/${groupId}/expenses">Joint Expense Tracker</a>
+                    <a class="navbar-brand mr-5" href="${pageContext.request.contextPath}/expense-groups/${groupId}/expenses">Joint Expense Tracker</a>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item ${expensesTabIsActive ? 'active' : ''}">

@@ -25,10 +25,11 @@ public class StatisticsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            DebtService debtService = ExpenseUtil.getDebtServiceByRequestPath(request);
-            List<PersonExpense> personExpenseList = debtService.getPersonExpenseList();
+            DebtService debtService = DebtService.getInstance();
+            String expenseGroupId = ExpenseUtil.getExpenseGroupIdFromRequest(request);
+            List<PersonExpense> personExpenseList = debtService.getPersonExpenseList(expenseGroupId);
             request.setAttribute("people" , personExpenseList);
-            request.setAttribute("debtors", debtService.getDebtors());
+            request.setAttribute("debtors", debtService.getDebtors(expenseGroupId));
             request.getRequestDispatcher("WEB-INF/pages/statistics.jsp").forward(request, response);
         } catch (ExpenseGroupNotFoundException e) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);

@@ -4,16 +4,16 @@ import com.es.jointexpensetracker.exception.ExpenseNotFoundException;
 import com.es.jointexpensetracker.model.Expense;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import static com.es.jointexpensetracker.constants.Constants.DEFAULT_EXPENSE_GROUP;
 
 public class ExpenseService {
     private Map<String, List<Expense>> expenseMap;
-    public static final String DEFAULT_EXPENSE_GROUP = "default-expense-group";
-    private static volatile ExpenseService expenseService;
-    private List<Expense> customGroupExpenses;
+    private static ExpenseService expenseService = new ExpenseService();
 
-    private ExpenseService(String groupId) {
-        expenseMap = new HashMap<>();
+    private ExpenseService() {
+        expenseMap = new ConcurrentHashMap<>();
         expenseMap.put(DEFAULT_EXPENSE_GROUP, new ArrayList<>());
         List<Expense> expenses = expenseMap.get(DEFAULT_EXPENSE_GROUP);
 
@@ -31,31 +31,21 @@ public class ExpenseService {
         expenses.add(new Expense(12L, "Surfing", new BigDecimal(30), "Sergei", DEFAULT_EXPENSE_GROUP));
         expenses.add(new Expense(13L, "Air wing", new BigDecimal(50), "Sergei", DEFAULT_EXPENSE_GROUP));
         expenses.add(new Expense(14L, "Bus tickets from Warsaw to Minsk", new BigDecimal(200), "Andrei", DEFAULT_EXPENSE_GROUP));
-
-        customGroupExpenses = expenseMap.get(groupId);
     }
 
-    public Optional<Expense> getExpense(Long id){
-        return  customGroupExpenses.stream().filter(expense -> id.equals(expense.getId())).findFirst();
+    public Optional<Expense> getExpense(Long id, String groupId){
+        return  Collections.synchronizedList(expenseMap.get(groupId))
+                .stream()
+                .filter(expense -> id.equals(expense.getId()))
+                .findFirst();
     }
 
-    public List<Expense> getCustomGroupExpenses() {
-        return customGroupExpenses;
-    }
-
-    public static ExpenseService getInstance(String groupId){
-        if(expenseService == null){
-            synchronized (ExpenseService.class) {
-                if(expenseService == null) {
-                    expenseService = new ExpenseService(groupId);
-                }
-            }
-        }
+    public static ExpenseService getInstance(){
         return expenseService;
     }
 
-    public void updateExpense(Expense update) throws ExpenseNotFoundException {
-       Optional<Expense> expense = expenseService.getExpense(update.getId());
+    public void updateExpense(Expense update, String groupId) throws ExpenseNotFoundException {
+       Optional<Expense> expense = expenseService.getExpense(update.getId(), groupId);
        if(expense.isPresent()) {
            expense.get().setDescription(update.getDescription());
            expense.get().setAmount(update.getAmount());
@@ -67,12 +57,23 @@ public class ExpenseService {
        }
     }
 
-    public void delete(Long id) {
-        customGroupExpenses = customGroupExpenses.stream().filter(expense -> !id.equals(expense.getId())).collect(Collectors.toList());
+    public void delete(Long id, String groupId) {
+        expenseMap.put(groupId, expenseMap.get(groupId)
+                .stream()
+                .filter(expense -> !id.equals(expense.getId()))
+                .collect(Collectors.toList()));
     }
 
-    public void add(Expense expense) {
-        customGroupExpenses.add(expense);
+    public void add(Expense expense, String groupId) {
+        Collections.synchronizedList(expenseMap.get(groupId)).add(expense);
+    }
+
+    public void addExpenseGroup(String newExpenseGroupId ) {
+        expenseMap.put(newExpenseGroupId, new ArrayList<>());
+    }
+
+    public List<Expense> getExpensesByGroupId(String groupId) {
+        return Collections.synchronizedList(expenseMap.get(groupId));
     }
 }
 

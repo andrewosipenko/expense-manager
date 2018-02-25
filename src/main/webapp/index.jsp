@@ -11,7 +11,7 @@
         <p class="lead">
         <form method="post" action="${pageContext.request.contextPath}/newGroup">
             <div class="d-flex justify-content-between">
-                <input class ="btn btn-primary btn-lg" type="submit" value="View default Expenst List page"/>
+                <input class ="btn btn-primary btn-lg" type="submit" value="Start adding joint expenses"/>
             </div>
         </form>
         </p>

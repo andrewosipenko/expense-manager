@@ -27,7 +27,6 @@ public class GroupFilter implements Filter {
            response.sendError(HttpServletResponse.SC_NOT_FOUND);
        }
     }
-
     public void init(FilterConfig config) throws ServletException {
     }
 
