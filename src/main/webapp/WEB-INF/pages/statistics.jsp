@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
-<template:page statisticsTabIsActive="${true}">
+<template:page statisticsTabIsActive="${true}" enabledAddButton="${true}" enabledMenuBar="${true}" >
     <h1 class="page-header">Total expenses per person</h1>
     <div class="container">
         <div class="row">
@@ -14,15 +14,33 @@
         $( document ).ready(function() {
             //pie
             var ctxP = document.getElementById("pieChart").getContext('2d');
+            var backgroundColor = [];
+            var hoverBackgroundColor = [];
+
+            for (var i = 0;i < ${people.size()}; i++) {
+                var r = Math.floor(256 * Math.random());
+                var g = Math.floor(150 * Math.random() + 100);
+                var b = Math.floor(200 * Math.random() + 50);
+                backgroundColor.push("rgba(" + r + "," + g + "," + b + ",1)");
+                hoverBackgroundColor.push("rgba(" + r + "," + g + "," + b + ",0.5)");
+            }
             var myPieChart = new Chart(ctxP, {
                 type: 'pie',
                 data: {
-                    labels: ["Andre", "Igor", "Sergei", "Ivan", "Dark Grey"],
+                    labels: [
+                        <c:forEach var="item" items="${people}" >
+                        "<c:out value = "${item.person}"/>",
+                        </c:forEach>
+                            ],
                     datasets: [
                         {
-                            data: [300, 50, 100, 40, 120],
-                            backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
-                            hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+                            data: [
+                                <c:forEach var="item" items="${people}" >
+                                "<c:out value = "${item.amount}"/>",
+                                </c:forEach>
+                            ],
+                            backgroundColor: backgroundColor ,
+                            hoverBackgroundColor: hoverBackgroundColor
                         }
                     ]
                 },
@@ -45,21 +63,13 @@
                     </tr>
                     </thead>
                     <tbody>
+                    <c:forEach var="debtor" items="${debtors}">
                         <tr>
-                            <td>Andrei</td>
-                            <td>owes 200$ to</td>
-                            <td>Sergei</td>
+                            <td><c:out value = "${debtor.name}"/></td>
+                            <td><c:out value = "owes ${debtor.amount} $ to"/></td>
+                            <td><c:out value = "${debtor.person}"/></td>
                         </tr>
-                        <tr>
-                            <td>Andrei</td>
-                            <td>owes 100$ to</td>
-                            <td>Ivan</td>
-                        </tr>
-                        <tr>
-                            <td>Ivan</td>
-                            <td>owes 50$ to</td>
-                            <td>Sergei</td>
-                        </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
             </div>
