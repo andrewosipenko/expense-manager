@@ -17,3 +17,5 @@ jobs:
       run: mvn -B package --file pom.xml
     - name: Run unit tests
       run: mvn test
+    - name: Code Coverage Test
+      run: mvn cobertura:cobertura
